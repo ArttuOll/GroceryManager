@@ -1,17 +1,7 @@
 <resources>
     <string name="app_name">Grocery Manager</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Grocery Manager</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-
-    <string name="home_second">Home Second</string>
     <string name="menu_grocery_settings">Grocery settings</string>
     <string name="grocery_settings_label">Grocery Settings</string>
     <string name="grocery_settings_label_text">Food-items</string>
@@ -19,6 +9,7 @@
     <string name="add_food_item_text">Add Food Item</string>
     <string name="hint_fooditem_search">Search food-item</string>
     <string name="title_search_fooditem">Search</string>
+    <string name="action_configure">Configure</string>
 
     <string-array name="grocery_settings_spinner_frequency">
         <item>Daily</item>
@@ -28,8 +19,31 @@
         <item>Once in two weeks</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="menu_app_settings">App Settings</string>
-    <string name="action_configure">Configure</string>
+    <string-array name="food_labels">
+        <item>Atria</item>
+        <item>Findus</item>
+        <item>Reissumies</item>
+        <item>Pätkisjäätelö</item>
+    </string-array>
+
+    <string-array name="food_infos">
+        <item>Varmista, että vähärasvainen!</item>
+        <item>Tämä tai joku vastaava</item>
+        <item>Tarkista suolan määrä</item>
+        <item>Sokerista ei säästellä</item>
+    </string-array>
+
+    <string-array name="food_weights">
+        <item>400g</item>
+        <item>500g</item>
+        <item>350g</item>
+        <item>1kg</item>
+    </string-array>
+
+    <string-array name="food_images">
+        <item>@drawable/jauhelihapaketti</item>
+        <item>@drawable/pakastevihannekset</item>
+        <item>@drawable/ruisleipa</item>
+        <item>@drawable/jaatelo</item>
+    </string-array>
 </resources>

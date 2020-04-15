@@ -4,21 +4,26 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.LinkedList;
+import com.bumptech.glide.Glide;
+
+import java.util.List;
 
 public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.GroceryViewHolder> {
 
-    private LinkedList<String> mLabels;
+    private List<FoodItem> mFoodItems;
     private LayoutInflater mInflator;
+    private Context mContext;
 
-    public GroceryListAdapter(Context context, LinkedList<String> labels) {
-        mInflator = LayoutInflater.from(context);
-        mLabels = labels;
+    public GroceryListAdapter(Context context, List<FoodItem> foodItems) {
+        this.mInflator = LayoutInflater.from(context);
+        this.mFoodItems = foodItems;
+        this.mContext = context;
     }
 
     @NonNull
@@ -31,22 +36,31 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull GroceryListAdapter.GroceryViewHolder holder, int position) {
+        FoodItem currentFoodItem = mFoodItems.get(position);
 
+        holder.bindTo(currentFoodItem);
     }
 
     @Override
     public int getItemCount() {
-        return mLabels.size();
+        return mFoodItems.size();
     }
 
     class GroceryViewHolder extends RecyclerView.ViewHolder {
-        public final TextView groceryItemView;
+        public final TextView foodItemLabel;
+        private ImageView mFoodImage;
         final GroceryListAdapter mAdapter;
 
         public GroceryViewHolder(View itemView, GroceryListAdapter adapter) {
             super(itemView);
-            groceryItemView = itemView.findViewById(R.id.grocery_item_label);
+            mFoodImage = itemView.findViewById(R.id.food_image);
+            foodItemLabel = itemView.findViewById(R.id.grocery_item_label);
             this.mAdapter = adapter;
+        }
+
+        void bindTo(FoodItem currentFoodItem) {
+            foodItemLabel.setText(currentFoodItem.getmTitle());
+            Glide.with(mContext).load(currentFoodItem.getImageResource()).into(mFoodImage);
         }
     }
 }

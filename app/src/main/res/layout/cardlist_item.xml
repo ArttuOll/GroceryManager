@@ -4,16 +4,26 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:padding="6dp">
+
+        <ImageView
+            android:id="@+id/food_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/grocery_item_label"
-            android:layout_width="match_parent"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/food_image"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-    </LinearLayout>
+            android:padding="8dp"
+            android:textColor="@android:color/black"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark" />
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>

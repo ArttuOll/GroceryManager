@@ -1,26 +1,27 @@
 package com.bsuuv.grocerymanager;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration mAppBarConfiguration;
+    private RecyclerView mRecyclerView;
+    private GroceryListAdapter mAdapter;
+    private List<FoodItem> mFoodItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,25 +29,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home)
-                .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+
+        String currentDate = "";
+        setTitle("Groceries for " + getCurrentDate());
+
+        this.mFoodItems = new LinkedList<>();
+
+        this.mRecyclerView = findViewById(R.id.main_recyclerview);
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        this.mAdapter = new GroceryListAdapter(this, mFoodItems);
+        this.mRecyclerView.setAdapter(mAdapter);
+
+        generateTestData();
     }
 
     @Override
@@ -56,15 +51,29 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
-
     public void onGrocerySettingsClicked(MenuItem item) {
         Intent intent = new Intent(this, GrocerySettingsActivity.class);
         startActivity(intent);
+    }
+
+    private void generateTestData() {
+        TypedArray foodImageResources = getResources().obtainTypedArray(R.array.food_images);
+        String[] foodLabels = getResources().getStringArray(R.array.food_labels);
+        String[] foodInfos = getResources().getStringArray(R.array.food_infos);
+        String[] foodWeights = getResources().getStringArray(R.array.food_weights);
+
+        for (int i = 0; i < foodLabels.length; i++) {
+            mFoodItems.add(new FoodItem(foodLabels[i], foodInfos[i], foodWeights[i], foodImageResources.getResourceId(i, 0)));
+        }
+
+        foodImageResources.recycle();
+    }
+
+    private String getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+        DateFormat format = SimpleDateFormat.getDateInstance();
+        String date = format.format(calendar.getTime());
+
+        return date;
     }
 }
