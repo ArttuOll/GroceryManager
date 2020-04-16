@@ -10,23 +10,29 @@ public class FoodItem {
     private String mTitle;
     private String mInfo;
     private String mWeight;
+    private String mAmount;
 
-    public FoodItem(String mTitle, String mInfo, String weight, int imageResource) {
+    public FoodItem(String mTitle, String mInfo, String weight, String amount, int imageResource) {
         this.mTitle = mTitle;
         this.mInfo = mInfo;
         this.mWeight = weight;
+        this.mAmount = amount;
         this.imageResource = imageResource;
     }
 
-    private String getmWeight() {
+    public String getAmount() {
+        return mAmount;
+    }
+
+    public String getWeight() {
         return mWeight;
     }
 
-    public String getmTitle() {
+    public String getTitle() {
         return mTitle;
     }
 
-    public String getmInfo() {
+    public String getInfo() {
         return mInfo;
     }
 

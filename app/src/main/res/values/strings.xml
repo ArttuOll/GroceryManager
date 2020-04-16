@@ -10,6 +10,7 @@
     <string name="hint_fooditem_search">Search food-item</string>
     <string name="title_search_fooditem">Search</string>
     <string name="action_configure">Configure</string>
+    <string name="toast_checked">Check!</string>
 
     <string-array name="grocery_settings_spinner_frequency">
         <item>Daily</item>
@@ -20,8 +21,8 @@
     </string-array>
 
     <string-array name="food_labels">
-        <item>Atria</item>
-        <item>Findus</item>
+        <item>Jauhelihapaketti</item>
+        <item>Pakastevihannekset</item>
         <item>Reissumies</item>
         <item>Pätkisjäätelö</item>
     </string-array>
@@ -38,6 +39,14 @@
         <item>500g</item>
         <item>350g</item>
         <item>1kg</item>
+    </string-array>
+
+    <string-array name="food_amounts">
+        <item>4kpl</item>
+        <item>1kpl</item>
+        <item>2kpl</item>
+        <item>5kpl</item>
+
     </string-array>
 
     <string-array name="food_images">
