@@ -34,10 +34,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitleTextAppearance(this, R.style.TextAppearance_MaterialComponents_Headline5);
         setSupportActionBar(toolbar);
 
         setTitle("Groceries for " + getCurrentDate());
+
 
         this.mFoodItems = new LinkedList<>();
 
