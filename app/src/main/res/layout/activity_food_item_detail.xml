@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".FoodItemDetailActivity">
 
     <ImageView
         android:id="@+id/imageView_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         android:adjustViewBounds="true"
+        android:background="@drawable/imageview_bg"
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,42 +23,55 @@
 
     <TextView
         android:id="@+id/textview_title"
-        style="@style/TextAppearance.MdcTypographyStyles.Headline4"
+        style="@style/TextLabels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="sans-serif-thin"
-        android:text="TextView"
-        android:textColor="@color/textColorMain"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_detail" />
+        android:layout_marginStart="8dp"
+        android:text="TextView" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="-12dp">
+
+        <TextView
+            android:id="@+id/textview_amount"
+            style="@style/TextSubLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/textview_brand"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/textview_brand"
+            style="@style/TextSubLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-8dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textview_amount"
-        android:layout_width="wrap_content"
+        android:id="@+id/textview_info_label"
+        style="@style/TextSubLabels"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline5"
-        android:textColor="@color/textColorMain"
-        app:layout_constraintBottom_toTopOf="@+id/textview_info"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_detail" />
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="-4dp"
+        android:text="Info:" />
 
     <TextView
         android:id="@+id/textview_info"
-        android:layout_width="0dp"
+        style="@style/TextBody"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/roboto_bold"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2"
-        android:textColor="@color/textColorMain"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_title" />
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="-12dp"
+        android:text="@string/textview_info_placeholder" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

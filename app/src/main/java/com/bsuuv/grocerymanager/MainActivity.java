@@ -1,11 +1,9 @@
 package com.bsuuv.grocerymanager;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -84,20 +82,17 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void onGrocerySettingsClicked(MenuItem item) {
-        Intent intent = new Intent(this, GrocerySettingsActivity.class);
-        startActivity(intent);
-    }
-
     private void generateTestData() {
         TypedArray foodImageResources = getResources().obtainTypedArray(R.array.food_images);
         String[] foodLabels = getResources().getStringArray(R.array.food_labels);
+        String[] foodBrands = getResources().getStringArray(R.array.food_brands);
         String[] foodInfos = getResources().getStringArray(R.array.food_infos);
         String[] foodWeights = getResources().getStringArray(R.array.food_weights);
         String[] amounts = getResources().getStringArray(R.array.food_amounts);
 
         for (int i = 0; i < foodLabels.length; i++) {
-            mFoodItems.add(new FoodItem(foodLabels[i], foodInfos[i], foodWeights[i], amounts[i], foodImageResources.getResourceId(i, 0)));
+            mFoodItems.add(new FoodItem(foodLabels[i], foodBrands[i], foodInfos[i], foodWeights[i],
+                    amounts[i], foodImageResources.getResourceId(i, 0)));
         }
 
         foodImageResources.recycle();

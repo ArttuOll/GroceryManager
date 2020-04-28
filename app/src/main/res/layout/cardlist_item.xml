@@ -29,7 +29,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:padding="8dp"
             android:text="Testi" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

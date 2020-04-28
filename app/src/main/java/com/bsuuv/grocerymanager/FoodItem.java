@@ -8,12 +8,14 @@ public class FoodItem {
 
     private final int imageResource;
     private String mTitle;
+    private String mBrand;
     private String mInfo;
     private String mWeight;
     private String mAmount;
 
-    public FoodItem(String mTitle, String mInfo, String weight, String amount, int imageResource) {
+    public FoodItem(String mTitle, String brand, String mInfo, String weight, String amount, int imageResource) {
         this.mTitle = mTitle;
+        this.mBrand = brand;
         this.mInfo = mInfo;
         this.mWeight = weight;
         this.mAmount = amount;
@@ -38,5 +40,9 @@ public class FoodItem {
 
     public int getImageResource() {
         return imageResource;
+    }
+
+    public String getBrand() {
+        return mBrand;
     }
 }

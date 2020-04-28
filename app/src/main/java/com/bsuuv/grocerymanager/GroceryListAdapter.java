@@ -21,7 +21,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     private LayoutInflater mInflator;
     private Context mContext;
 
-    public GroceryListAdapter(Context context, List<FoodItem> foodItems) {
+    GroceryListAdapter(Context context, List<FoodItem> foodItems) {
         this.mInflator = LayoutInflater.from(context);
         this.mFoodItems = foodItems;
         this.mContext = context;
@@ -74,6 +74,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             Intent foodItemDetail = new Intent(mContext, FoodItemDetailActivity.class);
             foodItemDetail.putExtra("title", currentFoodItem.getTitle());
             foodItemDetail.putExtra("image_resource", currentFoodItem.getImageResource());
+            foodItemDetail.putExtra("brand", currentFoodItem.getBrand());
             foodItemDetail.putExtra("info", currentFoodItem.getInfo());
             foodItemDetail.putExtra("weight", currentFoodItem.getWeight());
             foodItemDetail.putExtra("amount", currentFoodItem.getAmount());

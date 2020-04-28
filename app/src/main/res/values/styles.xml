@@ -27,7 +27,14 @@
     <style name="TextSubLabels">
         <item name="font">@font/roboto</item>
         <item name="android:textSize">17sp</item>
-        <item name="android:textColor">@color/textColorSub</item>
+        <item name="android:textColor">@color/textColorMain</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="TextBody">
+        <item name="font">@font/roboto</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/textColorBody</item>
         <item name="android:padding">8dp</item>
     </style>
 

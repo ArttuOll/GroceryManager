@@ -16,15 +16,18 @@ public class FoodItemDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_food_item_detail);
 
         ImageView foodImage = findViewById(R.id.imageView_detail);
+        foodImage.setClipToOutline(true);
         Glide.with(this).load(getIntent()
                 .getIntExtra("image_resource", 0)).into(foodImage);
 
         TextView title = findViewById(R.id.textview_title);
         TextView amount = findViewById(R.id.textview_amount);
+        TextView brand = findViewById(R.id.textview_brand);
         TextView info = findViewById(R.id.textview_info);
 
         title.setText(getIntent().getStringExtra("title"));
         amount.setText(getIntent().getStringExtra("amount"));
+        brand.setText(getIntent().getStringExtra("brand"));
         info.setText(getIntent().getStringExtra("info"));
     }
 }

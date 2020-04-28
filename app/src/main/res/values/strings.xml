@@ -11,14 +11,7 @@
     <string name="title_search_fooditem">Search</string>
     <string name="action_configure">Configure</string>
     <string name="toast_checked">Check!</string>
-
-    <string-array name="grocery_settings_spinner_frequency">
-        <item>Daily</item>
-        <item>Almost daily</item>
-        <item>Three times a week</item>
-        <item>Once a week</item>
-        <item>Once in two weeks</item>
-    </string-array>
+    <string name="textview_info_placeholder">Placeholder I\'m baby skateboard wayfarers dreamcatcher cold-pressed artisan next level organic. Salvia bitters pickled tumeric. Venmo actually everyday carry pour-over man braid yuccie tote bag. Master cleanse tumeric microdosing drinking vinegar portland keffiyeh glossier 3 wolf moon you probably haven\'t heard of them sriracha gentrify hashtag sustainable swag kale chips. Migas pop-up pickled, viral readymade normcore four loko hot chicken tacos waistcoat polaroid cloud bread shabby chic pinterest blog.</string>
 
     <string-array name="food_labels">
         <item>Jauhelihapaketti</item>
@@ -27,11 +20,39 @@
         <item>Pätkisjäätelö</item>
     </string-array>
 
+    <string-array name="food_brands">
+        <item>Maomix</item>
+        <item>Karjala</item>
+        <item>Atria</item>
+        <item>Oatly</item>
+    </string-array>
+
     <string-array name="food_infos">
-        <item>Varmista, että vähärasvainen!</item>
-        <item>Tämä tai joku vastaava</item>
-        <item>Tarkista suolan määrä</item>
-        <item>Sokerista ei säästellä</item>
+        <item>Im baby umami excepteur bushwick fanny pack adipisicing knausgaard. Food truck in
+            elit pickled shoreditch glossier, ad et. In umami hella, vape qui wayfarers gluten-free
+            nulla vexillologist yr hammock tbh skateboard meggings irure. Commodo heirloom wolf
+            distillery pariatur, aesthetic green juice banjo reprehenderit fingerstache vegan
+            seitan tousled kale chips semiotics. Enamel pin anim gochujang reprehenderit excepteur.
+            Woke viral man braid irony, celiac hashtag church-key velit craft beer.</item>
+        <item>Im baby green juice cloud bread glossier fam tattooed vegan lumbersexual quinoa,
+            asymmetrical mumblecore vape. Kombucha brunch cardigan intelligentsia, kickstarter
+            street art affogato franzen tattooed deep v snackwave freegan tumblr pug. Yr tousled
+            dreamcatcher kogi, literally tumeric occupy craft beer distillery tumblr gentrify
+            chillwave. +1 microdosing snackwave, literally post-ironic roof party raclette master
+            cleanse disrupt. Jianbing four loko prism pork belly selvage farm-to-table yr green
+            juice, ugh microdosing dreamcatcher franzen.</item>
+        <item>Im baby skateboard wayfarers dreamcatcher cold-pressed artisan next level organic.
+            Salvia bitters pickled tumeric. Venmo actually everyday carry pour-over man braid
+            yuccie tote bag. Master cleanse tumeric microdosing drinking vinegar portland keffiyeh
+            glossier 3 wolf moon you probably havent heard of them sriracha gentrify hashtag
+            sustainable swag kale chips. Migas pop-up pickled, viral readymade normcore four loko hot
+            chicken tacos waistcoat polaroid cloud bread shabby chic pinterest blog.</item>
+        <item>Im baby skateboard wayfarers dreamcatcher cold-pressed artisan next level organic.
+            Salvia bitters pickled tumeric. Venmo actually everyday carry pour-over man braid
+            yuccie tote bag. Master cleanse tumeric microdosing drinking vinegar portland keffiyeh
+            glossier 3 wolf moon you probably havent heard of them sriracha gentrify hashtag
+            sustainable swag kale chips. Migas pop-up pickled, viral readymade normcore four loko
+            hot chicken tacos waistcoat polaroid cloud bread shabby chic pinterest blog.</item>
     </string-array>
 
     <string-array name="food_weights">
