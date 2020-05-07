@@ -7,17 +7,17 @@ package com.bsuuv.grocerymanager;
 public class FoodItem {
 
     private final int imageResource;
-    private String mTitle;
+    private String mLabel;
     private String mBrand;
     private String mInfo;
-    private String mWeight;
+    private String mSize;
     private String mAmount;
 
     public FoodItem(String mTitle, String brand, String mInfo, String weight, String amount, int imageResource) {
-        this.mTitle = mTitle;
+        this.mLabel = mTitle;
         this.mBrand = brand;
         this.mInfo = mInfo;
-        this.mWeight = weight;
+        this.mSize = weight;
         this.mAmount = amount;
         this.imageResource = imageResource;
     }
@@ -26,12 +26,12 @@ public class FoodItem {
         return mAmount;
     }
 
-    public String getWeight() {
-        return mWeight;
+    public String mSize() {
+        return mSize;
     }
 
-    public String getTitle() {
-        return mTitle;
+    public String getLabel() {
+        return mLabel;
     }
 
     public String getInfo() {

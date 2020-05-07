@@ -15,7 +15,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:adjustViewBounds="true"
-        android:background="@drawable/imageview_bg"
+        android:background="@drawable/grocerylist_imageview_bg"
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

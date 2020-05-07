@@ -18,11 +18,11 @@ import java.util.List;
 public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.GroceryViewHolder> {
 
     private List<FoodItem> mFoodItems;
-    private LayoutInflater mInflator;
+    private LayoutInflater mInflater;
     private Context mContext;
 
     GroceryListAdapter(Context context, List<FoodItem> foodItems) {
-        this.mInflator = LayoutInflater.from(context);
+        this.mInflater = LayoutInflater.from(context);
         this.mFoodItems = foodItems;
         this.mContext = context;
     }
@@ -30,9 +30,9 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     @NonNull
     @Override
     public GroceryListAdapter.GroceryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View mItemView = mInflator.inflate(R.layout.cardlist_item, parent, false);
+        View itemView = mInflater.inflate(R.layout.grocerylist_item, parent, false);
 
-        return new GroceryViewHolder(mItemView, this);
+        return new GroceryViewHolder(itemView, this);
     }
 
     @Override
@@ -48,22 +48,28 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     }
 
     class GroceryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        final TextView foodItemLabel;
-        private ImageView mFoodImage;
+        private final TextView foodItemLabel;
+        private final TextView foodItemBrand;
+        private final TextView foodItemSize;
         final GroceryListAdapter mAdapter;
+        private ImageView mFoodImage;
 
         GroceryViewHolder(View itemView, GroceryListAdapter adapter) {
             super(itemView);
-            mFoodImage = itemView.findViewById(R.id.food_image);
+            mFoodImage = itemView.findViewById(R.id.grocerylist_food_image);
             mFoodImage.setClipToOutline(true);
             foodItemLabel = itemView.findViewById(R.id.grocery_item_label);
+            foodItemBrand = itemView.findViewById(R.id.grocery_item_brand);
+            foodItemSize = itemView.findViewById(R.id.grocery_item_size);
             this.mAdapter = adapter;
 
             itemView.setOnClickListener(this);
         }
 
         void bindTo(FoodItem currentFoodItem) {
-            foodItemLabel.setText(currentFoodItem.getTitle());
+            foodItemLabel.setText(currentFoodItem.getLabel());
+            foodItemBrand.setText(currentFoodItem.getBrand());
+            foodItemSize.setText(currentFoodItem.getAmount());
             Glide.with(mContext).load(currentFoodItem.getImageResource()).into(mFoodImage);
         }
 
@@ -72,11 +78,11 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             FoodItem currentFoodItem = mFoodItems.get(getAdapterPosition());
 
             Intent foodItemDetail = new Intent(mContext, FoodItemDetailActivity.class);
-            foodItemDetail.putExtra("title", currentFoodItem.getTitle());
+            foodItemDetail.putExtra("title", currentFoodItem.getLabel());
             foodItemDetail.putExtra("image_resource", currentFoodItem.getImageResource());
             foodItemDetail.putExtra("brand", currentFoodItem.getBrand());
             foodItemDetail.putExtra("info", currentFoodItem.getInfo());
-            foodItemDetail.putExtra("weight", currentFoodItem.getWeight());
+            foodItemDetail.putExtra("weight", currentFoodItem.mSize());
             foodItemDetail.putExtra("amount", currentFoodItem.getAmount());
             mContext.startActivity(foodItemDetail);
         }
