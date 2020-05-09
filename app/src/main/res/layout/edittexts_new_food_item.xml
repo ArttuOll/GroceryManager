@@ -49,18 +49,21 @@
         android:orientation="horizontal">
 
         <ToggleButton
+            android:id="@+id/togglebuton_biweekly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/button_biweekly" />
 
         <ToggleButton
+            android:id="@+id/togglebuton_weekly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/button_weekly" />
 
         <ToggleButton
+            android:id="@+id/togglebuton_monthly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

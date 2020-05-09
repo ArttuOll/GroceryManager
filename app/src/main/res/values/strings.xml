@@ -22,6 +22,9 @@
     <string name="button_weekly">Weekly</string>
     <string name="button_monthly">monthly</string>
     <string name="hint_more_information">More information:</string>
+    <string name="togglebutton_weekly">Weekly</string>
+    <string name="togglebutton_biweekly">Biweekly</string>
+    <string name="togglebutton_monthly">Monthly</string>
 
     <string-array name="food_labels">
         <item>Jauhelihapaketti</item>
