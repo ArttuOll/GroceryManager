@@ -8,7 +8,6 @@
         android:id="@+id/config_textview_label"
         style="@style/TextSubLabels"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="testi" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".FoodItemDetailActivity">
+    tools:context=".activities.FoodItemDetail">
 
     <ImageView
         android:id="@+id/imageView_detail"
@@ -19,6 +19,7 @@
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/food_image_content_description"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView

@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager;
+package com.bsuuv.grocerymanager.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.activities.FoodItemDetail;
+import com.bsuuv.grocerymanager.domain.FoodItem;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -21,7 +24,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     private LayoutInflater mInflater;
     private Context mContext;
 
-    GroceryListAdapter(Context context, List<FoodItem> foodItems) {
+    public GroceryListAdapter(Context context, List<FoodItem> foodItems) {
         this.mInflater = LayoutInflater.from(context);
         this.mFoodItems = foodItems;
         this.mContext = context;
@@ -77,7 +80,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
         public void onClick(View v) {
             FoodItem currentFoodItem = mFoodItems.get(getAdapterPosition());
 
-            Intent foodItemDetail = new Intent(mContext, FoodItemDetailActivity.class);
+            Intent foodItemDetail = new Intent(mContext, FoodItemDetail.class);
             foodItemDetail.putExtra("title", currentFoodItem.getLabel());
             foodItemDetail.putExtra("image_resource", currentFoodItem.getImageResource());
             foodItemDetail.putExtra("brand", currentFoodItem.getBrand());

@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager;
+package com.bsuuv.grocerymanager.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.adapters.GroceryListAdapter;
+import com.bsuuv.grocerymanager.domain.FoodItem;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -45,18 +49,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        setTitle(getString(R.string.mainActivity_actionbar_label) + " " + getCurrentDate());
+        setUpToolbar();
 
         this.mFoodItems = new LinkedList<>();
 
-        this.mRecyclerView = findViewById(R.id.main_recyclerview);
-        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        this.mAdapter = new GroceryListAdapter(this, mFoodItems);
-        this.mRecyclerView.setAdapter(mAdapter);
+        setUpRecyclerView();
 
         generateTestData();
 
@@ -82,13 +79,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_configure) {
-            Intent configs = new Intent(this, ConfigurationsActivity.class);
+            Intent configs = new Intent(this, Configurations.class);
             this.startActivity(configs);
 
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setUpRecyclerView() {
+        this.mRecyclerView = findViewById(R.id.main_recyclerview);
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        this.mAdapter = new GroceryListAdapter(this, mFoodItems);
+        this.mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void setUpToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        setTitle(getString(R.string.mainActivity_actionbar_label) + " " + getCurrentDate());
     }
 
     private void generateTestData() {

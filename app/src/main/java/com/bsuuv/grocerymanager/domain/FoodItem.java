@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager;
+package com.bsuuv.grocerymanager.domain;
 
 /**
  * A class representing a food-item in a meal.

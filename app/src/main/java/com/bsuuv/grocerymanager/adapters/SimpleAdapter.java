@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager;
+package com.bsuuv.grocerymanager.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.domain.FoodItem;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.SimpleView
     private final Context mContext;
     private List<FoodItem> mFoodItems;
 
-    SimpleAdapter(Context context, FoodItem[] data) {
+    public SimpleAdapter(Context context, FoodItem[] data) {
         mContext = context;
         if (data != null)
             mFoodItems = new ArrayList<>(Arrays.asList(data));

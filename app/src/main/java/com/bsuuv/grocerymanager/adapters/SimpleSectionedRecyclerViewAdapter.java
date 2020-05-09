@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager;
+package com.bsuuv.grocerymanager.adapters;
 
 
 import android.content.Context;
@@ -89,7 +89,7 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 : mBaseAdapter.getItemViewType(sectionedPositionToPosition(position)) + 1;
     }
 
-    void setSections(Section[] sections) {
+    public void setSections(Section[] sections) {
         mSections.clear();
 
         Arrays.sort(sections, (o, o1) -> Integer.compare(o.firstPosition, o1.firstPosition));
@@ -115,7 +115,7 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         return position + offset;
     }
 
-    public int sectionedPositionToPosition(int sectionedPosition) {
+    private int sectionedPositionToPosition(int sectionedPosition) {
         if (isSectionHeaderPosition(sectionedPosition)) {
             return RecyclerView.NO_POSITION;
         }
@@ -130,7 +130,7 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         return sectionedPosition + offset;
     }
 
-    public boolean isSectionHeaderPosition(int position) {
+    private boolean isSectionHeaderPosition(int position) {
         return mSections.get(position) != null;
     }
 
@@ -161,7 +161,7 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         int sectionedPosition;
         CharSequence title;
 
-        Section(int firstPosition, CharSequence title) {
+        public Section(int firstPosition, CharSequence title) {
             this.firstPosition = firstPosition;
             this.title = title;
         }
