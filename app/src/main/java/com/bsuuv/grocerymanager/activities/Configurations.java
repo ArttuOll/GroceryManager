@@ -26,7 +26,7 @@ public class Configurations extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configurations);
 
-        generateTestData();
+        // generateTestData();
 
         setUpRecyclerView();
     }
@@ -57,6 +57,11 @@ public class Configurations extends AppCompatActivity {
     private void setUpRecyclerView() {
         RecyclerView mRecyclerView = findViewById(R.id.config_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        if (mFoodItems == null) {
+            mRecyclerView.setVisibility(View.GONE);
+            return;
+        }
 
         SimpleAdapter mAdapter = new SimpleAdapter(this, mFoodItems);
 

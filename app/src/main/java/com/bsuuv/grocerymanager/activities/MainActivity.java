@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         setUpRecyclerView();
 
-        generateTestData();
+        // generateTestData();
 
         ItemTouchHelper helper = initializeItemTouchHelper();
         helper.attachToRecyclerView(mRecyclerView);
