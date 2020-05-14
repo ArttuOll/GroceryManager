@@ -16,7 +16,7 @@
     <string name="food_image_content_description">Food-item image</string>
     <string name="hint_item_label">Item Label</string>
     <string name="hint_brand">Brand</string>
-    <string name="hint_size">Size</string>
+    <string name="hint_amount">Amount</string>
     <string name="textview_frequency">Frequency</string>
     <string name="button_biweekly">Biweekly</string>
     <string name="button_weekly">Weekly</string>

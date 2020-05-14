@@ -10,24 +10,28 @@ public class FoodItem {
     private String mLabel;
     private String mBrand;
     private String mInfo;
-    private String mSize;
     private String mAmount;
+    private int mFrequency;
 
-    public FoodItem(String mTitle, String brand, String mInfo, String weight, String amount, int imageResource) {
-        this.mLabel = mTitle;
+    public FoodItem(String label, String brand, String info, String amount, int frequency, int imageResource) {
+        this.mLabel = label;
         this.mBrand = brand;
-        this.mInfo = mInfo;
-        this.mSize = weight;
+        this.mInfo = info;
         this.mAmount = amount;
+        this.mFrequency = frequency;
         this.imageResource = imageResource;
+    }
+
+    public int getFrequency() {
+        return mFrequency;
+    }
+
+    public void setFrequency(int mFrequency) {
+        this.mFrequency = mFrequency;
     }
 
     public String getAmount() {
         return mAmount;
-    }
-
-    public String mSize() {
-        return mSize;
     }
 
     public String getLabel() {
@@ -44,5 +48,11 @@ public class FoodItem {
 
     public String getBrand() {
         return mBrand;
+    }
+
+    public interface Frequency {
+        int BIWEEKLY = 0;
+        int WEEKLY = 1;
+        int MONTHLY = 2;
     }
 }

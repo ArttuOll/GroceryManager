@@ -1,17 +1,16 @@
 package com.bsuuv.grocerymanager.activities;
 
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.adapters.SimpleAdapter;
-import com.bsuuv.grocerymanager.adapters.SimpleSectionedRecyclerViewAdapter;
+import com.bsuuv.grocerymanager.adapters.ConfigslistAdapter;
 import com.bsuuv.grocerymanager.domain.FoodItem;
 
 import java.util.ArrayList;
@@ -19,65 +18,92 @@ import java.util.List;
 
 public class Configurations extends AppCompatActivity {
 
-    private FoodItem[] mFoodItems;
+    public static final int FOOD_ITEM_DETAILS_REQUEST = 1;
+    private List<FoodItem> mFoodItems;
+    private ConfigslistAdapter mAdapter;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configurations);
 
-        // generateTestData();
+        this.mFoodItems = new ArrayList<>();
 
         setUpRecyclerView();
     }
 
     public void onFabClick(View view) {
-        Intent intent = new Intent(this, NewFoodItem.class);
-        this.startActivity(intent);
+        Intent toNewFoodItem = new Intent(this, NewFoodItem.class);
+        startActivityForResult(toNewFoodItem, FOOD_ITEM_DETAILS_REQUEST);
     }
 
-    private void generateTestData() {
-        TypedArray foodImageResources = getResources().obtainTypedArray(R.array.food_images);
-        String[] foodLabels = getResources().getStringArray(R.array.food_labels);
-        String[] foodBrands = getResources().getStringArray(R.array.food_brands);
-        String[] foodInfos = getResources().getStringArray(R.array.food_infos);
-        String[] foodWeights = getResources().getStringArray(R.array.food_weights);
-        String[] amounts = getResources().getStringArray(R.array.food_amounts);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        this.mFoodItems = new FoodItem[foodLabels.length];
+        if (requestCode == FOOD_ITEM_DETAILS_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    String label = data.getStringExtra("label");
+                    String brand = data.getStringExtra("brand");
+                    String amount = data.getStringExtra("amount");
+                    String info = data.getStringExtra("info");
+                    int frequency = data.getIntExtra("frequency", 0);
 
-        for (int i = 0; i < foodLabels.length; i++) {
-            mFoodItems[i] = new FoodItem(foodLabels[i], foodBrands[i], foodInfos[i], foodWeights[i],
-                    amounts[i], foodImageResources.getResourceId(i, 0));
+                    mFoodItems.add(new FoodItem(label, brand, info, amount, frequency, 0));
+                }
+            }
         }
+    }
 
-        foodImageResources.recycle();
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (!mFoodItems.isEmpty()) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            sortFoodItemsByFrequency();
+            // TODO: toteuta mFoodItemsin järjestely siten, että tiedä aina, mihin kohtaan uusi
+            //  fooditem tuli ja voit näin käyttää asianmukaista notify-metodia.
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     private void setUpRecyclerView() {
-        RecyclerView mRecyclerView = findViewById(R.id.config_recyclerview);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.mRecyclerView = findViewById(R.id.config_recyclerview);
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        if (mFoodItems == null) {
-            mRecyclerView.setVisibility(View.GONE);
-            return;
-        }
-
-        SimpleAdapter mAdapter = new SimpleAdapter(this, mFoodItems);
-
-        List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<>();
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, "Biweekly"));
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(1, "Weekly"));
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(3, "Monthly"));
-
-        SimpleSectionedRecyclerViewAdapter.Section[] sectionsArray =
-                new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
-
-        //2. ja 3. parametri ovat otsakkeiden layout ja textview layoutin sisällä
-        SimpleSectionedRecyclerViewAdapter mSectionedAdapter =
-                new SimpleSectionedRecyclerViewAdapter(this, R.layout.recyclerview_section, R.id.section_text, mAdapter);
-        mSectionedAdapter.setSections(sections.toArray(sectionsArray));
-
-        mRecyclerView.setAdapter(mSectionedAdapter);
+        this.mAdapter = new ConfigslistAdapter(this, mFoodItems);
+        this.mRecyclerView.setAdapter(mAdapter);
     }
+
+    private void sortFoodItemsByFrequency() {
+        List<FoodItem> biweeklys = new ArrayList<>();
+        List<FoodItem> weeklys = new ArrayList<>();
+        List<FoodItem> monthlys = new ArrayList<>();
+
+        mFoodItems.forEach(foodItem -> {
+            switch (foodItem.getFrequency()) {
+                case 0:
+                    biweeklys.add(foodItem);
+                    break;
+                case 1:
+                    weeklys.add(foodItem);
+                    break;
+                case 2:
+                    monthlys.add(foodItem);
+                    break;
+            }
+        });
+
+        List<FoodItem> sorted = new ArrayList<>();
+
+        sorted.addAll(biweeklys);
+        sorted.addAll(weeklys);
+        sorted.addAll(monthlys);
+
+        this.mFoodItems = sorted;
+    }
+
 }

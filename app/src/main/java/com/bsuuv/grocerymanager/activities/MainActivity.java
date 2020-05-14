@@ -2,7 +2,6 @@ package com.bsuuv.grocerymanager.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.Menu;
@@ -34,15 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private GroceryListAdapter mAdapter;
     private List<FoodItem> mFoodItems;
     private Context mContext = this;
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            mRecyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState
-                    .getParcelable(MAIN_RECYCLERVIEW_STATE));
-        }
-        super.onRestoreInstanceState(savedInstanceState);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,21 +92,21 @@ public class MainActivity extends AppCompatActivity {
         setTitle(getString(R.string.mainActivity_actionbar_label) + " " + getCurrentDate());
     }
 
+    /*
     private void generateTestData() {
         TypedArray foodImageResources = getResources().obtainTypedArray(R.array.food_images);
         String[] foodLabels = getResources().getStringArray(R.array.food_labels);
         String[] foodBrands = getResources().getStringArray(R.array.food_brands);
         String[] foodInfos = getResources().getStringArray(R.array.food_infos);
-        String[] foodWeights = getResources().getStringArray(R.array.food_weights);
         String[] amounts = getResources().getStringArray(R.array.food_amounts);
 
         for (int i = 0; i < foodLabels.length; i++) {
-            mFoodItems.add(new FoodItem(foodLabels[i], foodBrands[i], foodInfos[i], foodWeights[i],
-                    amounts[i], foodImageResources.getResourceId(i, 0)));
+            mFoodItems.add(new FoodItem(foodLabels[i], foodBrands[i], foodInfos[i], amounts[i],
+                    foodImageResources.getResourceId(i, 0)));
         }
 
         foodImageResources.recycle();
-    }
+    }*/
 
     private String getCurrentDate() {
         Calendar calendar = Calendar.getInstance();

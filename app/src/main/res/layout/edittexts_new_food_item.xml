@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <EditText
+        android:id="@+id/editText_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_item_label"
@@ -19,6 +20,7 @@
         android:orientation="horizontal">
 
         <EditText
+            android:id="@+id/editText_brand"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -27,12 +29,13 @@
             android:inputType="text" />
 
         <EditText
+            android:id="@+id/editText_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/hint_size"
+            android:hint="@string/hint_amount"
             android:importantForAutofill="no"
-            android:inputType="text" />
+            android:inputType="number" />
     </LinearLayout>
 
     <TextView
@@ -72,9 +75,11 @@
     </LinearLayout>
 
     <EditText
+        android:id="@+id/editText_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_more_information" />
+        android:hint="@string/hint_more_information"
+        android:inputType="text" />
 
 
 </LinearLayout>

@@ -1,12 +1,15 @@
 package com.bsuuv.grocerymanager.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.domain.FoodItem;
 
 public class NewFoodItem extends AppCompatActivity {
 
@@ -42,6 +45,11 @@ public class NewFoodItem extends AppCompatActivity {
         }
     };
 
+    private EditText labelEditText;
+    private EditText brandEditText;
+    private EditText amountEditText;
+    private EditText infoEditText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +57,37 @@ public class NewFoodItem extends AppCompatActivity {
 
         setTitle("Add Food-item");
 
+        this.labelEditText = findViewById(R.id.editText_label);
+        this.brandEditText = findViewById(R.id.editText_brand);
+        this.amountEditText = findViewById(R.id.editText_amount);
+        this.infoEditText = findViewById(R.id.editText_info);
+
         setUpToggleButtons();
+    }
+
+    public void onFabClick(View view) {
+        String label = labelEditText.getText().toString();
+        String brand = brandEditText.getText().toString();
+        String amount = amountEditText.getText().toString();
+        String info = infoEditText.getText().toString();
+        int frequency = getActiveToggleButton();
+
+        Intent toConfigs = new Intent(this, Configurations.class);
+        toConfigs.putExtra("label", label);
+        toConfigs.putExtra("brand", brand);
+        toConfigs.putExtra("amount", amount);
+        toConfigs.putExtra("info", info);
+        toConfigs.putExtra("frequency", frequency);
+
+        setResult(RESULT_OK, toConfigs);
+        finish();
+    }
+
+    private int getActiveToggleButton() {
+        if (biweeklyToggle.isChecked()) return FoodItem.Frequency.BIWEEKLY;
+        else if (weeklyToggle.isChecked()) return FoodItem.Frequency.WEEKLY;
+        else if (monthlyToggle.isChecked()) return FoodItem.Frequency.MONTHLY;
+        else return -1;
     }
 
     private void setUpToggleButtons() {
@@ -71,8 +109,5 @@ public class NewFoodItem extends AppCompatActivity {
         monthlyToggle.setTextOff("Monthly");
         monthlyToggle.setTextOn("Monthly");
         monthlyToggle.setOnClickListener(mOnToggleButtonClickListener);
-    }
-
-    public void onFabClick(View view) {
     }
 }

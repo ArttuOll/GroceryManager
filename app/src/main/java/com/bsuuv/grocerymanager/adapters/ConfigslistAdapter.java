@@ -18,13 +18,13 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.GroceryViewHolder> {
+public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.ConfigsViewHolder> {
 
     private List<FoodItem> mFoodItems;
     private LayoutInflater mInflater;
     private Context mContext;
 
-    public GroceryListAdapter(Context context, List<FoodItem> foodItems) {
+    public ConfigslistAdapter(Context context, List<FoodItem> foodItems) {
         this.mInflater = LayoutInflater.from(context);
         this.mFoodItems = foodItems;
         this.mContext = context;
@@ -32,14 +32,14 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
     @NonNull
     @Override
-    public GroceryListAdapter.GroceryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.grocerylist_item, parent, false);
+    public ConfigslistAdapter.ConfigsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = mInflater.inflate(R.layout.configlist_item, parent, false);
 
-        return new GroceryViewHolder(itemView, this);
+        return new ConfigslistAdapter.ConfigsViewHolder(itemView, this);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GroceryListAdapter.GroceryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ConfigslistAdapter.ConfigsViewHolder holder, int position) {
         FoodItem currentFoodItem = mFoodItems.get(position);
 
         holder.bindTo(currentFoodItem);
@@ -50,20 +50,23 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
         return mFoodItems.size();
     }
 
-    class GroceryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ConfigsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final ConfigslistAdapter mAdapter;
         private final TextView foodItemLabel;
         private final TextView foodItemBrand;
         private final TextView foodItemSize;
-        final GroceryListAdapter mAdapter;
+        private final TextView foodItemFreq;
         private ImageView mFoodImage;
 
-        GroceryViewHolder(View itemView, GroceryListAdapter adapter) {
+        ConfigsViewHolder(View itemView, ConfigslistAdapter adapter) {
             super(itemView);
-            mFoodImage = itemView.findViewById(R.id.grocerylist_food_image);
+
+            mFoodImage = itemView.findViewById(R.id.configlist_food_image);
             mFoodImage.setClipToOutline(true);
-            foodItemLabel = itemView.findViewById(R.id.grocery_item_label);
-            foodItemBrand = itemView.findViewById(R.id.grocery_item_brand);
-            foodItemSize = itemView.findViewById(R.id.grocery_item_size);
+            foodItemLabel = itemView.findViewById(R.id.config_item_label);
+            foodItemBrand = itemView.findViewById(R.id.config_item_brand);
+            foodItemSize = itemView.findViewById(R.id.config_item_size);
+            foodItemFreq = itemView.findViewById(R.id.config_item_freq);
             this.mAdapter = adapter;
 
             itemView.setOnClickListener(this);
@@ -73,6 +76,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             foodItemLabel.setText(currentFoodItem.getLabel());
             foodItemBrand.setText(currentFoodItem.getBrand());
             foodItemSize.setText(currentFoodItem.getAmount());
+            foodItemFreq.setText(String.valueOf(currentFoodItem.getFrequency()));
             Glide.with(mContext).load(currentFoodItem.getImageResource()).into(mFoodImage);
         }
 
