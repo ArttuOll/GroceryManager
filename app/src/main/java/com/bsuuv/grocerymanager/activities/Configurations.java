@@ -14,6 +14,7 @@ import com.bsuuv.grocerymanager.adapters.ConfigslistAdapter;
 import com.bsuuv.grocerymanager.domain.FoodItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Configurations extends AppCompatActivity {
@@ -21,7 +22,6 @@ public class Configurations extends AppCompatActivity {
     public static final int FOOD_ITEM_DETAILS_REQUEST = 1;
     private List<FoodItem> mFoodItems;
     private ConfigslistAdapter mAdapter;
-    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,7 @@ public class Configurations extends AppCompatActivity {
                     int frequency = data.getIntExtra("frequency", 0);
 
                     mFoodItems.add(new FoodItem(label, brand, info, amount, frequency, 0));
+                    Collections.sort(mFoodItems, (foodItem1, foodItem2) -> foodItem1.getFrequency() - foodItem2.getFrequency());
                 }
             }
         }
@@ -62,8 +63,6 @@ public class Configurations extends AppCompatActivity {
         super.onResume();
 
         if (!mFoodItems.isEmpty()) {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            sortFoodItemsByFrequency();
             // TODO: toteuta mFoodItemsin järjestely siten, että tiedä aina, mihin kohtaan uusi
             //  fooditem tuli ja voit näin käyttää asianmukaista notify-metodia.
             mAdapter.notifyDataSetChanged();
@@ -71,39 +70,10 @@ public class Configurations extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
-        this.mRecyclerView = findViewById(R.id.config_recyclerview);
-        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView mRecyclerView = findViewById(R.id.config_recyclerview);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         this.mAdapter = new ConfigslistAdapter(this, mFoodItems);
-        this.mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
     }
-
-    private void sortFoodItemsByFrequency() {
-        List<FoodItem> biweeklys = new ArrayList<>();
-        List<FoodItem> weeklys = new ArrayList<>();
-        List<FoodItem> monthlys = new ArrayList<>();
-
-        mFoodItems.forEach(foodItem -> {
-            switch (foodItem.getFrequency()) {
-                case 0:
-                    biweeklys.add(foodItem);
-                    break;
-                case 1:
-                    weeklys.add(foodItem);
-                    break;
-                case 2:
-                    monthlys.add(foodItem);
-                    break;
-            }
-        });
-
-        List<FoodItem> sorted = new ArrayList<>();
-
-        sorted.addAll(biweeklys);
-        sorted.addAll(weeklys);
-        sorted.addAll(monthlys);
-
-        this.mFoodItems = sorted;
-    }
-
 }
