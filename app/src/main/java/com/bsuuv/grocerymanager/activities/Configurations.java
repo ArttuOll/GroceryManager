@@ -51,21 +51,14 @@ public class Configurations extends AppCompatActivity {
                     String info = data.getStringExtra("info");
                     int frequency = data.getIntExtra("frequency", 0);
 
+                    int insertionPosition = getFoodItemInsertionPosition(frequency);
+
                     mFoodItems.add(new FoodItem(label, brand, info, amount, frequency, 0));
                     Collections.sort(mFoodItems, (foodItem1, foodItem2) -> foodItem1.getFrequency() - foodItem2.getFrequency());
+
+                    mAdapter.notifyItemInserted(insertionPosition);
                 }
             }
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (!mFoodItems.isEmpty()) {
-            // TODO: toteuta mFoodItemsin järjestely siten, että tiedä aina, mihin kohtaan uusi
-            //  fooditem tuli ja voit näin käyttää asianmukaista notify-metodia.
-            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -75,5 +68,36 @@ public class Configurations extends AppCompatActivity {
 
         this.mAdapter = new ConfigslistAdapter(this, mFoodItems);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private int getFoodItemInsertionPosition(int frequency) {
+        int biweeklys = 0;
+        int weeklys = 0;
+        int monthlys = 0;
+
+        for (FoodItem foodItem : mFoodItems) {
+            switch (foodItem.getFrequency()) {
+                case FoodItem.Frequency.BIWEEKLY:
+                    biweeklys++;
+                    break;
+                case FoodItem.Frequency.WEEKLY:
+                    weeklys++;
+                    break;
+                case FoodItem.Frequency.MONTHLY:
+                    monthlys++;
+                    break;
+            }
+        }
+
+        switch (frequency) {
+            case FoodItem.Frequency.BIWEEKLY:
+                return biweeklys;
+            case FoodItem.Frequency.WEEKLY:
+                return biweeklys + weeklys;
+            case FoodItem.Frequency.MONTHLY:
+                return biweeklys + weeklys + monthlys;
+            default:
+                return -1;
+        }
     }
 }
