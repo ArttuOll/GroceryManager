@@ -73,7 +73,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             foodItemLabel.setText(currentFoodItem.getLabel());
             foodItemBrand.setText(currentFoodItem.getBrand());
             foodItemSize.setText(currentFoodItem.getAmount());
-            Glide.with(mContext).load(currentFoodItem.getImageResource()).into(mFoodImage);
+            Glide.with(mContext).load(currentFoodItem.getImageUri()).into(mFoodImage);
         }
 
         @Override
@@ -82,7 +82,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
             Intent foodItemDetail = new Intent(mContext, FoodItemDetail.class);
             foodItemDetail.putExtra("title", currentFoodItem.getLabel());
-            foodItemDetail.putExtra("image_resource", currentFoodItem.getImageResource());
+            foodItemDetail.putExtra("image_resource", currentFoodItem.getImageUri());
             foodItemDetail.putExtra("brand", currentFoodItem.getBrand());
             foodItemDetail.putExtra("info", currentFoodItem.getInfo());
             foodItemDetail.putExtra("amount", currentFoodItem.getAmount());

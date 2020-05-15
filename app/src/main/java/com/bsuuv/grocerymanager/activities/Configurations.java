@@ -1,6 +1,7 @@
 package com.bsuuv.grocerymanager.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -50,10 +51,11 @@ public class Configurations extends AppCompatActivity {
                     String amount = data.getStringExtra("amount");
                     String info = data.getStringExtra("info");
                     int frequency = data.getIntExtra("frequency", 0);
+                    Uri imageUri = data.getParcelableExtra("Uri");
 
                     int insertionPosition = getFoodItemInsertionPosition(frequency);
 
-                    mFoodItems.add(new FoodItem(label, brand, info, amount, frequency, 0));
+                    mFoodItems.add(new FoodItem(label, brand, info, amount, frequency, imageUri));
                     Collections.sort(mFoodItems, (foodItem1, foodItem2) -> foodItem1.getFrequency() - foodItem2.getFrequency());
 
                     mAdapter.notifyItemInserted(insertionPosition);

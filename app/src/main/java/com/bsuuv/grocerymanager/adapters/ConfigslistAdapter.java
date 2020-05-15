@@ -77,7 +77,7 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
             foodItemBrand.setText(currentFoodItem.getBrand());
             foodItemSize.setText(currentFoodItem.getAmount());
             foodItemFreq.setText(String.valueOf(currentFoodItem.getFrequency()));
-            Glide.with(mContext).load(currentFoodItem.getImageResource()).into(mFoodImage);
+            Glide.with(mContext).load(currentFoodItem.getImageUri()).into(mFoodImage);
         }
 
         @Override
@@ -86,10 +86,12 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
 
             Intent foodItemDetail = new Intent(mContext, FoodItemDetail.class);
             foodItemDetail.putExtra("title", currentFoodItem.getLabel());
-            foodItemDetail.putExtra("image_resource", currentFoodItem.getImageResource());
+            foodItemDetail.putExtra("image_resource", currentFoodItem.getImageUri());
             foodItemDetail.putExtra("brand", currentFoodItem.getBrand());
             foodItemDetail.putExtra("info", currentFoodItem.getInfo());
             foodItemDetail.putExtra("amount", currentFoodItem.getAmount());
+            foodItemDetail.putExtra("imageUri", currentFoodItem.getImageUri());
+
             mContext.startActivity(foodItemDetail);
         }
     }

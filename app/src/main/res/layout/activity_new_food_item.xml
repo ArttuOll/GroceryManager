@@ -35,6 +35,7 @@
         android:background="@drawable/ic_add_a_photo"
         android:contentDescription="@string/food_image_content_description"
         app:layout_constraintBottom_toBottomOf="@id/imageView_new_fooditem"
+        android:onClick="onCameraIconClick"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
