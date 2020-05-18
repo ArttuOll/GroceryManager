@@ -65,7 +65,7 @@ public class NewFoodItem extends AppCompatActivity {
     private EditText amountEditText;
     private EditText infoEditText;
     private ImageView foodImageView;
-    private String currentPhotoPath;
+    private Uri currentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +96,7 @@ public class NewFoodItem extends AppCompatActivity {
         toConfigs.putExtra("amount", amount);
         toConfigs.putExtra("info", info);
         toConfigs.putExtra("frequency", frequency);
+        toConfigs.putExtra("Uri", currentPhotoPath);
 
         setResult(RESULT_OK, toConfigs);
         finish();
@@ -126,7 +127,8 @@ public class NewFoodItem extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    Bitmap foodImage = BitmapFactory.decodeFile(currentPhotoPath);
+                    // TODO: muuta käyttämään Glidea kuvan asettamiseen
+                    Bitmap foodImage = BitmapFactory.decodeFile(currentPhotoPath.getPath());
                     foodImageView.setImageBitmap(foodImage);
                 }
             }
@@ -167,7 +169,7 @@ public class NewFoodItem extends AppCompatActivity {
         File storegeDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storegeDir);
 
-        currentPhotoPath = image.getAbsolutePath();
+        currentPhotoPath = Uri.parse(image.toURI().getPath());
 
         return image;
     }

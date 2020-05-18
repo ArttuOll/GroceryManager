@@ -21,6 +21,7 @@ public class FoodItemDetail extends AppCompatActivity {
         setUpTextViews();
     }
 
+    // TODO:Korjaa käyttämään Uria
     private void setUpImageView() {
         ImageView foodImage = findViewById(R.id.imageView_detail);
         foodImage.setClipToOutline(true);

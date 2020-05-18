@@ -16,6 +16,7 @@ import com.bsuuv.grocerymanager.activities.FoodItemDetail;
 import com.bsuuv.grocerymanager.domain.FoodItem;
 import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.util.List;
 
 public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.ConfigsViewHolder> {
@@ -56,7 +57,7 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
         private final TextView foodItemBrand;
         private final TextView foodItemSize;
         private final TextView foodItemFreq;
-        private ImageView mFoodImage;
+        private final ImageView mFoodImage;
 
         ConfigsViewHolder(View itemView, ConfigslistAdapter adapter) {
             super(itemView);
@@ -77,7 +78,7 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
             foodItemBrand.setText(currentFoodItem.getBrand());
             foodItemSize.setText(currentFoodItem.getAmount());
             foodItemFreq.setText(String.valueOf(currentFoodItem.getFrequency()));
-            Glide.with(mContext).load(currentFoodItem.getImageUri()).into(mFoodImage);
+            Glide.with(mContext).load(new File(String.valueOf(currentFoodItem.getImageUri()))).into(mFoodImage);
         }
 
         @Override
@@ -86,7 +87,6 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
 
             Intent foodItemDetail = new Intent(mContext, FoodItemDetail.class);
             foodItemDetail.putExtra("title", currentFoodItem.getLabel());
-            foodItemDetail.putExtra("image_resource", currentFoodItem.getImageUri());
             foodItemDetail.putExtra("brand", currentFoodItem.getBrand());
             foodItemDetail.putExtra("info", currentFoodItem.getInfo());
             foodItemDetail.putExtra("amount", currentFoodItem.getAmount());
