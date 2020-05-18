@@ -90,7 +90,7 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
             foodItemDetail.putExtra("brand", currentFoodItem.getBrand());
             foodItemDetail.putExtra("info", currentFoodItem.getInfo());
             foodItemDetail.putExtra("amount", currentFoodItem.getAmount());
-            foodItemDetail.putExtra("imageUri", currentFoodItem.getImageUri());
+            foodItemDetail.putExtra("uri", currentFoodItem.getImageUri());
 
             mContext.startActivity(foodItemDetail);
         }

@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bsuuv.grocerymanager.R;
 import com.bumptech.glide.Glide;
 
+// TODO: joutunee tekemään oman version Configurations-luokkaa varten,
+//  koska muuten tästä siirrytään aina MainActivityyn
 public class FoodItemDetail extends AppCompatActivity {
 
     @Override
@@ -21,12 +23,12 @@ public class FoodItemDetail extends AppCompatActivity {
         setUpTextViews();
     }
 
-    // TODO:Korjaa käyttämään Uria
     private void setUpImageView() {
         ImageView foodImage = findViewById(R.id.imageView_detail);
         foodImage.setClipToOutline(true);
-        Glide.with(this).load(getIntent()
-                .getIntExtra("image_resource", 0)).into(foodImage);
+        String imageUri = String.valueOf(getIntent()
+                .getParcelableExtra("uri"));
+        Glide.with(this).load(imageUri).into(foodImage);
     }
 
     private void setUpTextViews() {

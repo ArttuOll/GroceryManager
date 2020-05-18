@@ -51,7 +51,7 @@ public class Configurations extends AppCompatActivity {
                     String amount = data.getStringExtra("amount");
                     String info = data.getStringExtra("info");
                     int frequency = data.getIntExtra("frequency", 0);
-                    Uri imageUri = data.getParcelableExtra("Uri");
+                    Uri imageUri = data.getParcelableExtra("uri");
 
                     int insertionPosition = getFoodItemInsertionPosition(frequency);
 

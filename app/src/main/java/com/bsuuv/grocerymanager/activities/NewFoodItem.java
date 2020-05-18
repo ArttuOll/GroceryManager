@@ -95,7 +95,7 @@ public class NewFoodItem extends AppCompatActivity {
         toConfigs.putExtra("amount", amount);
         toConfigs.putExtra("info", info);
         toConfigs.putExtra("frequency", frequency);
-        toConfigs.putExtra("Uri", mCurrentPhotoPath);
+        toConfigs.putExtra("uri", mCurrentPhotoPath);
 
         setResult(RESULT_OK, toConfigs);
         finish();
