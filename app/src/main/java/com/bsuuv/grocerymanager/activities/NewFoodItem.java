@@ -64,7 +64,7 @@ public class NewFoodItem extends AppCompatActivity {
     private EditText mAmountEditText;
     private EditText mInfoEditText;
     private ImageView mFoodImageView;
-    private Uri mCurrentPhotoPath;
+    private String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +127,7 @@ public class NewFoodItem extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     Glide.with(this)
-                            .load(new File(String.valueOf(mCurrentPhotoPath.getPath())))
+                            .load(new File(String.valueOf(mCurrentPhotoPath)))
                             .into(mFoodImageView);
                 }
             }
@@ -168,7 +168,7 @@ public class NewFoodItem extends AppCompatActivity {
         File storegeDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storegeDir);
 
-        mCurrentPhotoPath = Uri.parse(image.toURI().getPath());
+        mCurrentPhotoPath = Uri.parse(image.toURI().getPath()).getPath();
 
         return image;
     }

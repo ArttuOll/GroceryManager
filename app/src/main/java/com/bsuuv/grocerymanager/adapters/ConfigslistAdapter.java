@@ -81,6 +81,7 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
             Glide.with(mContext).load(new File(String.valueOf(currentFoodItem.getImageUri()))).into(mFoodImage);
         }
 
+        // TODO: avaa newFoodItem, jossa kentät täytettynä klikatun fooditemin mukaan.
         @Override
         public void onClick(View v) {
             FoodItem currentFoodItem = mFoodItems.get(getAdapterPosition());

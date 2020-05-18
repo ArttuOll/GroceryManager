@@ -26,8 +26,8 @@ public class FoodItemDetail extends AppCompatActivity {
     private void setUpImageView() {
         ImageView foodImage = findViewById(R.id.imageView_detail);
         foodImage.setClipToOutline(true);
-        String imageUri = String.valueOf(getIntent()
-                .getParcelableExtra("uri"));
+
+        String imageUri = getIntent().getStringExtra("uri");
         Glide.with(this).load(imageUri).into(foodImage);
     }
 

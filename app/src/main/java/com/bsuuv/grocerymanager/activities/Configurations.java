@@ -1,7 +1,7 @@
 package com.bsuuv.grocerymanager.activities;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.adapters.ConfigslistAdapter;
 import com.bsuuv.grocerymanager.domain.FoodItem;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,8 +24,11 @@ import java.util.List;
 public class Configurations extends AppCompatActivity {
 
     public static final int FOOD_ITEM_DETAILS_REQUEST = 1;
+    private static final String FOOD_ITEMS_KEY = "foodItems";
     private List<FoodItem> mFoodItems;
     private ConfigslistAdapter mAdapter;
+    private SharedPreferences mPreferences;
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +36,18 @@ public class Configurations extends AppCompatActivity {
         setContentView(R.layout.activity_configurations);
 
         this.mFoodItems = new ArrayList<>();
+        this.gson = new Gson();
+        String prefFile = "com.bsuuv.grocerymanager.sharedpreferences";
+        this.mPreferences = getSharedPreferences(prefFile, MODE_PRIVATE);
+        //SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+        //preferencesEditor.clear().apply();
+
+        String jsonFoodItems = mPreferences.getString(FOOD_ITEMS_KEY, "");
+        Type listType = new TypeToken<List<FoodItem>>() {
+        }.getType();
+
+        List<FoodItem> foodItems = gson.fromJson(jsonFoodItems, listType);
+        if (foodItems != null) this.mFoodItems = foodItems;
 
         setUpRecyclerView();
     }
@@ -37,6 +55,16 @@ public class Configurations extends AppCompatActivity {
     public void onFabClick(View view) {
         Intent toNewFoodItem = new Intent(this, NewFoodItem.class);
         startActivityForResult(toNewFoodItem, FOOD_ITEM_DETAILS_REQUEST);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+        String json = gson.toJson(mFoodItems);
+
+        preferencesEditor.putString(FOOD_ITEMS_KEY, json);
+        preferencesEditor.apply();
     }
 
     @Override
@@ -51,12 +79,13 @@ public class Configurations extends AppCompatActivity {
                     String amount = data.getStringExtra("amount");
                     String info = data.getStringExtra("info");
                     int frequency = data.getIntExtra("frequency", 0);
-                    Uri imageUri = data.getParcelableExtra("uri");
+                    String imageUri = data.getStringExtra("uri");
 
                     int insertionPosition = getFoodItemInsertionPosition(frequency);
 
                     mFoodItems.add(new FoodItem(label, brand, info, amount, frequency, imageUri));
-                    Collections.sort(mFoodItems, (foodItem1, foodItem2) -> foodItem1.getFrequency() - foodItem2.getFrequency());
+                    Collections.sort(mFoodItems, (foodItem1, foodItem2) ->
+                            foodItem1.getFrequency() - foodItem2.getFrequency());
 
                     mAdapter.notifyItemInserted(insertionPosition);
                 }
@@ -99,7 +128,7 @@ public class Configurations extends AppCompatActivity {
             case FoodItem.Frequency.MONTHLY:
                 return biweeklys + weeklys + monthlys;
             default:
-                return -1;
+                return 0;
         }
     }
 }

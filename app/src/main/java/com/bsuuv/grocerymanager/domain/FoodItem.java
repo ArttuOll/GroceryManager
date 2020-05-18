@@ -1,21 +1,19 @@
 package com.bsuuv.grocerymanager.domain;
 
-import android.net.Uri;
-
 /**
  * A class representing a food-item in a meal.
  * There is currently a total of 57 nutrients in a food-item and they are grouped into maps to keep them organized.
  */
 public class FoodItem {
 
-    private final Uri imageUri;
+    private final String imageUri;
     private String mLabel;
     private String mBrand;
     private String mInfo;
     private String mAmount;
     private int mFrequency;
 
-    public FoodItem(String label, String brand, String info, String amount, int frequency, Uri imageUri) {
+    public FoodItem(String label, String brand, String info, String amount, int frequency, String imageUri) {
         this.mLabel = label;
         this.mBrand = brand;
         this.mInfo = info;
@@ -40,7 +38,7 @@ public class FoodItem {
         return mInfo;
     }
 
-    public Uri getImageUri() {
+    public String getImageUri() {
         return imageUri;
     }
 
