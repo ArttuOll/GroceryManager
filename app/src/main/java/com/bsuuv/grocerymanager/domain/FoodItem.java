@@ -1,8 +1,7 @@
 package com.bsuuv.grocerymanager.domain;
 
 /**
- * A class representing a food-item in a meal.
- * There is currently a total of 57 nutrients in a food-item and they are grouped into maps to keep them organized.
+ * A class representing a food-item in the grocery list.
  */
 public class FoodItem {
 

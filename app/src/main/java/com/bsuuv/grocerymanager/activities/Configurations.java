@@ -142,6 +142,8 @@ public class Configurations extends AppCompatActivity {
             }
         }
 
+        // When a food item is inserted into the RecyclerView, it is added after all the other
+        // food-items with the same frequency.
         switch (frequency) {
             case FoodItem.Frequency.BIWEEKLY:
                 return biweeklys;

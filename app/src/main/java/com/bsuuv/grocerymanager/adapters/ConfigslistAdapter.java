@@ -98,8 +98,8 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
             String uri = (currentFoodItem.getImageUri() != null) ? currentFoodItem.getImageUri() : "";
             toNewFoodItem.putExtra("uri", uri);
 
-            Activity origin = (Activity) mContext;
-            origin.startActivityForResult(toNewFoodItem, Configurations.FOOD_ITEM_EDIT_REQUEST);
+            Activity configurations = (Activity) mContext;
+            configurations.startActivityForResult(toNewFoodItem, Configurations.FOOD_ITEM_EDIT_REQUEST);
         }
     }
 }

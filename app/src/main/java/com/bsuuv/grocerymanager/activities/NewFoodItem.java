@@ -85,6 +85,7 @@ public class NewFoodItem extends AppCompatActivity {
 
     public void onCameraIconClick(View view) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Check if there exists a program that can handle the intent.
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             File photoFile = null;
             try {
@@ -145,17 +146,19 @@ public class NewFoodItem extends AppCompatActivity {
     }
 
     private void manageIntent() {
-        Intent intent = getIntent();
-        if (intent != null) {
-            this.mLabelEditText.setText(intent.getStringExtra("label"));
-            this.mBrandEditText.setText(intent.getStringExtra("brand"));
-            this.mAmountEditText.setText(intent.getStringExtra("amount"));
-            this.mInfoEditText.setText(intent.getStringExtra("info"));
+        Intent fromConfigs = getIntent();
+        if (fromConfigs != null) {
+            this.mLabelEditText.setText(fromConfigs.getStringExtra("label"));
+            this.mBrandEditText.setText(fromConfigs.getStringExtra("brand"));
+            this.mAmountEditText.setText(fromConfigs.getStringExtra("amount"));
+            this.mInfoEditText.setText(fromConfigs.getStringExtra("info"));
 
-            mCurrentPhotoPath = intent.getStringExtra("uri");
+            mCurrentPhotoPath = fromConfigs.getStringExtra("uri");
             if (mCurrentPhotoPath != null) populateFoodImageView(mCurrentPhotoPath);
 
-            switch (intent.getIntExtra("freq", 0)) {
+            // Based on the frequency of the food item being edited, set the toggle buttons to either
+            // checked or disabled.
+            switch (fromConfigs.getIntExtra("freq", 0)) {
                 case FoodItem.Frequency.BIWEEKLY:
                     setBiWeeklyToggleCheckedDisableOthers();
                     break;
@@ -222,8 +225,11 @@ public class NewFoodItem extends AppCompatActivity {
     private File createImageFile() throws IOException {
         String timestamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timestamp + "_";
-        File storegeDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storegeDir);
+
+        // The directory in which the image is saved, provided by the FileProvider defined in the
+        // project.
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
 
         mCurrentPhotoPath = Uri.parse(image.toURI().getPath()).getPath();
 

@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
         setUpRecyclerView();
 
-        // generateTestData();
-
         ItemTouchHelper helper = initializeItemTouchHelper();
         helper.attachToRecyclerView(mRecyclerView);
     }
@@ -61,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -69,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_configure) {
-            Intent configs = new Intent(this, Configurations.class);
-            this.startActivity(configs);
+            Intent toConfigs = new Intent(this, Configurations.class);
+            this.startActivity(toConfigs);
 
             return true;
         } else {
@@ -91,22 +88,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle(getString(R.string.mainActivity_actionbar_label) + " " + getCurrentDate());
     }
-
-    /*
-    private void generateTestData() {
-        TypedArray foodImageResources = getResources().obtainTypedArray(R.array.food_images);
-        String[] foodLabels = getResources().getStringArray(R.array.food_labels);
-        String[] foodBrands = getResources().getStringArray(R.array.food_brands);
-        String[] foodInfos = getResources().getStringArray(R.array.food_infos);
-        String[] amounts = getResources().getStringArray(R.array.food_amounts);
-
-        for (int i = 0; i < foodLabels.length; i++) {
-            mFoodItems.add(new FoodItem(foodLabels[i], foodBrands[i], foodInfos[i], amounts[i],
-                    foodImageResources.getResourceId(i, 0)));
-        }
-
-        foodImageResources.recycle();
-    }*/
 
     private String getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
