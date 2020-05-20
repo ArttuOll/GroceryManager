@@ -81,7 +81,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             FoodItem currentFoodItem = mFoodItems.get(getAdapterPosition());
 
             Intent foodItemDetail = new Intent(mContext, FoodItemDetail.class);
-            foodItemDetail.putExtra("title", currentFoodItem.getLabel());
+            foodItemDetail.putExtra("label", currentFoodItem.getLabel());
             foodItemDetail.putExtra("image_resource", currentFoodItem.getImageUri());
             foodItemDetail.putExtra("brand", currentFoodItem.getBrand());
             foodItemDetail.putExtra("info", currentFoodItem.getInfo());

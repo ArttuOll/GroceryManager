@@ -9,8 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bsuuv.grocerymanager.R;
 import com.bumptech.glide.Glide;
 
-// TODO: joutunee tekemään oman version Configurations-luokkaa varten,
-//  koska muuten tästä siirrytään aina MainActivityyn
 public class FoodItemDetail extends AppCompatActivity {
 
     @Override
@@ -37,7 +35,7 @@ public class FoodItemDetail extends AppCompatActivity {
         TextView brand = findViewById(R.id.textview_brand);
         TextView info = findViewById(R.id.textview_info);
 
-        title.setText(getIntent().getStringExtra("title"));
+        title.setText(getIntent().getStringExtra("label"));
         amount.setText(getIntent().getStringExtra("amount"));
         brand.setText(getIntent().getStringExtra("brand"));
         info.setText(getIntent().getStringExtra("info"));

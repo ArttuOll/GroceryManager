@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.activities.FoodItemDetail;
+import com.bsuuv.grocerymanager.activities.NewFoodItem;
 import com.bsuuv.grocerymanager.domain.FoodItem;
 import com.bumptech.glide.Glide;
 
@@ -86,14 +86,17 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
         public void onClick(View v) {
             FoodItem currentFoodItem = mFoodItems.get(getAdapterPosition());
 
-            Intent foodItemDetail = new Intent(mContext, FoodItemDetail.class);
-            foodItemDetail.putExtra("title", currentFoodItem.getLabel());
-            foodItemDetail.putExtra("brand", currentFoodItem.getBrand());
-            foodItemDetail.putExtra("info", currentFoodItem.getInfo());
-            foodItemDetail.putExtra("amount", currentFoodItem.getAmount());
-            foodItemDetail.putExtra("uri", currentFoodItem.getImageUri());
+            Intent newFoodItem = new Intent(mContext, NewFoodItem.class);
+            newFoodItem.putExtra("label", currentFoodItem.getLabel());
+            newFoodItem.putExtra("brand", currentFoodItem.getBrand());
+            newFoodItem.putExtra("info", currentFoodItem.getInfo());
+            newFoodItem.putExtra("amount", currentFoodItem.getAmount());
+            newFoodItem.putExtra("freq", currentFoodItem.getFrequency());
 
-            mContext.startActivity(foodItemDetail);
+            String uri = (currentFoodItem.getImageUri() != null) ? currentFoodItem.getImageUri() : "";
+            newFoodItem.putExtra("uri", uri);
+
+            mContext.startActivity(newFoodItem);
         }
     }
 }

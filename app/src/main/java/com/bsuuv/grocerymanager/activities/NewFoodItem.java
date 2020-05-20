@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+// TODO: nyt fooditem avautuu kentät täytettynä, mutta muutokset eivät tallennu
 public class NewFoodItem extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -30,33 +31,12 @@ public class NewFoodItem extends AppCompatActivity {
     private ToggleButton mWeeklyToggle;
     private ToggleButton mBiweeklyToggle;
     private ToggleButton mMonthlyToggle;
-    private View.OnClickListener mOnToggleButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (v.getId() == R.id.togglebuton_biweekly && mBiweeklyToggle.isChecked()) {
-                mWeeklyToggle.setEnabled(false);
-                mMonthlyToggle.setEnabled(false);
-            } else if (v.getId() == R.id.togglebuton_biweekly && !mBiweeklyToggle.isChecked()) {
-                mWeeklyToggle.setEnabled(true);
-                mMonthlyToggle.setEnabled(true);
-            }
+    private View.OnClickListener mOnToggleButtonClickListener = view -> {
+        handleBiweeklyToggleClicks(view);
 
-            if (v.getId() == R.id.togglebuton_weekly && mWeeklyToggle.isChecked()) {
-                mBiweeklyToggle.setEnabled(false);
-                mMonthlyToggle.setEnabled(false);
-            } else if (v.getId() == R.id.togglebuton_weekly && !mWeeklyToggle.isChecked()) {
-                mBiweeklyToggle.setEnabled(true);
-                mMonthlyToggle.setEnabled(true);
-            }
+        handleWeeklyToggleClicks(view);
 
-            if (v.getId() == R.id.togglebuton_monthly && mMonthlyToggle.isChecked()) {
-                mBiweeklyToggle.setEnabled(false);
-                mWeeklyToggle.setEnabled(false);
-            } else if (v.getId() == R.id.togglebuton_monthly && !mMonthlyToggle.isChecked()) {
-                mBiweeklyToggle.setEnabled(true);
-                mWeeklyToggle.setEnabled(true);
-            }
-        }
+        handleMonthlyToggleClicks(view);
     };
 
     private EditText mLabelEditText;
@@ -80,6 +60,8 @@ public class NewFoodItem extends AppCompatActivity {
         this.mFoodImageView = findViewById(R.id.imageView_new_fooditem);
 
         setUpToggleButtons();
+
+        manageIntent();
     }
 
     public void onFabClick(View view) {
@@ -95,6 +77,7 @@ public class NewFoodItem extends AppCompatActivity {
         toConfigs.putExtra("amount", amount);
         toConfigs.putExtra("info", info);
         toConfigs.putExtra("frequency", frequency);
+
         toConfigs.putExtra("uri", mCurrentPhotoPath);
 
         setResult(RESULT_OK, toConfigs);
@@ -110,7 +93,9 @@ public class NewFoodItem extends AppCompatActivity {
             } catch (IOException e) {
                 e.getMessage();
             }
+
             if (photoFile != null) {
+                // URI for a file in which the image is saved.
                 Uri photoUri = FileProvider.getUriForFile(this,
                         "com.bsuuv.android.fileprovider", photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
@@ -125,13 +110,86 @@ public class NewFoodItem extends AppCompatActivity {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
-                if (data != null) {
-                    Glide.with(this)
-                            .load(new File(String.valueOf(mCurrentPhotoPath)))
-                            .into(mFoodImageView);
-                }
+                if (data != null) populateFoodImageView(mCurrentPhotoPath);
             }
         }
+    }
+
+    private void handleBiweeklyToggleClicks(View v) {
+        if (v.getId() == R.id.togglebuton_biweekly && mBiweeklyToggle.isChecked()) {
+            mWeeklyToggle.setEnabled(false);
+            mMonthlyToggle.setEnabled(false);
+        } else if (v.getId() == R.id.togglebuton_biweekly && !mBiweeklyToggle.isChecked()) {
+            mWeeklyToggle.setEnabled(true);
+            mMonthlyToggle.setEnabled(true);
+        }
+    }
+
+    private void handleWeeklyToggleClicks(View v) {
+        if (v.getId() == R.id.togglebuton_weekly && mWeeklyToggle.isChecked()) {
+            mBiweeklyToggle.setEnabled(false);
+            mMonthlyToggle.setEnabled(false);
+        } else if (v.getId() == R.id.togglebuton_weekly && !mWeeklyToggle.isChecked()) {
+            mBiweeklyToggle.setEnabled(true);
+            mMonthlyToggle.setEnabled(true);
+        }
+    }
+
+    private void handleMonthlyToggleClicks(View v) {
+        if (v.getId() == R.id.togglebuton_monthly && mMonthlyToggle.isChecked()) {
+            mBiweeklyToggle.setEnabled(false);
+            mWeeklyToggle.setEnabled(false);
+        } else if (v.getId() == R.id.togglebuton_monthly && !mMonthlyToggle.isChecked()) {
+            mBiweeklyToggle.setEnabled(true);
+            mWeeklyToggle.setEnabled(true);
+        }
+    }
+
+    private void manageIntent() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            this.mLabelEditText.setText(intent.getStringExtra("label"));
+            this.mBrandEditText.setText(intent.getStringExtra("brand"));
+            this.mAmountEditText.setText(intent.getStringExtra("amount"));
+            this.mInfoEditText.setText(intent.getStringExtra("info"));
+
+            String uri = intent.getStringExtra("uri");
+            if (uri != null) populateFoodImageView(uri);
+
+            switch (intent.getIntExtra("freq", 0)) {
+                case FoodItem.Frequency.BIWEEKLY:
+                    setBiWeeklyToggleCheckedDisableOthers();
+                    break;
+                case FoodItem.Frequency.WEEKLY:
+                    setWeeklyToggleCheckedDisableOthers();
+                    break;
+                case FoodItem.Frequency.MONTHLY:
+                    setMonthlyToggleCheckedDisableOthers();
+                    break;
+            }
+        }
+    }
+
+    private void setBiWeeklyToggleCheckedDisableOthers() {
+        this.mBiweeklyToggle.setChecked(true);
+        this.mWeeklyToggle.setEnabled(false);
+        this.mMonthlyToggle.setEnabled(false);
+    }
+
+    private void setWeeklyToggleCheckedDisableOthers() {
+        this.mBiweeklyToggle.setEnabled(false);
+        this.mWeeklyToggle.setChecked(true);
+        this.mMonthlyToggle.setEnabled(false);
+    }
+
+    private void setMonthlyToggleCheckedDisableOthers() {
+        this.mBiweeklyToggle.setEnabled(false);
+        this.mWeeklyToggle.setEnabled(false);
+        this.mMonthlyToggle.setChecked(true);
+    }
+
+    private void populateFoodImageView(String path) {
+        Glide.with(this).load(new File(path)).into(mFoodImageView);
     }
 
     private int getActiveToggleButton() {
