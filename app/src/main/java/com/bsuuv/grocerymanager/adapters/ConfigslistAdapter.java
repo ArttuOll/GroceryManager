@@ -1,5 +1,6 @@
 package com.bsuuv.grocerymanager.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.activities.Configurations;
 import com.bsuuv.grocerymanager.activities.NewFoodItem;
 import com.bsuuv.grocerymanager.domain.FoodItem;
 import com.bumptech.glide.Glide;
@@ -81,22 +83,23 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
             Glide.with(mContext).load(new File(String.valueOf(currentFoodItem.getImageUri()))).into(mFoodImage);
         }
 
-        // TODO: avaa newFoodItem, jossa kentät täytettynä klikatun fooditemin mukaan.
         @Override
         public void onClick(View v) {
             FoodItem currentFoodItem = mFoodItems.get(getAdapterPosition());
 
-            Intent newFoodItem = new Intent(mContext, NewFoodItem.class);
-            newFoodItem.putExtra("label", currentFoodItem.getLabel());
-            newFoodItem.putExtra("brand", currentFoodItem.getBrand());
-            newFoodItem.putExtra("info", currentFoodItem.getInfo());
-            newFoodItem.putExtra("amount", currentFoodItem.getAmount());
-            newFoodItem.putExtra("freq", currentFoodItem.getFrequency());
+            Intent toNewFoodItem = new Intent(mContext, NewFoodItem.class);
+            toNewFoodItem.putExtra("label", currentFoodItem.getLabel());
+            toNewFoodItem.putExtra("brand", currentFoodItem.getBrand());
+            toNewFoodItem.putExtra("info", currentFoodItem.getInfo());
+            toNewFoodItem.putExtra("amount", currentFoodItem.getAmount());
+            toNewFoodItem.putExtra("freq", currentFoodItem.getFrequency());
+            toNewFoodItem.putExtra("editPosition", getAdapterPosition());
 
             String uri = (currentFoodItem.getImageUri() != null) ? currentFoodItem.getImageUri() : "";
-            newFoodItem.putExtra("uri", uri);
+            toNewFoodItem.putExtra("uri", uri);
 
-            mContext.startActivity(newFoodItem);
+            Activity origin = (Activity) mContext;
+            origin.startActivityForResult(toNewFoodItem, Configurations.FOOD_ITEM_EDIT_REQUEST);
         }
     }
 }

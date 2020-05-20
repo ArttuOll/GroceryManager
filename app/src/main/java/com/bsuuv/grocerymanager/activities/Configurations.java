@@ -24,6 +24,7 @@ import java.util.List;
 public class Configurations extends AppCompatActivity {
 
     public static final int FOOD_ITEM_DETAILS_REQUEST = 1;
+    public static final int FOOD_ITEM_EDIT_REQUEST = 2;
     private static final String FOOD_ITEMS_KEY = "foodItems";
     private List<FoodItem> mFoodItems;
     private ConfigslistAdapter mAdapter;
@@ -75,23 +76,43 @@ public class Configurations extends AppCompatActivity {
         if (requestCode == FOOD_ITEM_DETAILS_REQUEST) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    String label = data.getStringExtra("label");
-                    String brand = data.getStringExtra("brand");
-                    String amount = data.getStringExtra("amount");
-                    String info = data.getStringExtra("info");
-                    int frequency = data.getIntExtra("frequency", 0);
-                    String imageUri = data.getStringExtra("uri");
+                    FoodItem result = createFoodItemFromIntent(data);
 
-                    int insertionPosition = getFoodItemInsertionPosition(frequency);
+                    int insertionPosition = getFoodItemInsertionPosition(result.getFrequency());
 
-                    mFoodItems.add(new FoodItem(label, brand, info, amount, frequency, imageUri));
+                    mFoodItems.add(result);
                     Collections.sort(mFoodItems, (foodItem1, foodItem2) ->
                             foodItem1.getFrequency() - foodItem2.getFrequency());
 
                     mAdapter.notifyItemInserted(insertionPosition);
                 }
             }
+        } else if (requestCode == FOOD_ITEM_EDIT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    FoodItem result = createFoodItemFromIntent(data);
+
+                    int editedPosition = data.getIntExtra("editPosition", 0);
+
+                    mFoodItems.set(editedPosition, result);
+
+                    mAdapter.notifyItemChanged(editedPosition);
+                }
+            }
         }
+
+
+    }
+
+    private FoodItem createFoodItemFromIntent(Intent data) {
+        String label = data.getStringExtra("label");
+        String brand = data.getStringExtra("brand");
+        String amount = data.getStringExtra("amount");
+        String info = data.getStringExtra("info");
+        int frequency = data.getIntExtra("frequency", 0);
+        String imageUri = data.getStringExtra("uri");
+
+        return new FoodItem(label, brand, info, amount, frequency, imageUri);
     }
 
     private void setUpRecyclerView() {

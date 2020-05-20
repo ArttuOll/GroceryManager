@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-// TODO: nyt fooditem avautuu kentät täytettynä, mutta muutokset eivät tallennu
 public class NewFoodItem extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -153,8 +152,8 @@ public class NewFoodItem extends AppCompatActivity {
             this.mAmountEditText.setText(intent.getStringExtra("amount"));
             this.mInfoEditText.setText(intent.getStringExtra("info"));
 
-            String uri = intent.getStringExtra("uri");
-            if (uri != null) populateFoodImageView(uri);
+            mCurrentPhotoPath = intent.getStringExtra("uri");
+            if (mCurrentPhotoPath != null) populateFoodImageView(mCurrentPhotoPath);
 
             switch (intent.getIntExtra("freq", 0)) {
                 case FoodItem.Frequency.BIWEEKLY:
