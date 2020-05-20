@@ -22,7 +22,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
     private List<FoodItem> mFoodItems;
     private LayoutInflater mInflater;
-    // Represent the activity in which this the RecyclerView of this adapter resides.
+    // Represents the activity in which this the RecyclerView of this adapter resides.
     private Context mContext;
 
     public GroceryListAdapter(Context context, List<FoodItem> foodItems) {
