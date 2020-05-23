@@ -7,6 +7,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +26,7 @@ public class Configurations extends AppCompatActivity {
 
     public static final int FOOD_ITEM_DETAILS_REQUEST = 1;
     public static final int FOOD_ITEM_EDIT_REQUEST = 2;
-    private static final String FOOD_ITEMS_KEY = "foodItems";
+    public static final String FOOD_ITEMS_KEY = "foodItems";
     private List<FoodItem> mFoodItems;
     private ConfigslistAdapter mAdapter;
     private SharedPreferences mPreferences;
@@ -39,17 +40,9 @@ public class Configurations extends AppCompatActivity {
 
         this.mFoodItems = new ArrayList<>();
         this.gson = new Gson();
-        String prefFile = "com.bsuuv.grocerymanager.sharedpreferences";
-        this.mPreferences = getSharedPreferences(prefFile, MODE_PRIVATE);
-        //SharedPreferences.Editor preferencesEditor = mPreferences.edit();
-        //preferencesEditor.clear().apply();
+        this.mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        String jsonFoodItems = mPreferences.getString(FOOD_ITEMS_KEY, "");
-        Type listType = new TypeToken<List<FoodItem>>() {
-        }.getType();
-
-        List<FoodItem> foodItems = gson.fromJson(jsonFoodItems, listType);
-        if (foodItems != null) this.mFoodItems = foodItems;
+        getFoodItemsFromSharedPreferences();
 
         setUpRecyclerView();
     }
@@ -63,9 +56,9 @@ public class Configurations extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         SharedPreferences.Editor preferencesEditor = mPreferences.edit();
-        String json = gson.toJson(mFoodItems);
+        String foodItemsJson = gson.toJson(mFoodItems);
 
-        preferencesEditor.putString(FOOD_ITEMS_KEY, json);
+        preferencesEditor.putString(FOOD_ITEMS_KEY, foodItemsJson);
         preferencesEditor.apply();
     }
 
@@ -102,6 +95,15 @@ public class Configurations extends AppCompatActivity {
         }
 
 
+    }
+
+    private void getFoodItemsFromSharedPreferences() {
+        String jsonFoodItems = mPreferences.getString(FOOD_ITEMS_KEY, "");
+        Type listType = new TypeToken<List<FoodItem>>() {
+        }.getType();
+
+        List<FoodItem> foodItems = gson.fromJson(jsonFoodItems, listType);
+        if (foodItems != null) this.mFoodItems = foodItems;
     }
 
     private FoodItem createFoodItemFromIntent(Intent data) {

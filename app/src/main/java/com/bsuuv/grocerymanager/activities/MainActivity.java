@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.adapters.GroceryListAdapter;
 import com.bsuuv.grocerymanager.domain.FoodItem;
+import com.bsuuv.grocerymanager.logic.FoodScheduler;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private final String MAIN_RECYCLERVIEW_STATE = "recyclerView_state";
     private RecyclerView mRecyclerView;
     private GroceryListAdapter mAdapter;
-    private List<FoodItem> mFoodItems;
+    private List<FoodItem> mGroceryList;
     private Context mContext = this;
 
     @Override
@@ -41,12 +42,19 @@ public class MainActivity extends AppCompatActivity {
 
         setUpToolbar();
 
-        this.mFoodItems = new LinkedList<>();
+        this.mGroceryList = new LinkedList<>();
 
         setUpRecyclerView();
 
         ItemTouchHelper helper = initializeItemTouchHelper();
         helper.attachToRecyclerView(mRecyclerView);
+
+        FoodScheduler scheduler = new FoodScheduler(mContext);
+        try {
+            this.mGroceryList = scheduler.getGroceryList();
+        } catch (IllegalStateException e) {
+            // TODO: paikanpitäjä näkymä käyttöliittymään.
+        }
     }
 
     @Override
@@ -70,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
             this.startActivity(toConfigs);
 
             return true;
+        } else if (item.getItemId() == R.id.action_settings) {
+            Intent toSettings = new Intent(this, Settings.class);
+            this.startActivity(toSettings);
+
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -79,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         this.mRecyclerView = findViewById(R.id.main_recyclerview);
         this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        this.mAdapter = new GroceryListAdapter(this, mFoodItems);
+        this.mAdapter = new GroceryListAdapter(this, mGroceryList);
         this.mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -106,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 int from = viewHolder.getAdapterPosition();
                 int to = target.getAdapterPosition();
 
-                Collections.swap(mFoodItems, from, to);
+                Collections.swap(mGroceryList, from, to);
 
                 mAdapter.notifyItemMoved(from, to);
                 return true;
@@ -114,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                mFoodItems.remove(viewHolder.getAdapterPosition());
+                mGroceryList.remove(viewHolder.getAdapterPosition());
                 mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                 Toast toast = Toast.makeText(mContext, R.string.toast_checked, Toast.LENGTH_SHORT);
                 toast.show();
