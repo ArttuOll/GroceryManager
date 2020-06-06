@@ -28,4 +28,6 @@ public class Settings extends AppCompatActivity {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
         }
     }
+    // TODO: decide whether to allow up to seven grocery days a week or cut down options through
+    //  some hacking.
 }

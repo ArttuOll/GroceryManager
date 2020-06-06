@@ -6,17 +6,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
+import android.widget.ToggleButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.domain.FoodItem;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -24,18 +23,27 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class NewFoodItem extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class NewFoodItem extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private ToggleButton mWeeklyToggle;
+    private ToggleButton mBiweeklyToggle;
+    private ToggleButton mMonthlyToggle;
+    private View.OnClickListener mOnToggleButtonClickListener = view -> {
+        handleBiweeklyToggleClicks(view);
+
+        handleWeeklyToggleClicks(view);
+
+        handleMonthlyToggleClicks(view);
+    };
 
     private EditText mLabelEditText;
     private EditText mBrandEditText;
     private EditText mAmountEditText;
     private EditText mInfoEditText;
     private ImageView mFoodImageView;
-    private Spinner mFreqSpinner;
     private String mCurrentPhotoPath;
-    private int mFreq;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +57,8 @@ public class NewFoodItem extends AppCompatActivity implements AdapterView.OnItem
         this.mAmountEditText = findViewById(R.id.editText_amount);
         this.mInfoEditText = findViewById(R.id.editText_info);
         this.mFoodImageView = findViewById(R.id.imageView_new_fooditem);
-        this.mFreqSpinner = findViewById(R.id.frequency_spinner);
 
-        setUpFreqSpinner();
+        setUpToggleButtons();
 
         manageIntent();
     }
@@ -61,7 +68,7 @@ public class NewFoodItem extends AppCompatActivity implements AdapterView.OnItem
         String brand = mBrandEditText.getText().toString();
         String amount = mAmountEditText.getText().toString();
         String info = mInfoEditText.getText().toString();
-        int frequency = mFreq;
+        int frequency = getActiveToggleButton();
 
         Intent toConfigs = new Intent(this, Configurations.class);
         toConfigs.putExtra("label", label);
@@ -98,15 +105,6 @@ public class NewFoodItem extends AppCompatActivity implements AdapterView.OnItem
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String intString = parent.getItemAtPosition(position).toString();
-        mFreq = Integer.parseInt(intString);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {}
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -114,6 +112,36 @@ public class NewFoodItem extends AppCompatActivity implements AdapterView.OnItem
             if (resultCode == RESULT_OK) {
                 if (data != null) populateFoodImageView(mCurrentPhotoPath);
             }
+        }
+    }
+
+    private void handleBiweeklyToggleClicks(View v) {
+        if (v.getId() == R.id.togglebuton_biweekly && mBiweeklyToggle.isChecked()) {
+            mWeeklyToggle.setEnabled(false);
+            mMonthlyToggle.setEnabled(false);
+        } else if (v.getId() == R.id.togglebuton_biweekly && !mBiweeklyToggle.isChecked()) {
+            mWeeklyToggle.setEnabled(true);
+            mMonthlyToggle.setEnabled(true);
+        }
+    }
+
+    private void handleWeeklyToggleClicks(View v) {
+        if (v.getId() == R.id.togglebuton_weekly && mWeeklyToggle.isChecked()) {
+            mBiweeklyToggle.setEnabled(false);
+            mMonthlyToggle.setEnabled(false);
+        } else if (v.getId() == R.id.togglebuton_weekly && !mWeeklyToggle.isChecked()) {
+            mBiweeklyToggle.setEnabled(true);
+            mMonthlyToggle.setEnabled(true);
+        }
+    }
+
+    private void handleMonthlyToggleClicks(View v) {
+        if (v.getId() == R.id.togglebuton_monthly && mMonthlyToggle.isChecked()) {
+            mBiweeklyToggle.setEnabled(false);
+            mWeeklyToggle.setEnabled(false);
+        } else if (v.getId() == R.id.togglebuton_monthly && !mMonthlyToggle.isChecked()) {
+            mBiweeklyToggle.setEnabled(true);
+            mWeeklyToggle.setEnabled(true);
         }
     }
 
@@ -128,13 +156,70 @@ public class NewFoodItem extends AppCompatActivity implements AdapterView.OnItem
             mCurrentPhotoPath = fromConfigs.getStringExtra("uri");
             if (mCurrentPhotoPath != null) populateFoodImageView(mCurrentPhotoPath);
 
-            int freqSpinnerPos = fromConfigs.getIntExtra("freq", 0) - 1;
-            this.mFreqSpinner.setSelection(freqSpinnerPos);
+            // Based on the frequency of the food item being edited, set the toggle buttons to either
+            // checked or disabled.
+            switch (fromConfigs.getIntExtra("freq", 0)) {
+                case FoodItem.Frequency.BIWEEKLY:
+                    setBiWeeklyToggleCheckedDisableOthers();
+                    break;
+                case FoodItem.Frequency.WEEKLY:
+                    setWeeklyToggleCheckedDisableOthers();
+                    break;
+                case FoodItem.Frequency.MONTHLY:
+                    setMonthlyToggleCheckedDisableOthers();
+                    break;
+            }
         }
+    }
+
+    private void setBiWeeklyToggleCheckedDisableOthers() {
+        this.mBiweeklyToggle.setChecked(true);
+        this.mWeeklyToggle.setEnabled(false);
+        this.mMonthlyToggle.setEnabled(false);
+    }
+
+    private void setWeeklyToggleCheckedDisableOthers() {
+        this.mBiweeklyToggle.setEnabled(false);
+        this.mWeeklyToggle.setChecked(true);
+        this.mMonthlyToggle.setEnabled(false);
+    }
+
+    private void setMonthlyToggleCheckedDisableOthers() {
+        this.mBiweeklyToggle.setEnabled(false);
+        this.mWeeklyToggle.setEnabled(false);
+        this.mMonthlyToggle.setChecked(true);
     }
 
     private void populateFoodImageView(String path) {
         Glide.with(this).load(new File(path)).into(mFoodImageView);
+    }
+
+    private int getActiveToggleButton() {
+        if (mBiweeklyToggle.isChecked()) return FoodItem.Frequency.BIWEEKLY;
+        else if (mWeeklyToggle.isChecked()) return FoodItem.Frequency.WEEKLY;
+        else if (mMonthlyToggle.isChecked()) return FoodItem.Frequency.MONTHLY;
+        else return -1;
+    }
+
+    private void setUpToggleButtons() {
+        this.mWeeklyToggle = findViewById(R.id.togglebuton_weekly);
+        this.mBiweeklyToggle = findViewById(R.id.togglebuton_biweekly);
+        this.mMonthlyToggle = findViewById(R.id.togglebuton_monthly);
+
+        mBiweeklyToggle.setText(R.string.togglebutton_biweekly);
+        mBiweeklyToggle.setTextOff("Biweekly");
+        mBiweeklyToggle.setTextOn("Biweekly");
+        mBiweeklyToggle.setOnClickListener(mOnToggleButtonClickListener);
+
+        mWeeklyToggle.setText(R.string.togglebutton_weekly);
+        mWeeklyToggle.setTextOff("Weekly");
+        mWeeklyToggle.setTextOn("Weekly");
+        mWeeklyToggle.setOnClickListener(mOnToggleButtonClickListener);
+
+        mMonthlyToggle.setText(R.string.togglebutton_monthly);
+        mMonthlyToggle.setTextOff("Monthly");
+        mMonthlyToggle.setTextOn("Monthly");
+        mMonthlyToggle.setOnClickListener(mOnToggleButtonClickListener);
     }
 
     private File createImageFile() throws IOException {
@@ -149,13 +234,5 @@ public class NewFoodItem extends AppCompatActivity implements AdapterView.OnItem
         mCurrentPhotoPath = Uri.parse(image.toURI().getPath()).getPath();
 
         return image;
-    }
-
-    private void setUpFreqSpinner() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.frequency_options, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mFreqSpinner.setAdapter(adapter);
-        mFreqSpinner.setOnItemSelectedListener(this);
     }
 }

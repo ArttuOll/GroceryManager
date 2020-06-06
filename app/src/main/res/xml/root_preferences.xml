@@ -2,9 +2,14 @@
 
     <PreferenceCategory app:title="@string/groceries_header">
         <MultiSelectListPreference
-            app:key="grocerydays"
-            app:title="@string/grocery_day_title"
+            app:defaultValue="@array/daysofweek"
             app:entries="@array/daysofweek"
-            app:entryValues="@array/daysofweek_values" />
+            app:entryValues="@array/daysofweek_values"
+            app:key="grocerydays"
+            app:persistent="true"
+            app:title="@string/grocery_day_title"
+            app:useSimpleSummaryProvider="true" />
+
     </PreferenceCategory>
+
 </PreferenceScreen>

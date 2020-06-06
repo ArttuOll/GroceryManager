@@ -35,7 +35,7 @@ public class FoodScheduler {
     public FoodScheduler(Context context) {
         this.mContext = context;
         this.mGroceryDayCounter = 0;
-        this.mGroceryDaysInWeek = (mGroceryDays != null) ? mGroceryDays.size() : -1;
+        this.mGroceryDaysInWeek = (mGroceryDays != null) ? mGroceryDays.size() : 0;
         this.mBiweeklyItems = new ArrayList<>();
         this.mWeeklyItems = new ArrayList<>();
         this.mMonthlyItems = new ArrayList<>();
