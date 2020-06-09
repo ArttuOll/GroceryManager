@@ -97,4 +97,10 @@
     <string name="error_not_grocery_day">It is not a grocery day!</string>
     <string name="newFoodItem_title">Add Food-item</string>
 
+    <!-- Snackbars -->
+    <string name="snackbar_no_grocery_days">You must set grocery days in settings before you can
+        configure your grocerylist!</string>
+    <string name="snackbar_not_enough_grocery_days">You don\'t have enough grocery days per week
+        to have this food-item this often!</string>
+
 </resources>

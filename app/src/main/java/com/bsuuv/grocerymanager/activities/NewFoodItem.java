@@ -19,6 +19,7 @@ import androidx.preference.PreferenceManager;
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.logic.FoodScheduler;
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,20 +78,34 @@ public class NewFoodItem extends AppCompatActivity {
         int timeFrame = getActiveToggleButton();
         int frequency = Integer.parseInt(mFrequencyEditText.getText().toString());
 
-        int groceryDaysInWeek = getGroceryDaysInWeek();
-        if (groceryDaysInWeek != 0 && frequency / (timeFrame * groceryDaysInWeek) <= 1) {
-            Intent toConfigs = new Intent(this, Configurations.class);
-            toConfigs.putExtra("label", label);
-            toConfigs.putExtra("brand", brand);
-            toConfigs.putExtra("amount", amount);
-            toConfigs.putExtra("info", info);
-            toConfigs.putExtra("time_frame", timeFrame);
-            toConfigs.putExtra("frequency", frequency);
+        int groceryDaysAWeek = getGroceryDaysInWeek();
+        double frequencyTimeFrameGroceryDaysQuotient =
+                (double) frequency / ((double) timeFrame * (double) groceryDaysAWeek);
 
-            toConfigs.putExtra("uri", mCurrentPhotoPath);
+        if (groceryDaysAWeek > 0) {
+            if (frequencyTimeFrameGroceryDaysQuotient <= 1.0) {
+                Intent toConfigs = new Intent(this, Configurations.class);
+                toConfigs.putExtra("label", label);
+                toConfigs.putExtra("brand", brand);
+                toConfigs.putExtra("amount", amount);
+                toConfigs.putExtra("info", info);
+                toConfigs.putExtra("time_frame", timeFrame);
+                toConfigs.putExtra("frequency", frequency);
 
-            setResult(RESULT_OK, toConfigs);
-            finish();
+                toConfigs.putExtra("uri", mCurrentPhotoPath);
+
+                setResult(RESULT_OK, toConfigs);
+                finish();
+            } else {
+                Snackbar.make(findViewById(R.id.fab_new_fooditem),
+                        R.string.snackbar_not_enough_grocery_days,
+                        Snackbar.LENGTH_LONG)
+                        .setAnchorView(R.id.fab_new_fooditem).show();
+            }
+        } else {
+            Snackbar.make(findViewById(R.id.fab_new_fooditem), R.string.snackbar_no_grocery_days,
+                    Snackbar.LENGTH_LONG)
+                    .setAnchorView(R.id.fab_new_fooditem).show();
         }
     }
 
