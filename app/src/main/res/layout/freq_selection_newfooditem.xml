@@ -17,6 +17,7 @@
         android:orientation="horizontal">
 
         <EditText
+            android:id="@+id/editText_freq"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:autofillHints=""

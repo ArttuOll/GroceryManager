@@ -95,5 +95,6 @@
     <!-- Grocery Preferences -->
     <string name="grocery_day_title">Grocery days</string>
     <string name="error_not_grocery_day">It is not a grocery day!</string>
+    <string name="newFoodItem_title">Add Food-item</string>
 
 </resources>

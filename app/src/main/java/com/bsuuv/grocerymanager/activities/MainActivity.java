@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.adapters.GroceryListAdapter;
+import com.bsuuv.grocerymanager.activities.adapters.GroceryListAdapter;
 import com.bsuuv.grocerymanager.domain.FoodItem;
 import com.bsuuv.grocerymanager.logic.FoodScheduler;
 

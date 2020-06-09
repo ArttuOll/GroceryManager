@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.adapters.ConfigslistAdapter;
+import com.bsuuv.grocerymanager.activities.adapters.ConfigslistAdapter;
 import com.bsuuv.grocerymanager.domain.FoodItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -24,7 +24,7 @@ import java.util.List;
 
 public class Configurations extends AppCompatActivity {
 
-    public static final int FOOD_ITEM_DETAILS_REQUEST = 1;
+    public static final int FOOD_ITEM_CREATE_REQUEST = 1;
     public static final int FOOD_ITEM_EDIT_REQUEST = 2;
     public static final String FOOD_ITEMS_KEY = "foodItems";
     private List<FoodItem> mFoodItems;
@@ -49,7 +49,7 @@ public class Configurations extends AppCompatActivity {
 
     public void onFabClick(View view) {
         Intent toNewFoodItem = new Intent(this, NewFoodItem.class);
-        startActivityForResult(toNewFoodItem, FOOD_ITEM_DETAILS_REQUEST);
+        startActivityForResult(toNewFoodItem, FOOD_ITEM_CREATE_REQUEST);
     }
 
     @Override
@@ -66,20 +66,23 @@ public class Configurations extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == FOOD_ITEM_DETAILS_REQUEST) {
+        // Result when NewFoodItem was launched to create a new food-item using the FAB.
+        if (requestCode == FOOD_ITEM_CREATE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     FoodItem result = createFoodItemFromIntent(data);
 
-                    int insertionPosition = getFoodItemInsertionPosition(result.getFrequency());
+                    int insertionPosition = getFoodItemInsertionPosition(result.getTimeFrame());
 
                     mFoodItems.add(result);
                     Collections.sort(mFoodItems, (foodItem1, foodItem2) ->
-                            foodItem1.getFrequency() - foodItem2.getFrequency());
+                            foodItem1.getTimeFrame() - foodItem2.getTimeFrame());
 
                     mAdapter.notifyItemInserted(insertionPosition);
                 }
             }
+            // Result when NewFoodItem was launched to edit a food-item by clicking one in the
+            // RecyclerView.
         } else if (requestCode == FOOD_ITEM_EDIT_REQUEST) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
@@ -111,10 +114,12 @@ public class Configurations extends AppCompatActivity {
         String brand = data.getStringExtra("brand");
         String amount = data.getStringExtra("amount");
         String info = data.getStringExtra("info");
+        int timeFrame = data.getIntExtra("time_frame", 0);
         int frequency = data.getIntExtra("frequency", 0);
+
         String imageUri = data.getStringExtra("uri");
 
-        return new FoodItem(label, brand, info, amount, frequency, imageUri);
+        return new FoodItem(label, brand, info, amount, timeFrame, frequency, imageUri);
     }
 
     private void setUpRecyclerView() {
@@ -126,20 +131,20 @@ public class Configurations extends AppCompatActivity {
     }
 
     private int getFoodItemInsertionPosition(int frequency) {
-        int biweeklys = 0;
-        int weeklys = 0;
-        int monthlys = 0;
+        int weeks = 0;
+        int twoweeks = 0;
+        int months = 0;
 
         for (FoodItem foodItem : mFoodItems) {
-            switch (foodItem.getFrequency()) {
-                case FoodItem.Frequency.BIWEEKLY:
-                    biweeklys++;
+            switch (foodItem.getTimeFrame()) {
+                case 1:
+                    weeks++;
                     break;
-                case FoodItem.Frequency.WEEKLY:
-                    weeklys++;
+                case 2:
+                    twoweeks++;
                     break;
-                case FoodItem.Frequency.MONTHLY:
-                    monthlys++;
+                case 4:
+                    months++;
                     break;
             }
         }
@@ -147,12 +152,12 @@ public class Configurations extends AppCompatActivity {
         // When a food item is inserted into the RecyclerView, it is added after all the other
         // food-items with the same frequency.
         switch (frequency) {
-            case FoodItem.Frequency.BIWEEKLY:
-                return biweeklys;
-            case FoodItem.Frequency.WEEKLY:
-                return biweeklys + weeklys;
-            case FoodItem.Frequency.MONTHLY:
-                return biweeklys + weeklys + monthlys;
+            case 1:
+                return weeks;
+            case 2:
+                return weeks + twoweeks;
+            case 4:
+                return weeks + twoweeks + months;
             default:
                 return 0;
         }

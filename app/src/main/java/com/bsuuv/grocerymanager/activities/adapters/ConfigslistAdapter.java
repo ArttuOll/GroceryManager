@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.adapters;
+package com.bsuuv.grocerymanager.activities.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -79,7 +79,7 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
             foodItemLabel.setText(currentFoodItem.getLabel());
             foodItemBrand.setText(currentFoodItem.getBrand());
             foodItemSize.setText(currentFoodItem.getAmount());
-            foodItemFreq.setText(String.valueOf(currentFoodItem.getFrequency()));
+            foodItemFreq.setText(String.valueOf(currentFoodItem.getTimeFrame()));
             Glide.with(mContext).load(new File(String.valueOf(currentFoodItem.getImageUri()))).into(mFoodImage);
         }
 
@@ -92,14 +92,17 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
             toNewFoodItem.putExtra("brand", currentFoodItem.getBrand());
             toNewFoodItem.putExtra("info", currentFoodItem.getInfo());
             toNewFoodItem.putExtra("amount", currentFoodItem.getAmount());
-            toNewFoodItem.putExtra("freq", currentFoodItem.getFrequency());
+            toNewFoodItem.putExtra("time_frame", currentFoodItem.getTimeFrame());
+            toNewFoodItem.putExtra("frequency", currentFoodItem.getFrequency());
             toNewFoodItem.putExtra("editPosition", getAdapterPosition());
 
-            String uri = (currentFoodItem.getImageUri() != null) ? currentFoodItem.getImageUri() : "";
+            String uri = (currentFoodItem.getImageUri() != null) ? currentFoodItem.getImageUri()
+                    : "";
             toNewFoodItem.putExtra("uri", uri);
 
             Activity configurations = (Activity) mContext;
-            configurations.startActivityForResult(toNewFoodItem, Configurations.FOOD_ITEM_EDIT_REQUEST);
+            configurations.startActivityForResult(toNewFoodItem,
+                    Configurations.FOOD_ITEM_EDIT_REQUEST);
         }
     }
 }

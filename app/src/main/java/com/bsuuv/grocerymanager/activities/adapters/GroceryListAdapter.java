@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.adapters;
+package com.bsuuv.grocerymanager.activities.adapters;
 
 import android.content.Context;
 import android.content.Intent;

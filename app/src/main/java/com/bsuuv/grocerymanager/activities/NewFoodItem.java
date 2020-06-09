@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.domain.FoodItem;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -42,6 +41,7 @@ public class NewFoodItem extends AppCompatActivity {
     private EditText mBrandEditText;
     private EditText mAmountEditText;
     private EditText mInfoEditText;
+    private EditText mFrequencyEditText;
     private ImageView mFoodImageView;
     private String mCurrentPhotoPath;
 
@@ -50,12 +50,13 @@ public class NewFoodItem extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_food_item);
 
-        setTitle("Add Food-item");
+        setTitle(getString(R.string.newFoodItem_title));
 
         this.mLabelEditText = findViewById(R.id.editText_label);
         this.mBrandEditText = findViewById(R.id.editText_brand);
         this.mAmountEditText = findViewById(R.id.editText_amount);
         this.mInfoEditText = findViewById(R.id.editText_info);
+        this.mFrequencyEditText = findViewById(R.id.editText_freq);
         this.mFoodImageView = findViewById(R.id.imageView_new_fooditem);
 
         setUpToggleButtons();
@@ -68,13 +69,15 @@ public class NewFoodItem extends AppCompatActivity {
         String brand = mBrandEditText.getText().toString();
         String amount = mAmountEditText.getText().toString();
         String info = mInfoEditText.getText().toString();
-        int frequency = getActiveToggleButton();
+        int timeFrame = getActiveToggleButton();
+        int frequency = Integer.parseInt(mFrequencyEditText.getText().toString());
 
         Intent toConfigs = new Intent(this, Configurations.class);
         toConfigs.putExtra("label", label);
         toConfigs.putExtra("brand", brand);
         toConfigs.putExtra("amount", amount);
         toConfigs.putExtra("info", info);
+        toConfigs.putExtra("time_frame", timeFrame);
         toConfigs.putExtra("frequency", frequency);
 
         toConfigs.putExtra("uri", mCurrentPhotoPath);
@@ -152,6 +155,7 @@ public class NewFoodItem extends AppCompatActivity {
             this.mBrandEditText.setText(fromConfigs.getStringExtra("brand"));
             this.mAmountEditText.setText(fromConfigs.getStringExtra("amount"));
             this.mInfoEditText.setText(fromConfigs.getStringExtra("info"));
+            this.mFrequencyEditText.setText(fromConfigs.getStringExtra("frequency"));
 
             mCurrentPhotoPath = fromConfigs.getStringExtra("uri");
             if (mCurrentPhotoPath != null) populateFoodImageView(mCurrentPhotoPath);
@@ -159,14 +163,14 @@ public class NewFoodItem extends AppCompatActivity {
             // Based on the frequency of the food item being edited, set the toggle buttons to
             // either
             // checked or disabled.
-            switch (fromConfigs.getIntExtra("freq", 0)) {
-                case FoodItem.Frequency.BIWEEKLY:
+            switch (fromConfigs.getIntExtra("time_frame", 0)) {
+                case 1:
                     setWeekToggleCheckedDisableOthers();
                     break;
-                case FoodItem.Frequency.WEEKLY:
+                case 2:
                     setTwoWeeksToggleCheckedDisableOthers();
                     break;
-                case FoodItem.Frequency.MONTHLY:
+                case 4:
                     setMonthToggleCheckedDisableOthers();
                     break;
             }
