@@ -68,7 +68,7 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
             mFoodImage.setClipToOutline(true);
             foodItemLabel = itemView.findViewById(R.id.config_item_label);
             foodItemBrand = itemView.findViewById(R.id.config_item_brand);
-            foodItemSize = itemView.findViewById(R.id.config_item_size);
+            foodItemSize = itemView.findViewById(R.id.config_item_amount);
             foodItemFreq = itemView.findViewById(R.id.config_item_freq);
             this.mAdapter = adapter;
 

@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.logic.FoodScheduler;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -164,13 +165,13 @@ public class NewFoodItem extends AppCompatActivity {
             // either
             // checked or disabled.
             switch (fromConfigs.getIntExtra("time_frame", 0)) {
-                case 1:
+                case FoodScheduler.TimeFrame.WEEK:
                     setWeekToggleCheckedDisableOthers();
                     break;
-                case 2:
+                case FoodScheduler.TimeFrame.TWO_WEEKS:
                     setTwoWeeksToggleCheckedDisableOthers();
                     break;
-                case 4:
+                case FoodScheduler.TimeFrame.MONTH:
                     setMonthToggleCheckedDisableOthers();
                     break;
             }
@@ -201,11 +202,11 @@ public class NewFoodItem extends AppCompatActivity {
 
     private int getActiveToggleButton() {
         if (mWeekToggle.isChecked()) {
-            return 1;
+            return FoodScheduler.TimeFrame.WEEK;
         } else if (mTwoWeeksToggle.isChecked()) {
-            return 2;
+            return FoodScheduler.TimeFrame.TWO_WEEKS;
         } else if (mMonthlyToggle.isChecked()) {
-            return 4;
+            return FoodScheduler.TimeFrame.MONTH;
         } else {
             return -1;
         }

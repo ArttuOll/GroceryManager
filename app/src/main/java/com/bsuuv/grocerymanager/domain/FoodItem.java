@@ -51,5 +51,4 @@ public class FoodItem {
     public String getBrand() {
         return mBrand;
     }
-
 }

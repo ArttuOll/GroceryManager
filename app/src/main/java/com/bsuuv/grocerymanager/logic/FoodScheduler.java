@@ -81,11 +81,11 @@ public class FoodScheduler {
     private void fillChecklistsAndCountersWithDefaultValues() {
         mFoodItems.forEach(foodItem -> {
             switch (foodItem.getTimeFrame()) {
-                case 1:
+                case TimeFrame.WEEK:
                     mBiweeklyItems.add(foodItem);
-                case 2:
+                case TimeFrame.TWO_WEEKS:
                     mWeeklyItems.add(foodItem);
-                case 4:
+                case TimeFrame.MONTH:
                     mMonthlyItems.add(foodItem);
             }
         });
@@ -132,9 +132,9 @@ public class FoodScheduler {
         }
     }
 
-    public interface Frequency {
+    public interface TimeFrame {
         int WEEK = 1;
-        int TWOWEEKS = 2;
+        int TWO_WEEKS = 2;
         int MONTH = 3;
     }
 }

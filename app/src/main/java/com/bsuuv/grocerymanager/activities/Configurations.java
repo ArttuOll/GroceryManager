@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.activities.adapters.ConfigslistAdapter;
 import com.bsuuv.grocerymanager.domain.FoodItem;
+import com.bsuuv.grocerymanager.logic.FoodScheduler;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -137,13 +138,13 @@ public class Configurations extends AppCompatActivity {
 
         for (FoodItem foodItem : mFoodItems) {
             switch (foodItem.getTimeFrame()) {
-                case 1:
+                case FoodScheduler.TimeFrame.WEEK:
                     weeks++;
                     break;
-                case 2:
+                case FoodScheduler.TimeFrame.TWO_WEEKS:
                     twoweeks++;
                     break;
-                case 4:
+                case FoodScheduler.TimeFrame.MONTH:
                     months++;
                     break;
             }
@@ -152,11 +153,11 @@ public class Configurations extends AppCompatActivity {
         // When a food item is inserted into the RecyclerView, it is added after all the other
         // food-items with the same frequency.
         switch (frequency) {
-            case 1:
+            case FoodScheduler.TimeFrame.WEEK:
                 return weeks;
-            case 2:
+            case FoodScheduler.TimeFrame.TWO_WEEKS:
                 return weeks + twoweeks;
-            case 4:
+            case FoodScheduler.TimeFrame.MONTH:
                 return weeks + twoweeks + months;
             default:
                 return 0;
