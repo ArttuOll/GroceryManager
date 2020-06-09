@@ -20,4 +20,8 @@
         <item>saturday</item>
         <item>sunday</item>
     </string-array>
+
+    <string-array name="empty_array">
+
+    </string-array>
 </resources>

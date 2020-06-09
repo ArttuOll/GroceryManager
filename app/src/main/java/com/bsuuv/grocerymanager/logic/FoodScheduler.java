@@ -57,6 +57,9 @@ public class FoodScheduler {
 
         List<FoodItem> groceryList = new ArrayList<>();
 
+        // TODO: poista ja keksi mitä tehdä, kun ruokaostospäiviä ei ole asetettu.
+        if (mGroceryDaysInWeek == 0) return null;
+
         // When counter's value is multiple of four times grocery days a week, add monthly items.
         if (mGroceryDayCounter % (4 * mGroceryDaysInWeek) == 0) groceryList.addAll(mMonthlyItems);
         // When counter's value is multiple of grocery days a week, add weekly items.

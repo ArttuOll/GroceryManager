@@ -1,6 +1,7 @@
 package com.bsuuv.grocerymanager.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,6 +14,7 @@ import android.widget.ToggleButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.preference.PreferenceManager;
 
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.logic.FoodScheduler;
@@ -22,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class NewFoodItem extends AppCompatActivity {
 
@@ -73,18 +77,29 @@ public class NewFoodItem extends AppCompatActivity {
         int timeFrame = getActiveToggleButton();
         int frequency = Integer.parseInt(mFrequencyEditText.getText().toString());
 
-        Intent toConfigs = new Intent(this, Configurations.class);
-        toConfigs.putExtra("label", label);
-        toConfigs.putExtra("brand", brand);
-        toConfigs.putExtra("amount", amount);
-        toConfigs.putExtra("info", info);
-        toConfigs.putExtra("time_frame", timeFrame);
-        toConfigs.putExtra("frequency", frequency);
+        int groceryDaysInWeek = getGroceryDaysInWeek();
+        if (groceryDaysInWeek != 0 && frequency / (timeFrame * groceryDaysInWeek) <= 1) {
+            Intent toConfigs = new Intent(this, Configurations.class);
+            toConfigs.putExtra("label", label);
+            toConfigs.putExtra("brand", brand);
+            toConfigs.putExtra("amount", amount);
+            toConfigs.putExtra("info", info);
+            toConfigs.putExtra("time_frame", timeFrame);
+            toConfigs.putExtra("frequency", frequency);
 
-        toConfigs.putExtra("uri", mCurrentPhotoPath);
+            toConfigs.putExtra("uri", mCurrentPhotoPath);
 
-        setResult(RESULT_OK, toConfigs);
-        finish();
+            setResult(RESULT_OK, toConfigs);
+            finish();
+        }
+    }
+
+    private int getGroceryDaysInWeek() {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        Set<String> groceryDays = sharedPreferences.getStringSet("grocerydays", new HashSet<>());
+
+        return groceryDays.size();
     }
 
     public void onCameraIconClick(View view) {
