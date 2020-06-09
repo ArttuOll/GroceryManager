@@ -154,7 +154,7 @@ public class NewFoodItem extends AppCompatActivity {
         if (fromConfigs != null) {
             this.mLabelEditText.setText(fromConfigs.getStringExtra("label"));
             this.mBrandEditText.setText(fromConfigs.getStringExtra("brand"));
-            this.mAmountEditText.setText(fromConfigs.getStringExtra("amount"));
+            this.mAmountEditText.setText(String.valueOf(fromConfigs.getIntExtra("amount", 0)));
             this.mInfoEditText.setText(fromConfigs.getStringExtra("info"));
             this.mFrequencyEditText.setText(String.valueOf(
                     fromConfigs.getIntExtra("frequency", 0)));

@@ -113,7 +113,7 @@ public class Configurations extends AppCompatActivity {
     private FoodItem createFoodItemFromIntent(Intent data) {
         String label = data.getStringExtra("label");
         String brand = data.getStringExtra("brand");
-        String amount = data.getStringExtra("amount");
+        int amount = data.getIntExtra("amount", 0);
         String info = data.getStringExtra("info");
         int timeFrame = data.getIntExtra("time_frame", 0);
         int frequency = data.getIntExtra("frequency", 0);

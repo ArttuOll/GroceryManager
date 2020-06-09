@@ -78,7 +78,7 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
         void bindTo(FoodItem currentFoodItem) {
             foodItemLabel.setText(currentFoodItem.getLabel());
             foodItemBrand.setText(currentFoodItem.getBrand());
-            foodItemAmount.setText(currentFoodItem.getAmount());
+            foodItemAmount.setText(String.valueOf(currentFoodItem.getAmount()));
             foodItemTimeFrame.setText(String.valueOf(currentFoodItem.getTimeFrame()));
             Glide.with(mContext).load(new File(String.valueOf(currentFoodItem.getImageUri())))
                     .into(mFoodImage);

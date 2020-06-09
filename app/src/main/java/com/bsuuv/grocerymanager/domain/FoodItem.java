@@ -9,11 +9,11 @@ public class FoodItem {
     private String mLabel;
     private String mBrand;
     private String mInfo;
-    private String mAmount;
+    private int mAmount;
     private int mTimeFrame;
     private int mFrequency;
 
-    public FoodItem(String label, String brand, String info, String amount, int timeFrame,
+    public FoodItem(String label, String brand, String info, int amount, int timeFrame,
                     int frequency, String imageUri) {
         this.mLabel = label;
         this.mBrand = brand;
@@ -32,7 +32,7 @@ public class FoodItem {
         return mFrequency;
     }
 
-    public String getAmount() {
+    public int getAmount() {
         return mAmount;
     }
 
