@@ -15,8 +15,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class FoodScheduler {
@@ -24,81 +26,69 @@ public class FoodScheduler {
     private Set<String> mGroceryDays;
     private Context mContext;
     private List<FoodItem> mFoodItems;
-    private List<FoodItem> mBiweeklyItems;
-    private List<FoodItem> mWeeklyItems;
-    private List<FoodItem> mMonthlyItems;
     private int todayInt;
-    private int mGroceryDayCounter;
-    private int mGroceryDaysInWeek;
+    private int mGroceryDaysAWeek;
+    private Map<FoodItem, Double> mFoodItemTracker;
     private SharedPreferences mPreferences;
 
     public FoodScheduler(Context context) {
         this.mContext = context;
-        this.mGroceryDayCounter = 0;
-        this.mGroceryDaysInWeek = (mGroceryDays != null) ? mGroceryDays.size() : 0;
-        this.mBiweeklyItems = new ArrayList<>();
-        this.mWeeklyItems = new ArrayList<>();
-        this.mMonthlyItems = new ArrayList<>();
-        this.mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         this.mGroceryDays = mPreferences.getStringSet("grocerydays", new HashSet<>());
-        this.mFoodItems = new ArrayList<>();
+        this.mGroceryDaysAWeek = mGroceryDays.size();
+        this.mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        this.mFoodItems = getFoodItemsFromSharedPreferences();
+        this.todayInt = getTodayInt();
+        this.mFoodItemTracker = getFoodItemTracker();
+    }
 
-        getFoodItemsFromSharedPreferences();
+    private Map<FoodItem, Double> getFoodItemTracker() {
+        Map<FoodItem, Double> foodItemQuotientMap = new HashMap<>();
+        for (FoodItem foodItem : mFoodItems) {
+            double foodItemFrequencyQuotient =
+                    ((double) foodItem.getFrequency()) / (foodItem.getTimeFrame() * mGroceryDaysAWeek);
+            foodItemQuotientMap.put(foodItem, foodItemFrequencyQuotient);
+        }
 
-        setTodayInt();
-
-        fillChecklistsAndCountersWithDefaultValues();
+        return foodItemQuotientMap;
     }
 
     public List<FoodItem> getGroceryList() {
-        if (!isGroceryDay()) {
-            throw new IllegalStateException(mContext.getString(R.string.error_not_grocery_day));
-        }
-
         List<FoodItem> groceryList = new ArrayList<>();
 
-        // TODO: poista ja keksi mitä tehdä, kun ruokaostospäiviä ei ole asetettu.
-        if (mGroceryDaysInWeek == 0) return null;
+        if (isGroceryDay()) {
+            for (FoodItem foodItem : mFoodItemTracker.keySet()) {
+                Double frequencyQuotient = mFoodItemTracker.get(foodItem);
 
-        // When counter's value is multiple of four times grocery days a week, add monthly items.
-        if (mGroceryDayCounter % (4 * mGroceryDaysInWeek) == 0) groceryList.addAll(mMonthlyItems);
-        // When counter's value is multiple of grocery days a week, add weekly items.
-        if (mGroceryDayCounter % mGroceryDaysInWeek == 0) groceryList.addAll(mWeeklyItems);
-        // Since max frequency is twice a week and max grocery days a week is two, biweekly items
-        // are added always.
-        groceryList.addAll(mBiweeklyItems);
+                if (frequencyQuotient != null) {
+                    if (frequencyQuotient == 1) { groceryList.add(foodItem); } else {
+                        mFoodItemTracker.put(foodItem, frequencyQuotient + frequencyQuotient);
+                    }
+                }
+            }
+        } else {
+            throw new IllegalStateException(mContext.getString(R.string.error_not_grocery_day));
+        }
 
         return groceryList;
     }
 
-    private void getFoodItemsFromSharedPreferences() {
+    private List<FoodItem> getFoodItemsFromSharedPreferences() {
         String jsonFoodItems = mPreferences.getString(Configurations.FOOD_ITEMS_KEY, "");
         Type listType = new TypeToken<List<FoodItem>>() {
         }.getType();
-
         Gson gson = new Gson();
+
         List<FoodItem> foodItems = gson.fromJson(jsonFoodItems, listType);
-        if (foodItems != null) this.mFoodItems = foodItems;
+
+        return (foodItems != null) ? foodItems : new ArrayList<>();
     }
 
-    private void fillChecklistsAndCountersWithDefaultValues() {
-        mFoodItems.forEach(foodItem -> {
-            switch (foodItem.getTimeFrame()) {
-                case TimeFrame.WEEK:
-                    mBiweeklyItems.add(foodItem);
-                case TimeFrame.TWO_WEEKS:
-                    mWeeklyItems.add(foodItem);
-                case TimeFrame.MONTH:
-                    mMonthlyItems.add(foodItem);
-            }
-        });
-    }
-
-    private void setTodayInt() {
+    private int getTodayInt() {
         Calendar calendar = Calendar.getInstance();
-        Date today = new Date();
-        calendar.setTime(today);
-        this.todayInt = calendar.get(Calendar.DAY_OF_WEEK);
+
+        // When Date is instantiated with zero parameters, it's value is set to today.
+        calendar.setTime(new Date());
+        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     private boolean isGroceryDay() {
@@ -106,7 +96,6 @@ public class FoodScheduler {
             int groceryDayInt = stringWeekDayToInt(groceryDay);
 
             if (groceryDayInt == todayInt) {
-                mGroceryDayCounter++;
                 return true;
             }
         }
