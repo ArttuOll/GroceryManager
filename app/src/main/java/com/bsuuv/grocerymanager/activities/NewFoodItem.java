@@ -68,7 +68,7 @@ public class NewFoodItem extends AppCompatActivity {
     public void onFabClick(View view) {
         String label = mLabelEditText.getText().toString();
         String brand = mBrandEditText.getText().toString();
-        String amount = mAmountEditText.getText().toString();
+        int amount = Integer.parseInt(mAmountEditText.getText().toString());
         String info = mInfoEditText.getText().toString();
         int timeFrame = getActiveToggleButton();
         int frequency = Integer.parseInt(mFrequencyEditText.getText().toString());

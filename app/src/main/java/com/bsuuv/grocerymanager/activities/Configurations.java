@@ -46,6 +46,8 @@ public class Configurations extends AppCompatActivity {
         getFoodItemsFromSharedPreferences();
 
         setUpRecyclerView();
+
+        // clearSharedPrefs();
     }
 
     public void onFabClick(View view) {
@@ -162,5 +164,11 @@ public class Configurations extends AppCompatActivity {
             default:
                 return 0;
         }
+    }
+
+    private void clearSharedPrefs() {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 }
