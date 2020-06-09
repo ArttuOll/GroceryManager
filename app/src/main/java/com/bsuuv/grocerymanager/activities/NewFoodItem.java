@@ -27,13 +27,13 @@ public class NewFoodItem extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    private ToggleButton mWeeklyToggle;
-    private ToggleButton mBiweeklyToggle;
+    private ToggleButton mWeekToggle;
+    private ToggleButton mTwoWeeksToggle;
     private ToggleButton mMonthlyToggle;
     private View.OnClickListener mOnToggleButtonClickListener = view -> {
-        handleBiweeklyToggleClicks(view);
+        handleWeekToggleClicks(view);
 
-        handleWeeklyToggleClicks(view);
+        handleTwoWeeksToggleClicks(view);
 
         handleMonthlyToggleClicks(view);
     };
@@ -115,33 +115,33 @@ public class NewFoodItem extends AppCompatActivity {
         }
     }
 
-    private void handleBiweeklyToggleClicks(View v) {
-        if (v.getId() == R.id.togglebuton_biweekly && mBiweeklyToggle.isChecked()) {
-            mWeeklyToggle.setEnabled(false);
+    private void handleWeekToggleClicks(View v) {
+        if (v.getId() == R.id.togglebutton_week && mWeekToggle.isChecked()) {
+            mTwoWeeksToggle.setEnabled(false);
             mMonthlyToggle.setEnabled(false);
-        } else if (v.getId() == R.id.togglebuton_biweekly && !mBiweeklyToggle.isChecked()) {
-            mWeeklyToggle.setEnabled(true);
+        } else if (v.getId() == R.id.togglebutton_week && !mWeekToggle.isChecked()) {
+            mTwoWeeksToggle.setEnabled(true);
             mMonthlyToggle.setEnabled(true);
         }
     }
 
-    private void handleWeeklyToggleClicks(View v) {
-        if (v.getId() == R.id.togglebuton_weekly && mWeeklyToggle.isChecked()) {
-            mBiweeklyToggle.setEnabled(false);
+    private void handleTwoWeeksToggleClicks(View v) {
+        if (v.getId() == R.id.togglebutton_two_weeks && mTwoWeeksToggle.isChecked()) {
+            mWeekToggle.setEnabled(false);
             mMonthlyToggle.setEnabled(false);
-        } else if (v.getId() == R.id.togglebuton_weekly && !mWeeklyToggle.isChecked()) {
-            mBiweeklyToggle.setEnabled(true);
+        } else if (v.getId() == R.id.togglebutton_two_weeks && !mTwoWeeksToggle.isChecked()) {
+            mWeekToggle.setEnabled(true);
             mMonthlyToggle.setEnabled(true);
         }
     }
 
     private void handleMonthlyToggleClicks(View v) {
-        if (v.getId() == R.id.togglebuton_monthly && mMonthlyToggle.isChecked()) {
-            mBiweeklyToggle.setEnabled(false);
-            mWeeklyToggle.setEnabled(false);
-        } else if (v.getId() == R.id.togglebuton_monthly && !mMonthlyToggle.isChecked()) {
-            mBiweeklyToggle.setEnabled(true);
-            mWeeklyToggle.setEnabled(true);
+        if (v.getId() == R.id.togglebutton_month && mMonthlyToggle.isChecked()) {
+            mTwoWeeksToggle.setEnabled(false);
+            mWeekToggle.setEnabled(false);
+        } else if (v.getId() == R.id.togglebutton_month && !mMonthlyToggle.isChecked()) {
+            mTwoWeeksToggle.setEnabled(true);
+            mWeekToggle.setEnabled(true);
         }
     }
 
@@ -160,34 +160,34 @@ public class NewFoodItem extends AppCompatActivity {
             // checked or disabled.
             switch (fromConfigs.getIntExtra("freq", 0)) {
                 case FoodItem.Frequency.BIWEEKLY:
-                    setBiWeeklyToggleCheckedDisableOthers();
+                    setWeekToggleCheckedDisableOthers();
                     break;
                 case FoodItem.Frequency.WEEKLY:
-                    setWeeklyToggleCheckedDisableOthers();
+                    setTwoWeeksToggleCheckedDisableOthers();
                     break;
                 case FoodItem.Frequency.MONTHLY:
-                    setMonthlyToggleCheckedDisableOthers();
+                    setMonthToggleCheckedDisableOthers();
                     break;
             }
         }
     }
 
-    private void setBiWeeklyToggleCheckedDisableOthers() {
-        this.mBiweeklyToggle.setChecked(true);
-        this.mWeeklyToggle.setEnabled(false);
+    private void setWeekToggleCheckedDisableOthers() {
+        this.mWeekToggle.setChecked(true);
+        this.mTwoWeeksToggle.setEnabled(false);
         this.mMonthlyToggle.setEnabled(false);
     }
 
-    private void setWeeklyToggleCheckedDisableOthers() {
-        this.mBiweeklyToggle.setEnabled(false);
-        this.mWeeklyToggle.setChecked(true);
+    private void setTwoWeeksToggleCheckedDisableOthers() {
+        this.mTwoWeeksToggle.setChecked(true);
+        this.mWeekToggle.setEnabled(false);
         this.mMonthlyToggle.setEnabled(false);
     }
 
-    private void setMonthlyToggleCheckedDisableOthers() {
-        this.mBiweeklyToggle.setEnabled(false);
-        this.mWeeklyToggle.setEnabled(false);
+    private void setMonthToggleCheckedDisableOthers() {
         this.mMonthlyToggle.setChecked(true);
+        this.mTwoWeeksToggle.setEnabled(false);
+        this.mWeekToggle.setEnabled(false);
     }
 
     private void populateFoodImageView(String path) {
@@ -195,30 +195,35 @@ public class NewFoodItem extends AppCompatActivity {
     }
 
     private int getActiveToggleButton() {
-        if (mBiweeklyToggle.isChecked()) return FoodItem.Frequency.BIWEEKLY;
-        else if (mWeeklyToggle.isChecked()) return FoodItem.Frequency.WEEKLY;
-        else if (mMonthlyToggle.isChecked()) return FoodItem.Frequency.MONTHLY;
-        else return -1;
+        if (mTwoWeeksToggle.isChecked()) {
+            return FoodItem.Frequency.BIWEEKLY;
+        } else if (mWeekToggle.isChecked()) {
+            return FoodItem.Frequency.WEEKLY;
+        } else if (mMonthlyToggle.isChecked()) { return FoodItem.Frequency.MONTHLY; } else
+            return -1;
     }
 
     private void setUpToggleButtons() {
-        this.mWeeklyToggle = findViewById(R.id.togglebuton_weekly);
-        this.mBiweeklyToggle = findViewById(R.id.togglebuton_biweekly);
-        this.mMonthlyToggle = findViewById(R.id.togglebuton_monthly);
+        this.mWeekToggle = findViewById(R.id.togglebutton_week);
+        this.mTwoWeeksToggle = findViewById(R.id.togglebutton_two_weeks);
+        this.mMonthlyToggle = findViewById(R.id.togglebutton_month);
 
-        mBiweeklyToggle.setText(R.string.togglebutton_biweekly);
-        mBiweeklyToggle.setTextOff("Biweekly");
-        mBiweeklyToggle.setTextOn("Biweekly");
-        mBiweeklyToggle.setOnClickListener(mOnToggleButtonClickListener);
+        String twoWeeksButton = getResources().getString(R.string.button_twoweeks);
+        mTwoWeeksToggle.setText(R.string.button_twoweeks);
+        mTwoWeeksToggle.setTextOff(twoWeeksButton);
+        mTwoWeeksToggle.setTextOn(twoWeeksButton);
+        mTwoWeeksToggle.setOnClickListener(mOnToggleButtonClickListener);
 
-        mWeeklyToggle.setText(R.string.togglebutton_weekly);
-        mWeeklyToggle.setTextOff("Weekly");
-        mWeeklyToggle.setTextOn("Weekly");
-        mWeeklyToggle.setOnClickListener(mOnToggleButtonClickListener);
+        String weekButton = getResources().getString(R.string.button_week);
+        mWeekToggle.setText(R.string.button_week);
+        mWeekToggle.setTextOff(weekButton);
+        mWeekToggle.setTextOn(weekButton);
+        mWeekToggle.setOnClickListener(mOnToggleButtonClickListener);
 
-        mMonthlyToggle.setText(R.string.togglebutton_monthly);
-        mMonthlyToggle.setTextOff("Monthly");
-        mMonthlyToggle.setTextOn("Monthly");
+        String monthButton = getResources().getString(R.string.button_month);
+        mMonthlyToggle.setText(R.string.button_month);
+        mMonthlyToggle.setTextOff(monthButton);
+        mMonthlyToggle.setTextOn(monthButton);
         mMonthlyToggle.setOnClickListener(mOnToggleButtonClickListener);
     }
 
