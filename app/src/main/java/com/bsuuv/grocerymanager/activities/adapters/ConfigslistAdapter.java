@@ -57,8 +57,8 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
         final ConfigslistAdapter mAdapter;
         private final TextView foodItemLabel;
         private final TextView foodItemBrand;
-        private final TextView foodItemSize;
-        private final TextView foodItemFreq;
+        private final TextView foodItemAmount;
+        private final TextView foodItemTimeFrame;
         private final ImageView mFoodImage;
 
         ConfigsViewHolder(View itemView, ConfigslistAdapter adapter) {
@@ -68,8 +68,8 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
             mFoodImage.setClipToOutline(true);
             foodItemLabel = itemView.findViewById(R.id.config_item_label);
             foodItemBrand = itemView.findViewById(R.id.config_item_brand);
-            foodItemSize = itemView.findViewById(R.id.config_item_amount);
-            foodItemFreq = itemView.findViewById(R.id.config_item_freq);
+            foodItemAmount = itemView.findViewById(R.id.config_item_amount);
+            foodItemTimeFrame = itemView.findViewById(R.id.config_item_time_frame);
             this.mAdapter = adapter;
 
             itemView.setOnClickListener(this);
@@ -78,9 +78,10 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
         void bindTo(FoodItem currentFoodItem) {
             foodItemLabel.setText(currentFoodItem.getLabel());
             foodItemBrand.setText(currentFoodItem.getBrand());
-            foodItemSize.setText(currentFoodItem.getAmount());
-            foodItemFreq.setText(String.valueOf(currentFoodItem.getTimeFrame()));
-            Glide.with(mContext).load(new File(String.valueOf(currentFoodItem.getImageUri()))).into(mFoodImage);
+            foodItemAmount.setText(currentFoodItem.getAmount());
+            foodItemTimeFrame.setText(String.valueOf(currentFoodItem.getTimeFrame()));
+            Glide.with(mContext).load(new File(String.valueOf(currentFoodItem.getImageUri())))
+                    .into(mFoodImage);
         }
 
         @Override
@@ -96,8 +97,8 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
             toNewFoodItem.putExtra("frequency", currentFoodItem.getFrequency());
             toNewFoodItem.putExtra("editPosition", getAdapterPosition());
 
-            String uri = (currentFoodItem.getImageUri() != null) ? currentFoodItem.getImageUri()
-                    : "";
+            String uri = (currentFoodItem.getImageUri() != null) ?
+                    currentFoodItem.getImageUri() : "";
             toNewFoodItem.putExtra("uri", uri);
 
             Activity configurations = (Activity) mContext;

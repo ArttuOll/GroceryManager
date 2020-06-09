@@ -156,7 +156,8 @@ public class NewFoodItem extends AppCompatActivity {
             this.mBrandEditText.setText(fromConfigs.getStringExtra("brand"));
             this.mAmountEditText.setText(fromConfigs.getStringExtra("amount"));
             this.mInfoEditText.setText(fromConfigs.getStringExtra("info"));
-            this.mFrequencyEditText.setText(fromConfigs.getStringExtra("frequency"));
+            this.mFrequencyEditText.setText(String.valueOf(
+                    fromConfigs.getIntExtra("frequency", 0)));
 
             mCurrentPhotoPath = fromConfigs.getStringExtra("uri");
             if (mCurrentPhotoPath != null) populateFoodImageView(mCurrentPhotoPath);

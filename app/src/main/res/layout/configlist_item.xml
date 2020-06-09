@@ -58,7 +58,7 @@
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
-                android:id="@+id/config_item_freq"
+                android:id="@+id/config_item_time_frame"
                 style="@style/TextSubLabels"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
