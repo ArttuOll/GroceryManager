@@ -156,7 +156,8 @@ public class NewFoodItem extends AppCompatActivity {
             mCurrentPhotoPath = fromConfigs.getStringExtra("uri");
             if (mCurrentPhotoPath != null) populateFoodImageView(mCurrentPhotoPath);
 
-            // Based on the frequency of the food item being edited, set the toggle buttons to either
+            // Based on the frequency of the food item being edited, set the toggle buttons to
+            // either
             // checked or disabled.
             switch (fromConfigs.getIntExtra("freq", 0)) {
                 case FoodItem.Frequency.BIWEEKLY:
@@ -195,12 +196,15 @@ public class NewFoodItem extends AppCompatActivity {
     }
 
     private int getActiveToggleButton() {
-        if (mTwoWeeksToggle.isChecked()) {
-            return FoodItem.Frequency.BIWEEKLY;
-        } else if (mWeekToggle.isChecked()) {
-            return FoodItem.Frequency.WEEKLY;
-        } else if (mMonthlyToggle.isChecked()) { return FoodItem.Frequency.MONTHLY; } else
+        if (mWeekToggle.isChecked()) {
+            return 1;
+        } else if (mTwoWeeksToggle.isChecked()) {
+            return 2;
+        } else if (mMonthlyToggle.isChecked()) {
+            return 4;
+        } else {
             return -1;
+        }
     }
 
     private void setUpToggleButtons() {
