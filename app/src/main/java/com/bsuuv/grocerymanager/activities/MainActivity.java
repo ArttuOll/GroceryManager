@@ -19,21 +19,24 @@ import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.activities.adapters.GroceryListAdapter;
 import com.bsuuv.grocerymanager.domain.FoodItem;
 import com.bsuuv.grocerymanager.logic.FoodScheduler;
+import com.bsuuv.grocerymanager.logic.SharedPreferencesHelper;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String MAIN_RECYCLERVIEW_STATE = "recyclerView_state";
-    private RecyclerView mRecyclerView;
+    private final static String MAIN_RECYCLERVIEW_STATE = "recyclerView_state";
+    private final Context mContext = this;
     private GroceryListAdapter mAdapter;
     private List<FoodItem> mGroceryList;
-    private Context mContext = this;
+    private RecyclerView mRecyclerView;
+    private SharedPreferencesHelper mSharedPrefsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +46,16 @@ public class MainActivity extends AppCompatActivity {
         setUpToolbar();
 
         this.mGroceryList = new LinkedList<>();
+        this.mSharedPrefsHelper = new SharedPreferencesHelper(this);
 
         setUpRecyclerView();
 
         ItemTouchHelper helper = initializeItemTouchHelper();
         helper.attachToRecyclerView(mRecyclerView);
 
-        FoodScheduler scheduler = new FoodScheduler(mContext);
+        FoodScheduler scheduler = new FoodScheduler(this, mGroceryList);
         try {
-            this.mGroceryList = scheduler.getGroceryList();
+            this.mGroceryList = scheduler.getGroceryList(getCurrentWeekDayInt());
         } catch (IllegalStateException e) {
             // TODO: paikanpitäjä näkymä käyttöliittymään.
         }
@@ -133,5 +137,11 @@ public class MainActivity extends AppCompatActivity {
                 toast.show();
             }
         });
+    }
+
+    private int getCurrentWeekDayInt() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 }

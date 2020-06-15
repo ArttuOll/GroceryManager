@@ -21,13 +21,13 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 import java.util.List;
 
-public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.ConfigsViewHolder> {
+public class ConfigurationsListAdapter extends RecyclerView.Adapter<ConfigurationsListAdapter.ConfigsViewHolder> {
 
     private List<FoodItem> mFoodItems;
     private LayoutInflater mInflater;
     private Context mContext;
 
-    public ConfigslistAdapter(Context context, List<FoodItem> foodItems) {
+    public ConfigurationsListAdapter(Context context, List<FoodItem> foodItems) {
         this.mInflater = LayoutInflater.from(context);
         this.mFoodItems = foodItems;
         this.mContext = context;
@@ -35,14 +35,15 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
 
     @NonNull
     @Override
-    public ConfigslistAdapter.ConfigsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ConfigurationsListAdapter.ConfigsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = mInflater.inflate(R.layout.configlist_item, parent, false);
 
-        return new ConfigslistAdapter.ConfigsViewHolder(itemView, this);
+        return new ConfigurationsListAdapter.ConfigsViewHolder(itemView, this);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ConfigslistAdapter.ConfigsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ConfigurationsListAdapter.ConfigsViewHolder holder,
+                                 int position) {
         FoodItem currentFoodItem = mFoodItems.get(position);
 
         holder.bindTo(currentFoodItem);
@@ -54,14 +55,14 @@ public class ConfigslistAdapter extends RecyclerView.Adapter<ConfigslistAdapter.
     }
 
     class ConfigsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        final ConfigslistAdapter mAdapter;
+        final ConfigurationsListAdapter mAdapter;
         private final TextView foodItemLabel;
         private final TextView foodItemBrand;
         private final TextView foodItemAmount;
         private final TextView foodItemTimeFrame;
         private final ImageView mFoodImage;
 
-        ConfigsViewHolder(View itemView, ConfigslistAdapter adapter) {
+        ConfigsViewHolder(View itemView, ConfigurationsListAdapter adapter) {
             super(itemView);
 
             mFoodImage = itemView.findViewById(R.id.configlist_food_image);

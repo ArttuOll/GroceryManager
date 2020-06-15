@@ -1,25 +1,20 @@
 package com.bsuuv.grocerymanager.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.activities.adapters.ConfigslistAdapter;
+import com.bsuuv.grocerymanager.activities.adapters.ConfigurationsListAdapter;
 import com.bsuuv.grocerymanager.domain.FoodItem;
 import com.bsuuv.grocerymanager.logic.FoodScheduler;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.bsuuv.grocerymanager.logic.SharedPreferencesHelper;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,11 +22,9 @@ public class Configurations extends AppCompatActivity {
 
     public static final int FOOD_ITEM_CREATE_REQUEST = 1;
     public static final int FOOD_ITEM_EDIT_REQUEST = 2;
-    public static final String FOOD_ITEMS_KEY = "foodItems";
     private List<FoodItem> mFoodItems;
-    private ConfigslistAdapter mAdapter;
-    private SharedPreferences mPreferences;
-    private Gson gson;
+    private ConfigurationsListAdapter mAdapter;
+    private SharedPreferencesHelper mSharedPrefsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +32,10 @@ public class Configurations extends AppCompatActivity {
         setContentView(R.layout.activity_configurations);
         setTitle("Configurations");
 
-        this.mFoodItems = new ArrayList<>();
-        this.gson = new Gson();
-        this.mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        getFoodItemsFromSharedPreferences();
+        this.mSharedPrefsHelper = new SharedPreferencesHelper(this);
+        this.mFoodItems = mSharedPrefsHelper.getFoodItems();
 
         setUpRecyclerView();
-
-        // clearSharedPrefs();
     }
 
     public void onFabClick(View view) {
@@ -58,11 +46,7 @@ public class Configurations extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
-        String foodItemsJson = gson.toJson(mFoodItems);
-
-        preferencesEditor.putString(FOOD_ITEMS_KEY, foodItemsJson);
-        preferencesEditor.apply();
+        mSharedPrefsHelper.saveFoodItems(mFoodItems);
     }
 
     @Override
@@ -103,15 +87,6 @@ public class Configurations extends AppCompatActivity {
 
     }
 
-    private void getFoodItemsFromSharedPreferences() {
-        String jsonFoodItems = mPreferences.getString(FOOD_ITEMS_KEY, "");
-        Type listType = new TypeToken<List<FoodItem>>() {
-        }.getType();
-
-        List<FoodItem> foodItems = gson.fromJson(jsonFoodItems, listType);
-        if (foodItems != null) this.mFoodItems = foodItems;
-    }
-
     private FoodItem createFoodItemFromIntent(Intent data) {
         String label = data.getStringExtra("label");
         String brand = data.getStringExtra("brand");
@@ -129,7 +104,7 @@ public class Configurations extends AppCompatActivity {
         RecyclerView mRecyclerView = findViewById(R.id.config_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        this.mAdapter = new ConfigslistAdapter(this, mFoodItems);
+        this.mAdapter = new ConfigurationsListAdapter(this, mFoodItems);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -164,11 +139,5 @@ public class Configurations extends AppCompatActivity {
             default:
                 return 0;
         }
-    }
-
-    private void clearSharedPrefs() {
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.clear();
-        editor.apply();
     }
 }
