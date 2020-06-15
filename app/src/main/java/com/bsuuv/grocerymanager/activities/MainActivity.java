@@ -26,7 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,26 +33,26 @@ public class MainActivity extends AppCompatActivity {
     private final static String MAIN_RECYCLERVIEW_STATE = "recyclerView_state";
     private final Context mContext = this;
     private GroceryListAdapter mAdapter;
+    private List<FoodItem> mFoodItems;
     private List<FoodItem> mGroceryList;
     private RecyclerView mRecyclerView;
-    private SharedPreferencesHelper mSharedPrefsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferencesHelper sharedPrefsHelper = new SharedPreferencesHelper(this);
+
+        this.mFoodItems = sharedPrefsHelper.getFoodItems();
 
         setUpToolbar();
-
-        this.mGroceryList = new LinkedList<>();
-        this.mSharedPrefsHelper = new SharedPreferencesHelper(this);
 
         setUpRecyclerView();
 
         ItemTouchHelper helper = initializeItemTouchHelper();
         helper.attachToRecyclerView(mRecyclerView);
 
-        FoodScheduler scheduler = new FoodScheduler(this, mGroceryList);
+        FoodScheduler scheduler = new FoodScheduler(sharedPrefsHelper.getGroceryDays(), mFoodItems);
         try {
             this.mGroceryList = scheduler.getGroceryList(getCurrentWeekDayInt());
         } catch (IllegalStateException e) {
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         this.mRecyclerView = findViewById(R.id.main_recyclerview);
         this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        this.mAdapter = new GroceryListAdapter(this, mGroceryList);
+        this.mAdapter = new GroceryListAdapter(this, mFoodItems);
         this.mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -123,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 int from = viewHolder.getAdapterPosition();
                 int to = target.getAdapterPosition();
 
-                Collections.swap(mGroceryList, from, to);
+                Collections.swap(mFoodItems, from, to);
 
                 mAdapter.notifyItemMoved(from, to);
                 return true;
@@ -131,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                mGroceryList.remove(viewHolder.getAdapterPosition());
+                mFoodItems.remove(viewHolder.getAdapterPosition());
                 mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                 Toast toast = Toast.makeText(mContext, R.string.toast_checked, Toast.LENGTH_SHORT);
                 toast.show();

@@ -1,7 +1,5 @@
 package com.bsuuv.grocerymanager.logic;
 
-import android.content.Context;
-
 import com.bsuuv.grocerymanager.domain.FoodItem;
 
 import java.util.ArrayList;
@@ -16,11 +14,9 @@ public class FoodScheduler {
     private List<FoodItem> mFoodItems;
     private int mGroceryDaysAWeek;
     private Map<FoodItem, Double> mFoodItemTracker;
-    private SharedPreferencesHelper mSharedPrefsHelper;
 
-    public FoodScheduler(Context context, List<FoodItem> foodItems) {
-        this.mSharedPrefsHelper = new SharedPreferencesHelper(context);
-        this.mGroceryDays = mSharedPrefsHelper.getGroceryDays();
+    public FoodScheduler(Set<String> groceryDays, List<FoodItem> foodItems) {
+        this.mGroceryDays = groceryDays;
         this.mGroceryDaysAWeek = mGroceryDays.size();
         this.mFoodItems = foodItems;
         this.mFoodItemTracker = getFoodItemTracker();
