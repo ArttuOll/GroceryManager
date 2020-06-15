@@ -3,6 +3,8 @@ package com.bsuuv.grocerymanager.logic;
 import com.bsuuv.grocerymanager.domain.FoodItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,25 +24,26 @@ public class FoodScheduler {
         this.mFoodItemTracker = getFoodItemTracker();
     }
 
-    public List<FoodItem> getGroceryList(int today) {
+    public List<FoodItem> getGroceryList() {
         List<FoodItem> groceryList = new ArrayList<>();
 
-        if (isGroceryDay(today)) {
+        if (isGroceryDay()) {
             for (FoodItem foodItem : mFoodItemTracker.keySet()) {
                 Double frequencyQuotient = mFoodItemTracker.get(foodItem);
+                double startingFrequencyQuotient = getFoodItemFrequencyQuotient(foodItem);
 
                 // Calling .get() from a map returns a Double object, which can be null.
                 if (frequencyQuotient != null) {
                     if (frequencyQuotient == 1) {
                         groceryList.add(foodItem);
 
-                        // Return the food-item frequency quotient back to its original value.
-                        mFoodItemTracker.put(foodItem, getFoodItemFrequencyQuotient(foodItem));
+                        // Reset the food-item frequency quotient back to its original value.
+                        mFoodItemTracker.put(foodItem, startingFrequencyQuotient);
                     } else {
                         // Increment the food-item frequency quotient in the tracker by adding to
                         // it the original value.
                         mFoodItemTracker.put(foodItem, frequencyQuotient +
-                                getFoodItemFrequencyQuotient(foodItem));
+                                startingFrequencyQuotient);
                     }
                 }
             }
@@ -49,7 +52,7 @@ public class FoodScheduler {
         return groceryList;
     }
 
-    private Map<FoodItem, Double> getFoodItemTracker() {
+    Map<FoodItem, Double> getFoodItemTracker() {
         Map<FoodItem, Double> foodItemQuotientMap = new HashMap<>();
         for (FoodItem foodItem : mFoodItems) {
             foodItemQuotientMap.put(foodItem, getFoodItemFrequencyQuotient(foodItem));
@@ -59,10 +62,24 @@ public class FoodScheduler {
     }
 
     private double getFoodItemFrequencyQuotient(FoodItem foodItem) {
-        return ((double) foodItem.getFrequency()) / (foodItem.getTimeFrame() * mGroceryDaysAWeek);
+        double frequencyQuotient = ((double) foodItem.getFrequency()) /
+                (foodItem.getTimeFrame() * mGroceryDaysAWeek);
+
+        if (frequencyQuotient <= 1) {
+            return frequencyQuotient;
+        } else {
+            throw new UnsupportedOperationException("Frequency quotient for food-item: " +
+                    foodItem.getLabel() + " was over 1!");
+        }
     }
 
-    private boolean isGroceryDay(int today) {
+    private boolean isGroceryDay() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.SUNDAY);
+        // When Date-object is instantiated without parameters, it is set to the current day.
+        calendar.setTime(new Date());
+        int today = calendar.get(Calendar.DAY_OF_WEEK);
+
         for (String groceryDay : mGroceryDays)
             if (stringWeekDayToInt(groceryDay) == today) return true;
 

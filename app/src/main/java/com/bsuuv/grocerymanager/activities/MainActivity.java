@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         FoodScheduler scheduler = new FoodScheduler(sharedPrefsHelper.getGroceryDays(), mFoodItems);
         try {
-            this.mGroceryList = scheduler.getGroceryList(getCurrentWeekDayInt());
+            this.mGroceryList = scheduler.getGroceryList();
         } catch (IllegalStateException e) {
             // TODO: paikanpitäjä näkymä käyttöliittymään.
         }
