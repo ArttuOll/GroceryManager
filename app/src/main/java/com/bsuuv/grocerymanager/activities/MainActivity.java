@@ -52,12 +52,10 @@ public class MainActivity extends AppCompatActivity {
         ItemTouchHelper helper = initializeItemTouchHelper();
         helper.attachToRecyclerView(mRecyclerView);
 
-        FoodScheduler scheduler = new FoodScheduler(sharedPrefsHelper.getGroceryDays(), mFoodItems);
-        try {
-            this.mGroceryList = scheduler.getGroceryList();
-        } catch (IllegalStateException e) {
-            // TODO: paikanpitäjä näkymä käyttöliittymään.
-        }
+        FoodScheduler scheduler = new FoodScheduler(mContext, sharedPrefsHelper.getGroceryDays(),
+                mFoodItems);
+
+        this.mGroceryList = scheduler.getGroceryList();
     }
 
     @Override

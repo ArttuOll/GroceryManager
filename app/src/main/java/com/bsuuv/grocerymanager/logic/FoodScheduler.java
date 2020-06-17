@@ -1,5 +1,7 @@
 package com.bsuuv.grocerymanager.logic;
 
+import android.content.Context;
+
 import com.bsuuv.grocerymanager.domain.FoodItem;
 
 import java.util.ArrayList;
@@ -16,12 +18,14 @@ public class FoodScheduler {
     private List<FoodItem> mFoodItems;
     private int mGroceryDaysAWeek;
     private Map<FoodItem, Double> mFoodItemTracker;
+    private SharedPreferencesHelper mSharedPrefsHelper;
 
-    public FoodScheduler(Set<String> groceryDays, List<FoodItem> foodItems) {
+    public FoodScheduler(Context context, Set<String> groceryDays, List<FoodItem> foodItems) {
         this.mGroceryDays = groceryDays;
         this.mGroceryDaysAWeek = mGroceryDays.size();
         this.mFoodItems = foodItems;
         this.mFoodItemTracker = getFoodItemTracker();
+        this.mSharedPrefsHelper = new SharedPreferencesHelper(context);
     }
 
     public List<FoodItem> getGroceryList() {
@@ -53,12 +57,29 @@ public class FoodScheduler {
     }
 
     Map<FoodItem, Double> getFoodItemTracker() {
-        Map<FoodItem, Double> foodItemQuotientMap = new HashMap<>();
-        for (FoodItem foodItem : mFoodItems) {
-            foodItemQuotientMap.put(foodItem, getFoodItemFrequencyQuotient(foodItem));
+        Map<FoodItem, Double> tracker;
+
+        // If no tracker was previously saved, create a new one.
+        if (mSharedPrefsHelper.getFoodItemTracker() == null) {
+            tracker = new HashMap<>();
+            for (FoodItem foodItem : mFoodItems) {
+                tracker.put(foodItem, getFoodItemFrequencyQuotient(foodItem));
+            }
+        } else {
+            tracker = mSharedPrefsHelper.getFoodItemTracker();
+
+            // Check if there's new items in the list of foods that weren't there on the last save
+            // and add them to tracker.
+            for (FoodItem foodItem : mFoodItems) {
+                if (!mFoodItemTracker.containsKey(foodItem)) {
+                    mFoodItemTracker.put(foodItem, getFoodItemFrequencyQuotient(foodItem));
+                }
+            }
         }
 
-        return foodItemQuotientMap;
+        mSharedPrefsHelper.saveFoodItemTracker(tracker);
+
+        return tracker;
     }
 
     private double getFoodItemFrequencyQuotient(FoodItem foodItem) {
