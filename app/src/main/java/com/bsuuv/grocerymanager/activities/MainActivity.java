@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,9 +42,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferencesHelper sharedPrefsHelper = new SharedPreferencesHelper(this);
+        SharedPreferencesHelper sharedPrefsHelper = new SharedPreferencesHelper(PreferenceManager.
+                getDefaultSharedPreferences(this));
 
         this.mFoodItems = sharedPrefsHelper.getFoodItems();
+        FoodScheduler scheduler = new FoodScheduler(sharedPrefsHelper);
+        this.mGroceryList = scheduler.getGroceryList();
 
         setUpToolbar();
 
@@ -51,11 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
         ItemTouchHelper helper = initializeItemTouchHelper();
         helper.attachToRecyclerView(mRecyclerView);
-
-        FoodScheduler scheduler = new FoodScheduler(mContext, sharedPrefsHelper.getGroceryDays(),
-                mFoodItems);
-
-        this.mGroceryList = scheduler.getGroceryList();
     }
 
     @Override

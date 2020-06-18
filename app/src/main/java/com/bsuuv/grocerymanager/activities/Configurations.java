@@ -6,6 +6,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,7 +33,8 @@ public class Configurations extends AppCompatActivity {
         setContentView(R.layout.activity_configurations);
         setTitle("Configurations");
 
-        this.mSharedPrefsHelper = new SharedPreferencesHelper(this);
+        this.mSharedPrefsHelper = new SharedPreferencesHelper(PreferenceManager.
+                getDefaultSharedPreferences(this));
         this.mFoodItems = mSharedPrefsHelper.getFoodItems();
 
         setUpRecyclerView();

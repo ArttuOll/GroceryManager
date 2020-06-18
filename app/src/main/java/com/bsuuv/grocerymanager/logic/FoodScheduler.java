@@ -1,7 +1,5 @@
 package com.bsuuv.grocerymanager.logic;
 
-import android.content.Context;
-
 import com.bsuuv.grocerymanager.domain.FoodItem;
 
 import java.util.ArrayList;
@@ -20,12 +18,12 @@ public class FoodScheduler {
     private Map<FoodItem, Double> mFoodItemTracker;
     private SharedPreferencesHelper mSharedPrefsHelper;
 
-    public FoodScheduler(Context context, Set<String> groceryDays, List<FoodItem> foodItems) {
-        this.mGroceryDays = groceryDays;
+    public FoodScheduler(SharedPreferencesHelper sharedPrefsHelper) {
+        this.mSharedPrefsHelper = sharedPrefsHelper;
+        this.mGroceryDays = sharedPrefsHelper.getGroceryDays();
         this.mGroceryDaysAWeek = mGroceryDays.size();
-        this.mFoodItems = foodItems;
+        this.mFoodItems = sharedPrefsHelper.getFoodItems();
         this.mFoodItemTracker = getFoodItemTracker();
-        this.mSharedPrefsHelper = new SharedPreferencesHelper(context);
     }
 
     public List<FoodItem> getGroceryList() {
@@ -71,7 +69,7 @@ public class FoodScheduler {
             // Check if there's new items in the list of foods that weren't there on the last save
             // and add them to tracker.
             for (FoodItem foodItem : mFoodItems) {
-                if (!mFoodItemTracker.containsKey(foodItem)) {
+                if (!tracker.containsKey(foodItem)) {
                     mFoodItemTracker.put(foodItem, getFoodItemFrequencyQuotient(foodItem));
                 }
             }

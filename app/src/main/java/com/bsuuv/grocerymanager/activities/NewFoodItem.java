@@ -13,6 +13,7 @@ import android.widget.ToggleButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.preference.PreferenceManager;
 
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.logic.FoodScheduler;
@@ -62,7 +63,8 @@ public class NewFoodItem extends AppCompatActivity {
         this.mInfoEditText = findViewById(R.id.editText_info);
         this.mFrequencyEditText = findViewById(R.id.editText_freq);
         this.mFoodImageView = findViewById(R.id.imageView_new_fooditem);
-        this.mSharedPrefsHelper = new SharedPreferencesHelper(this);
+        this.mSharedPrefsHelper = new SharedPreferencesHelper(PreferenceManager
+                .getDefaultSharedPreferences(this));
 
         setUpToggleButtons();
 

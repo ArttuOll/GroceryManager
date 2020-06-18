@@ -1,6 +1,5 @@
 package com.bsuuv.grocerymanager.logic;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.bsuuv.grocerymanager.domain.FoodItem;
@@ -21,9 +20,8 @@ public class SharedPreferencesHelper {
     private final SharedPreferences mSharedPreferences;
     private Gson gson;
 
-    public SharedPreferencesHelper(Context context) {
-        this.mSharedPreferences = context.getSharedPreferences("gmpreferences",
-                Context.MODE_PRIVATE);
+    public SharedPreferencesHelper(SharedPreferences sharedPreferences) {
+        this.mSharedPreferences = sharedPreferences;
         this.gson = new Gson();
     }
 
@@ -48,7 +46,7 @@ public class SharedPreferencesHelper {
     }
 
     public Map<FoodItem, Double> getFoodItemTracker() {
-        String quotientMapJson = mSharedPreferences.getString(FOOD_ITEM_TRACKER_KEY, "");
+        String quotientMapJson = mSharedPreferences.getString(FOOD_ITEM_TRACKER_KEY, null);
         Type mapType = new TypeToken<Map<FoodItem, Double>>() {
         }.getType();
 
