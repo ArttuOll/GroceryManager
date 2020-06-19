@@ -54,7 +54,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     class GroceryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView foodItemLabel;
         private final TextView foodItemBrand;
-        private final TextView foodItemSize;
+        private final TextView foodItemAmount;
         final GroceryListAdapter mAdapter;
         private ImageView mFoodImage;
 
@@ -64,7 +64,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             mFoodImage.setClipToOutline(true);
             foodItemLabel = itemView.findViewById(R.id.grocery_item_label);
             foodItemBrand = itemView.findViewById(R.id.grocery_item_brand);
-            foodItemSize = itemView.findViewById(R.id.grocery_item_size);
+            foodItemAmount = itemView.findViewById(R.id.grocery_item_amount);
             this.mAdapter = adapter;
 
             itemView.setOnClickListener(this);
@@ -73,7 +73,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
         void bindTo(FoodItem currentFoodItem) {
             foodItemLabel.setText(currentFoodItem.getLabel());
             foodItemBrand.setText(currentFoodItem.getBrand());
-            foodItemSize.setText(currentFoodItem.getAmount());
+            foodItemAmount.setText(String.valueOf(currentFoodItem.getAmount()));
             Glide.with(mContext).load(currentFoodItem.getImageUri()).into(mFoodImage);
         }
 

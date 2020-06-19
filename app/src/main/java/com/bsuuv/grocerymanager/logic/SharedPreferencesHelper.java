@@ -61,6 +61,9 @@ public class SharedPreferencesHelper {
 
     public void saveFoodItemTracker(Map<FoodItem, Double> foodItemQuotientMap) {
         SharedPreferences.Editor preferencesEditor = mSharedPreferences.edit();
+        // TODO: selvitä, miten Jsoniin saadaan tallentumaan avaimeksi koko olio, ei vain sen nimi.
+        // TODO: selvitä, tallennetaanko sanakirjan avaimiksi edes kokonaisia olioita vai
+        //  ainostaan niiden nimet?
         String quotientMapJson = gson.toJson(foodItemQuotientMap);
 
         preferencesEditor.putString(FOOD_ITEM_TRACKER_KEY, quotientMapJson);
