@@ -5,7 +5,6 @@ import com.bsuuv.grocerymanager.domain.FoodItem;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -55,17 +54,14 @@ public class FoodScheduler {
     }
 
     Map<FoodItem, Double> getFoodItemTracker() {
-        Map<FoodItem, Double> tracker;
+        Map<FoodItem, Double> tracker = mSharedPrefsHelper.getFoodItemTracker();
 
         // If no tracker was previously saved, create a new one.
-        if (mSharedPrefsHelper.getFoodItemTracker() == null) {
-            tracker = new HashMap<>();
+        if (tracker.isEmpty()) {
             for (FoodItem foodItem : mFoodItems) {
                 tracker.put(foodItem, getFoodItemFrequencyQuotient(foodItem));
             }
         } else {
-            tracker = mSharedPrefsHelper.getFoodItemTracker();
-
             // Check if there's new items in the list of foods that weren't there on the last save
             // and add them to tracker.
             for (FoodItem foodItem : mFoodItems) {
@@ -75,7 +71,7 @@ public class FoodScheduler {
             }
         }
 
-        mSharedPrefsHelper.saveFoodItemTracker(tracker);
+        if (!tracker.isEmpty()) mSharedPrefsHelper.saveFoodItemTracker(tracker);
 
         return tracker;
     }

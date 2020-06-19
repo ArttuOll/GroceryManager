@@ -101,7 +101,7 @@ public class FoodSchedulerTests {
     }
 
     @Test
-    public void throwsExceptionWhenFaultyFoodItem() {
+    public void throwsExceptionWhenFaultyFoodItemQuotient() {
         // Add current weekday as grocery day
         mGroceryDays.add(intWeekDayToString(getTodayInt()));
         mFoodItems.add(mFaultyFoodItem1);

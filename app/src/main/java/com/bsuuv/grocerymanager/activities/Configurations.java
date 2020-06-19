@@ -48,7 +48,7 @@ public class Configurations extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mSharedPrefsHelper.saveFoodItems(mFoodItems);
+        if (!mFoodItems.isEmpty()) mSharedPrefsHelper.saveFoodItems(mFoodItems);
     }
 
     @Override

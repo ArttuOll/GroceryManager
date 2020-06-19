@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -34,30 +36,34 @@ public class SharedPreferencesHelper {
         Type listType = new TypeToken<List<FoodItem>>() {
         }.getType();
 
-        return gson.fromJson(jsonFoodItems, listType);
+        if (jsonFoodItems.equals("")) { return new ArrayList<>(); } else {
+            return gson.fromJson(jsonFoodItems, listType);
+        }
     }
 
     public void saveFoodItems(List<FoodItem> foodItems) {
         SharedPreferences.Editor preferencesEditor = mSharedPreferences.edit();
         String foodItemsJson = gson.toJson(foodItems);
 
-        preferencesEditor.putString(FOOD_ITEM_TRACKER_KEY, foodItemsJson);
+        preferencesEditor.putString(FOOD_ITEMS_KEY, foodItemsJson);
         preferencesEditor.apply();
     }
 
     public Map<FoodItem, Double> getFoodItemTracker() {
-        String quotientMapJson = mSharedPreferences.getString(FOOD_ITEM_TRACKER_KEY, null);
+        String jsonQuotientMap = mSharedPreferences.getString(FOOD_ITEM_TRACKER_KEY, "");
         Type mapType = new TypeToken<Map<FoodItem, Double>>() {
         }.getType();
 
-        return gson.fromJson(quotientMapJson, mapType);
+        if (jsonQuotientMap.equals("")) { return new HashMap<>(); } else {
+            return gson.fromJson(jsonQuotientMap, mapType);
+        }
     }
 
     public void saveFoodItemTracker(Map<FoodItem, Double> foodItemQuotientMap) {
         SharedPreferences.Editor preferencesEditor = mSharedPreferences.edit();
         String quotientMapJson = gson.toJson(foodItemQuotientMap);
 
-        preferencesEditor.putString(FOOD_ITEMS_KEY, quotientMapJson);
+        preferencesEditor.putString(FOOD_ITEM_TRACKER_KEY, quotientMapJson);
         preferencesEditor.apply();
     }
 

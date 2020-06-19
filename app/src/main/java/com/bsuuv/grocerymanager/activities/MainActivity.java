@@ -26,8 +26,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        Parcelable state = mRecyclerView.getLayoutManager().onSaveInstanceState();
+        Parcelable state = Objects.requireNonNull(mRecyclerView.getLayoutManager())
+                .onSaveInstanceState();
         outState.putParcelable(MAIN_RECYCLERVIEW_STATE, state);
 
         super.onSaveInstanceState(outState);
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         this.mRecyclerView = findViewById(R.id.main_recyclerview);
         this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        this.mAdapter = new GroceryListAdapter(this, mFoodItems);
+        this.mAdapter = new GroceryListAdapter(this, mGroceryList);
         this.mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -133,11 +134,5 @@ public class MainActivity extends AppCompatActivity {
                 toast.show();
             }
         });
-    }
-
-    private int getCurrentWeekDayInt() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 }
