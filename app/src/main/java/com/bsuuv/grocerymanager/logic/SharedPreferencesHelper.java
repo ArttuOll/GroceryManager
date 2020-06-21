@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 
 import com.bsuuv.grocerymanager.domain.FoodItem;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -20,11 +21,17 @@ public class SharedPreferencesHelper {
     private static final String FOOD_ITEMS_KEY = "foodItems";
     private static final String FOOD_ITEM_TRACKER_KEY = "foodItemTracker";
     private final SharedPreferences mSharedPreferences;
+    private final Type mapType = new TypeToken<Map<FoodItem, Double>>() {
+    }.getType();
+    private final Type listType = new TypeToken<List<FoodItem>>() {
+    }.getType();
     private Gson gson;
 
     public SharedPreferencesHelper(SharedPreferences sharedPreferences) {
         this.mSharedPreferences = sharedPreferences;
-        this.gson = new Gson();
+        GsonBuilder builder = new GsonBuilder();
+        builder.enableComplexMapKeySerialization();
+        this.gson = builder.create();
     }
 
     public Set<String> getGroceryDays() {
@@ -33,8 +40,6 @@ public class SharedPreferencesHelper {
 
     public List<FoodItem> getFoodItems() {
         String jsonFoodItems = mSharedPreferences.getString(FOOD_ITEMS_KEY, "");
-        Type listType = new TypeToken<List<FoodItem>>() {
-        }.getType();
 
         if (jsonFoodItems.equals("")) { return new ArrayList<>(); } else {
             return gson.fromJson(jsonFoodItems, listType);
@@ -43,7 +48,7 @@ public class SharedPreferencesHelper {
 
     public void saveFoodItems(List<FoodItem> foodItems) {
         SharedPreferences.Editor preferencesEditor = mSharedPreferences.edit();
-        String foodItemsJson = gson.toJson(foodItems);
+        String foodItemsJson = gson.toJson(foodItems, listType);
 
         preferencesEditor.putString(FOOD_ITEMS_KEY, foodItemsJson);
         preferencesEditor.apply();
@@ -51,8 +56,6 @@ public class SharedPreferencesHelper {
 
     public Map<FoodItem, Double> getFoodItemTracker() {
         String jsonQuotientMap = mSharedPreferences.getString(FOOD_ITEM_TRACKER_KEY, "");
-        Type mapType = new TypeToken<Map<FoodItem, Double>>() {
-        }.getType();
 
         if (jsonQuotientMap.equals("")) { return new HashMap<>(); } else {
             return gson.fromJson(jsonQuotientMap, mapType);
@@ -61,10 +64,7 @@ public class SharedPreferencesHelper {
 
     public void saveFoodItemTracker(Map<FoodItem, Double> foodItemQuotientMap) {
         SharedPreferences.Editor preferencesEditor = mSharedPreferences.edit();
-        // TODO: selvitä, miten Jsoniin saadaan tallentumaan avaimeksi koko olio, ei vain sen nimi.
-        // TODO: selvitä, tallennetaanko sanakirjan avaimiksi edes kokonaisia olioita vai
-        //  ainostaan niiden nimet?
-        String quotientMapJson = gson.toJson(foodItemQuotientMap);
+        String quotientMapJson = gson.toJson(foodItemQuotientMap, mapType);
 
         preferencesEditor.putString(FOOD_ITEM_TRACKER_KEY, quotientMapJson);
         preferencesEditor.apply();

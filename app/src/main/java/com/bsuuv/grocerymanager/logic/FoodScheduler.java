@@ -66,7 +66,7 @@ public class FoodScheduler {
             // and add them to tracker.
             for (FoodItem foodItem : mFoodItems) {
                 if (!tracker.containsKey(foodItem)) {
-                    mFoodItemTracker.put(foodItem, getFoodItemFrequencyQuotient(foodItem));
+                    tracker.put(foodItem, getFoodItemFrequencyQuotient(foodItem));
                 }
             }
         }

@@ -36,7 +36,7 @@ public class FoodItemDetail extends AppCompatActivity {
         TextView info = findViewById(R.id.textview_info);
 
         title.setText(getIntent().getStringExtra("label"));
-        amount.setText(getIntent().getStringExtra("amount"));
+        amount.setText(String.valueOf(getIntent().getIntExtra("amount", 0)));
         brand.setText(getIntent().getStringExtra("brand"));
         info.setText(getIntent().getStringExtra("info"));
     }
