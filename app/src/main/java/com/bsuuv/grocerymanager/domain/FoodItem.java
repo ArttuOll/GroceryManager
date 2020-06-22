@@ -1,5 +1,9 @@
 package com.bsuuv.grocerymanager.domain;
 
+import androidx.annotation.NonNull;
+
+import java.util.Objects;
+
 /**
  * A class representing a food-item in the grocery list.
  */
@@ -50,5 +54,30 @@ public class FoodItem {
 
     public String getBrand() {
         return mBrand;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getImageUri(), mLabel, mBrand, mInfo, mAmount, mTimeFrame, mFrequency);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FoodItem foodItem = (FoodItem) o;
+        return mAmount == foodItem.mAmount &&
+                mTimeFrame == foodItem.mTimeFrame &&
+                mFrequency == foodItem.mFrequency &&
+                Objects.equals(getImageUri(), foodItem.getImageUri()) &&
+                mLabel.equals(foodItem.mLabel) &&
+                Objects.equals(mBrand, foodItem.mBrand) &&
+                Objects.equals(mInfo, foodItem.mInfo);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return getLabel() + " " + getBrand() + " " + getAmount() + " " + getInfo();
     }
 }
