@@ -18,6 +18,7 @@ import com.bsuuv.grocerymanager.logic.SharedPreferencesHelper;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class Configurations extends AppCompatActivity {
 
@@ -46,12 +47,6 @@ public class Configurations extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (!mFoodItems.isEmpty()) mSharedPrefsHelper.saveFoodItems(mFoodItems);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -75,7 +70,7 @@ public class Configurations extends AppCompatActivity {
         } else if (requestCode == FOOD_ITEM_EDIT_REQUEST) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    FoodItem result = createFoodItemFromIntent(data);
+                    FoodItem result = modifyFoodItemByIntent(data);
 
                     int editedPosition = data.getIntExtra("editPosition", 0);
 
@@ -85,8 +80,32 @@ public class Configurations extends AppCompatActivity {
                 }
             }
         }
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (!mFoodItems.isEmpty()) mSharedPrefsHelper.saveFoodItems(mFoodItems);
+    }
 
+    private FoodItem modifyFoodItemByIntent(Intent data) {
+        String label = data.getStringExtra("label");
+        String brand = data.getStringExtra("brand");
+        int amount = data.getIntExtra("amount", 0);
+        String info = data.getStringExtra("info");
+        int timeFrame = data.getIntExtra("time_frame", 0);
+        int frequency = data.getIntExtra("frequency", 0);
+        String imageUri = data.getStringExtra("uri");
+        UUID id = (UUID) data.getSerializableExtra("id");
+
+        FoodItem editedItem = new FoodItem(label, brand, info, amount, timeFrame, frequency,
+                imageUri);
+        editedItem.setId(id);
+
+        for (int i = 0; i < mFoodItems.size(); i++)
+            if (mFoodItems.get(i).getId() == editedItem.getId()) mFoodItems.set(i, editedItem);
+
+        return editedItem;
     }
 
     private FoodItem createFoodItemFromIntent(Intent data) {
@@ -96,7 +115,6 @@ public class Configurations extends AppCompatActivity {
         String info = data.getStringExtra("info");
         int timeFrame = data.getIntExtra("time_frame", 0);
         int frequency = data.getIntExtra("frequency", 0);
-
         String imageUri = data.getStringExtra("uri");
 
         return new FoodItem(label, brand, info, amount, timeFrame, frequency, imageUri);

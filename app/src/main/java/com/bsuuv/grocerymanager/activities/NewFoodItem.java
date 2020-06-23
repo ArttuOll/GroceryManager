@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 public class NewFoodItem extends AppCompatActivity {
 
@@ -47,7 +48,8 @@ public class NewFoodItem extends AppCompatActivity {
     private EditText mInfoEditText;
     private EditText mFrequencyEditText;
     private ImageView mFoodImageView;
-    private String mCurrentPhotoPath;
+    private String mPhotoPath;
+    private UUID mFoodItemId;
     private SharedPreferencesHelper mSharedPrefsHelper;
 
     @Override
@@ -92,8 +94,8 @@ public class NewFoodItem extends AppCompatActivity {
                 toConfigs.putExtra("info", info);
                 toConfigs.putExtra("time_frame", timeFrame);
                 toConfigs.putExtra("frequency", frequency);
-
-                toConfigs.putExtra("uri", mCurrentPhotoPath);
+                toConfigs.putExtra("uri", mPhotoPath);
+                toConfigs.putExtra("id", mFoodItemId);
 
                 setResult(RESULT_OK, toConfigs);
                 finish();
@@ -137,7 +139,7 @@ public class NewFoodItem extends AppCompatActivity {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
-                if (data != null) populateFoodImageView(mCurrentPhotoPath);
+                if (data != null) populateFoodImageView(mPhotoPath);
             }
         }
     }
@@ -181,13 +183,13 @@ public class NewFoodItem extends AppCompatActivity {
             this.mInfoEditText.setText(fromConfigs.getStringExtra("info"));
             this.mFrequencyEditText.setText(String.valueOf(
                     fromConfigs.getIntExtra("frequency", 0)));
+            this.mFoodItemId = (UUID) fromConfigs.getSerializableExtra("id");
 
-            mCurrentPhotoPath = fromConfigs.getStringExtra("uri");
-            if (mCurrentPhotoPath != null) populateFoodImageView(mCurrentPhotoPath);
+            this.mPhotoPath = fromConfigs.getStringExtra("uri");
+            if (mPhotoPath != null) populateFoodImageView(mPhotoPath);
 
             // Based on the frequency of the food item being edited, set the toggle buttons to
-            // either
-            // checked or disabled.
+            // either checked or disabled.
             switch (fromConfigs.getIntExtra("time_frame", 0)) {
                 case FoodScheduler.TimeFrame.WEEK:
                     setWeekToggleCheckedDisableOthers();
@@ -225,15 +227,10 @@ public class NewFoodItem extends AppCompatActivity {
     }
 
     private int getActiveToggleButton() {
-        if (mWeekToggle.isChecked()) {
-            return FoodScheduler.TimeFrame.WEEK;
-        } else if (mTwoWeeksToggle.isChecked()) {
-            return FoodScheduler.TimeFrame.TWO_WEEKS;
-        } else if (mMonthlyToggle.isChecked()) {
-            return FoodScheduler.TimeFrame.MONTH;
-        } else {
-            return -1;
-        }
+        if (mWeekToggle.isChecked()) return FoodScheduler.TimeFrame.WEEK;
+        else if (mTwoWeeksToggle.isChecked()) return FoodScheduler.TimeFrame.TWO_WEEKS;
+        else if (mMonthlyToggle.isChecked()) return FoodScheduler.TimeFrame.MONTH;
+        else return -1;
     }
 
     private void setUpToggleButtons() {
@@ -269,7 +266,7 @@ public class NewFoodItem extends AppCompatActivity {
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
 
-        mCurrentPhotoPath = Uri.parse(image.toURI().getPath()).getPath();
+        mPhotoPath = Uri.parse(image.toURI().getPath()).getPath();
 
         return image;
     }

@@ -31,7 +31,7 @@ public class FoodScheduler {
         if (isGroceryDay()) {
             for (FoodItem foodItem : mFoodItemTracker.keySet()) {
                 Double frequencyQuotient = mFoodItemTracker.get(foodItem);
-                double startingFrequencyQuotient = getFoodItemFrequencyQuotient(foodItem);
+                double startingFrequencyQuotient = getFrequencyQuotient(foodItem);
 
                 // Calling .get() from a map returns a Double object, which can be null.
                 if (frequencyQuotient != null) {
@@ -59,16 +59,11 @@ public class FoodScheduler {
         // If no tracker was previously saved, create a new one.
         if (tracker.isEmpty()) {
             for (FoodItem foodItem : mFoodItems) {
-                tracker.put(foodItem, getFoodItemFrequencyQuotient(foodItem));
+                tracker.put(foodItem, getFrequencyQuotient(foodItem));
             }
         } else {
-            // Check if there's new items in the list of foods that weren't there on the last save
-            // and add them to tracker.
-            for (FoodItem foodItem : mFoodItems) {
-                if (!tracker.containsKey(foodItem)) {
-                    tracker.put(foodItem, getFoodItemFrequencyQuotient(foodItem));
-                }
-            }
+            addFoodsNotInTracker(tracker);
+            deleteFromTrackerFoodsNotInFoodItemsList(tracker);
         }
 
         if (!tracker.isEmpty()) mSharedPrefsHelper.saveFoodItemTracker(tracker);
@@ -76,7 +71,23 @@ public class FoodScheduler {
         return tracker;
     }
 
-    private double getFoodItemFrequencyQuotient(FoodItem foodItem) {
+    private void deleteFromTrackerFoodsNotInFoodItemsList(Map<FoodItem, Double> tracker) {
+        List<FoodItem> uselessKeys = new ArrayList<>();
+        for (FoodItem key : tracker.keySet()) {
+            if (!mFoodItems.contains(key)) uselessKeys.add(key);
+        }
+        for (FoodItem uselessKey : uselessKeys) tracker.remove(uselessKey);
+    }
+
+    private void addFoodsNotInTracker(Map<FoodItem, Double> tracker) {
+        for (FoodItem foodItem : mFoodItems) {
+            if (!tracker.containsKey(foodItem)) {
+                tracker.put(foodItem, getFrequencyQuotient(foodItem));
+            }
+        }
+    }
+
+    private double getFrequencyQuotient(FoodItem foodItem) {
         double frequencyQuotient = ((double) foodItem.getFrequency()) /
                 (foodItem.getTimeFrame() * mGroceryDaysAWeek);
 

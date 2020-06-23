@@ -3,6 +3,7 @@ package com.bsuuv.grocerymanager.domain;
 import androidx.annotation.NonNull;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A class representing a food-item in the grocery list.
@@ -16,6 +17,7 @@ public class FoodItem {
     private int mAmount;
     private int mTimeFrame;
     private int mFrequency;
+    private UUID mId;
 
     public FoodItem(String label, String brand, String info, int amount, int timeFrame,
                     int frequency, String imageUri) {
@@ -26,6 +28,7 @@ public class FoodItem {
         this.mTimeFrame = timeFrame;
         this.mFrequency = frequency;
         this.imageUri = imageUri;
+        this.mId = UUID.randomUUID();
     }
 
     public int getTimeFrame() {
@@ -57,11 +60,6 @@ public class FoodItem {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getImageUri(), mLabel, mBrand, mInfo, mAmount, mTimeFrame, mFrequency);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -75,9 +73,22 @@ public class FoodItem {
                 Objects.equals(mInfo, foodItem.mInfo);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getImageUri(), mLabel, mBrand, mInfo, mAmount, mTimeFrame, mFrequency);
+    }
+
     @NonNull
     @Override
     public String toString() {
         return getLabel() + " " + getBrand() + " " + getAmount() + " " + getInfo();
+    }
+
+    public UUID getId() {
+        return mId;
+    }
+
+    public void setId(UUID mId) {
+        this.mId = mId;
     }
 }
