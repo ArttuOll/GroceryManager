@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +29,7 @@ public class Configurations extends AppCompatActivity {
     private List<FoodItem> mFoodItems;
     private ConfigurationsListAdapter mAdapter;
     private SharedPreferencesHelper mSharedPrefsHelper;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,9 @@ public class Configurations extends AppCompatActivity {
         this.mFoodItems = mSharedPrefsHelper.getFoodItems();
 
         setUpRecyclerView();
+
+        ItemTouchHelper helper = initializeItemTouchHelper();
+        helper.attachToRecyclerView(mRecyclerView);
     }
 
     public void onFabClick(View view) {
@@ -85,7 +91,7 @@ public class Configurations extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (!mFoodItems.isEmpty()) mSharedPrefsHelper.saveFoodItems(mFoodItems);
+        mSharedPrefsHelper.saveFoodItems(mFoodItems);
     }
 
     private FoodItem modifyFoodItemByIntent(Intent data) {
@@ -121,7 +127,7 @@ public class Configurations extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
-        RecyclerView mRecyclerView = findViewById(R.id.config_recyclerview);
+        this.mRecyclerView = findViewById(R.id.config_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         this.mAdapter = new ConfigurationsListAdapter(this, mFoodItems);
@@ -159,5 +165,22 @@ public class Configurations extends AppCompatActivity {
             default:
                 return 0;
         }
+    }
+
+    private ItemTouchHelper initializeItemTouchHelper() {
+        return new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                mFoodItems.remove(viewHolder.getAdapterPosition());
+                mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            }
+        });
     }
 }
