@@ -80,22 +80,21 @@ public class NewFoodItem extends AppCompatActivity {
         String info = mInfoEditText.getText().toString();
         int timeFrame = getActiveToggleButton();
         int frequency = Integer.parseInt(mFrequencyEditText.getText().toString());
-
         int groceryDaysAWeek = mSharedPrefsHelper.getGroceryDays().size();
+
         double frequencyTimeFrameGroceryDaysQuotient =
                 (double) frequency / ((double) timeFrame * (double) groceryDaysAWeek);
 
+        if (label.isEmpty()) {
+            Snackbar.make(findViewById(R.id.fab_new_fooditem), getString(R.string.label_empty),
+                    Snackbar.LENGTH_LONG).setAnchorView(R.id.fab_new_fooditem).show();
+            return;
+        }
+
         if (groceryDaysAWeek > 0) {
             if (frequencyTimeFrameGroceryDaysQuotient <= 1.0) {
-                Intent toConfigs = new Intent(this, Configurations.class);
-                toConfigs.putExtra("label", label);
-                toConfigs.putExtra("brand", brand);
-                toConfigs.putExtra("amount", amount);
-                toConfigs.putExtra("info", info);
-                toConfigs.putExtra("time_frame", timeFrame);
-                toConfigs.putExtra("frequency", frequency);
-                toConfigs.putExtra("uri", mPhotoPath);
-                toConfigs.putExtra("id", mFoodItemId);
+                Intent toConfigs = createIntentToConfigs(label, brand, amount, info, timeFrame, frequency,
+                        mPhotoPath, mFoodItemId);
 
                 setResult(RESULT_OK, toConfigs);
                 finish();
@@ -110,6 +109,21 @@ public class NewFoodItem extends AppCompatActivity {
                     Snackbar.LENGTH_LONG)
                     .setAnchorView(R.id.fab_new_fooditem).show();
         }
+    }
+
+    private Intent createIntentToConfigs(String label, String brand, int amount, String info, int timeFrame, int frequency,
+                                         String mPhotoPath, UUID mFoodItemId) {
+        Intent toConfigs = new Intent(this, Configurations.class);
+        toConfigs.putExtra("label", label);
+        toConfigs.putExtra("brand", brand);
+        toConfigs.putExtra("amount", amount);
+        toConfigs.putExtra("info", info);
+        toConfigs.putExtra("time_frame", timeFrame);
+        toConfigs.putExtra("frequency", frequency);
+        toConfigs.putExtra("uri", mPhotoPath);
+        toConfigs.putExtra("id", mFoodItemId);
+
+        return toConfigs;
     }
 
     public void onCameraIconClick(View view) {
