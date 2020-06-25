@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FoodScheduler {
 
@@ -62,11 +63,15 @@ public class FoodScheduler {
                 tracker.put(foodItem, getFrequencyQuotient(foodItem));
             }
         } else {
+            // TODO: testaa näitä lambdoja.
             // Add foods not in tracker from mFoodItems.
             mFoodItems.stream().filter(foodItem -> !tracker.containsKey(foodItem))
                     .forEach(foodItem -> tracker.put(foodItem, getFrequencyQuotient(foodItem)));
             // Delete from tracker foods not in mFoodItems.
-            tracker.keySet().stream().filter(key -> !mFoodItems.contains(key)).forEach(tracker::remove);
+            List<FoodItem> uselessKeys = tracker.keySet().stream()
+                    .filter(key -> !mFoodItems.contains(key))
+                    .collect(Collectors.toList());
+            uselessKeys.forEach(tracker::remove);
         }
 
         if (!tracker.isEmpty()) mSharedPrefsHelper.saveFoodItemTracker(tracker);

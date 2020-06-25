@@ -20,6 +20,7 @@ public class SharedPreferencesHelper {
     private static final String GROCERY_DAYS_KEY = "grocerydays";
     private static final String FOOD_ITEMS_KEY = "foodItems";
     private static final String FOOD_ITEM_TRACKER_KEY = "foodItemTracker";
+
     private final SharedPreferences mSharedPreferences;
     private final Type mapType = new TypeToken<Map<FoodItem, Double>>() {
     }.getType();

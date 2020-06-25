@@ -35,6 +35,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
     private final static String MAIN_RECYCLERVIEW_STATE = "recyclerView_state";
+
     private final Context mContext = this;
     private GroceryListAdapter mAdapter;
     private List<FoodItem> mFoodItems;
