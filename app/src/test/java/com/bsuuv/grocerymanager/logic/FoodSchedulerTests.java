@@ -90,7 +90,7 @@ public class FoodSchedulerTests {
         mFoodItems.add(mCorrectFoodItem1);
         // Override previous stubbing of the same method. Null is required for
         // FoodScheduler.getFoodItemTracker to create a new quotinent map.
-        when(sharedPrefsHelper.getFoodItemTracker()).thenReturn(null);
+        when(sharedPrefsHelper.getFoodItemTracker()).thenReturn(new HashMap<>());
 
         FoodScheduler foodScheduler = new FoodScheduler(sharedPrefsHelper);
 
@@ -107,7 +107,7 @@ public class FoodSchedulerTests {
         mFoodItems.add(mFaultyFoodItem1);
         // Doesn't matter what is returned when getFoodItemTracker is called,
         // getFoodItemFrequencyQuotient is called anyway.
-        when(sharedPrefsHelper.getFoodItemTracker()).thenReturn(null);
+        when(sharedPrefsHelper.getFoodItemTracker()).thenReturn(new HashMap<>());
 
         boolean throwsException = false;
 

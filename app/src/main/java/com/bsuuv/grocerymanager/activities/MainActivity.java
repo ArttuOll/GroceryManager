@@ -29,6 +29,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Main activity of the app. Displays the grocery list and includes options menu to settings and to configure groceries.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private final static String MAIN_RECYCLERVIEW_STATE = "recyclerView_state";
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 getDefaultSharedPreferences(this));
 
         this.mFoodItems = sharedPrefsHelper.getFoodItems();
+
         FoodScheduler scheduler = new FoodScheduler(sharedPrefsHelper);
         this.mGroceryList = scheduler.getGroceryList();
 
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         setUpRecyclerView();
 
+        // Manages dragging and swiping items in mRecyclerView
         ItemTouchHelper helper = initializeItemTouchHelper();
         helper.attachToRecyclerView(mRecyclerView);
     }
@@ -104,9 +109,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getCurrentDate() {
-        Calendar calendar = Calendar.getInstance();
         DateFormat format = SimpleDateFormat.getDateInstance();
-        return format.format(calendar.getTime());
+        return format.format(Calendar.getInstance().getTime());
     }
 
     private ItemTouchHelper initializeItemTouchHelper() {

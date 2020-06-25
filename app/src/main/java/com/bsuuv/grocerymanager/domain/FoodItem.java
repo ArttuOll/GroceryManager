@@ -10,7 +10,7 @@ import java.util.UUID;
  */
 public class FoodItem {
 
-    private final String imageUri;
+    private String imageUri;
     private String mLabel;
     private String mBrand;
     private String mInfo;
@@ -29,6 +29,18 @@ public class FoodItem {
         this.mFrequency = frequency;
         this.imageUri = imageUri;
         this.mId = UUID.randomUUID();
+    }
+
+    public FoodItem(String label, String brand, String info, int amount, int timeFrame,
+                    int frequency, String imageUri, UUID id) {
+        this.mLabel = label;
+        this.mBrand = brand;
+        this.mInfo = info;
+        this.mAmount = amount;
+        this.mTimeFrame = timeFrame;
+        this.mFrequency = frequency;
+        this.imageUri = imageUri;
+        this.mId = id;
     }
 
     public int getTimeFrame() {

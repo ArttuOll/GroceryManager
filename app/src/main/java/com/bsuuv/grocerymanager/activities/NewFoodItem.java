@@ -27,6 +27,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * An <code>Activity</code>
+ */
 public class NewFoodItem extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -41,7 +44,6 @@ public class NewFoodItem extends AppCompatActivity {
 
         handleMonthlyToggleClicks(view);
     };
-
     private EditText mLabelEditText;
     private EditText mBrandEditText;
     private EditText mAmountEditText;

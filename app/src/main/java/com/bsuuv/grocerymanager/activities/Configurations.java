@@ -22,10 +22,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * An activity containing a list of all food-items the user has configured
+ * to show in his grocery list on a certain time. Gives options to create
+ * new food-items and edit existing ones.
+ */
 public class Configurations extends AppCompatActivity {
 
-    public static final int FOOD_ITEM_CREATE_REQUEST = 1;
     public static final int FOOD_ITEM_EDIT_REQUEST = 2;
+    private static final int FOOD_ITEM_CREATE_REQUEST = 1;
     private List<FoodItem> mFoodItems;
     private ConfigurationsListAdapter mAdapter;
     private SharedPreferencesHelper mSharedPrefsHelper;
@@ -43,13 +48,9 @@ public class Configurations extends AppCompatActivity {
 
         setUpRecyclerView();
 
+        // Manages dragging and swiping items in mRecyclerView
         ItemTouchHelper helper = initializeItemTouchHelper();
         helper.attachToRecyclerView(mRecyclerView);
-    }
-
-    public void onFabClick(View view) {
-        Intent toNewFoodItem = new Intent(this, NewFoodItem.class);
-        startActivityForResult(toNewFoodItem, FOOD_ITEM_CREATE_REQUEST);
     }
 
     @Override
@@ -62,6 +63,7 @@ public class Configurations extends AppCompatActivity {
                 if (data != null) {
                     FoodItem result = createFoodItemFromIntent(data);
 
+                    // Position in mRecyclerView, where the new food-item is inserted.
                     int insertionPosition = getFoodItemInsertionPosition(result.getTimeFrame());
 
                     mFoodItems.add(result);
@@ -94,6 +96,18 @@ public class Configurations extends AppCompatActivity {
         mSharedPrefsHelper.saveFoodItems(mFoodItems);
     }
 
+    /**
+     * Called when the floating action button in this activity is pressed. Launches
+     * <code>NewFoodItemActivity</code> for creating a new <code>FoodItem</code>.
+     *
+     * @param view The view that has been clicked, in this case, the FAB.
+     *             Default parameter required by the system.
+     */
+    public void onFabClick(View view) {
+        Intent toNewFoodItem = new Intent(this, NewFoodItem.class);
+        startActivityForResult(toNewFoodItem, FOOD_ITEM_CREATE_REQUEST);
+    }
+
     private FoodItem modifyFoodItemByIntent(Intent data) {
         String label = data.getStringExtra("label");
         String brand = data.getStringExtra("brand");
@@ -105,11 +119,15 @@ public class Configurations extends AppCompatActivity {
         UUID id = (UUID) data.getSerializableExtra("id");
 
         FoodItem editedItem = new FoodItem(label, brand, info, amount, timeFrame, frequency,
-                imageUri);
-        editedItem.setId(id);
+                imageUri, id);
 
-        for (int i = 0; i < mFoodItems.size(); i++)
-            if (mFoodItems.get(i).getId() == editedItem.getId()) mFoodItems.set(i, editedItem);
+        // Replace the old food-item with the edited one.
+        for (int i = 0; i < mFoodItems.size(); i++) {
+            if (mFoodItems.get(i).getId() == editedItem.getId()) {
+                mFoodItems.set(i, editedItem);
+                break;
+            }
+        }
 
         return editedItem;
     }
@@ -168,7 +186,8 @@ public class Configurations extends AppCompatActivity {
     }
 
     private ItemTouchHelper initializeItemTouchHelper() {
-        return new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+        return new ItemTouchHelper(new ItemTouchHelper
+                .SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView,
                                   @NonNull RecyclerView.ViewHolder viewHolder,
