@@ -65,20 +65,13 @@ public class FoodScheduler {
             // Add foods not in tracker from mFoodItems.
             mFoodItems.stream().filter(foodItem -> !tracker.containsKey(foodItem))
                     .forEach(foodItem -> tracker.put(foodItem, getFrequencyQuotient(foodItem)));
-            deleteFromTrackerFoodsNotInFoodItemsList(tracker);
+            // Delete from tracker foods not in mFoodItems.
+            tracker.keySet().stream().filter(key -> !mFoodItems.contains(key)).forEach(tracker::remove);
         }
 
         if (!tracker.isEmpty()) mSharedPrefsHelper.saveFoodItemTracker(tracker);
 
         return tracker;
-    }
-
-    private void deleteFromTrackerFoodsNotInFoodItemsList(Map<FoodItem, Double> tracker) {
-        List<FoodItem> uselessKeys = new ArrayList<>();
-        for (FoodItem key : tracker.keySet()) {
-            if (!mFoodItems.contains(key)) uselessKeys.add(key);
-        }
-        for (FoodItem uselessKey : uselessKeys) tracker.remove(uselessKey);
     }
 
     private double getFrequencyQuotient(FoodItem foodItem) {
