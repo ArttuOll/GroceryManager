@@ -21,6 +21,10 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 import java.util.List;
 
+/**
+ * Connects food-item data (list of food-items created by the user) to <code>RecyclerView</code> in
+ * Configurations.
+ */
 public class ConfigurationsListAdapter extends RecyclerView.Adapter<ConfigurationsListAdapter.ConfigsViewHolder> {
 
     private List<FoodItem> mFoodItems;
@@ -62,6 +66,13 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
         private final TextView foodItemTimeFrame;
         private final ImageView mFoodImage;
 
+        /**
+         * Contains a single item displayed in Configurations <code>RecyclerView</code>.
+         *
+         * @param itemView The view contained by this <code>ViewHolder</code>.
+         * @param adapter  The adapter that feeds <code>ViewHolders</code> into Configurations
+         *                 <code>RecyclerView</code>.
+         */
         ConfigsViewHolder(View itemView, ConfigurationsListAdapter adapter) {
             super(itemView);
 
@@ -76,6 +87,11 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
             itemView.setOnClickListener(this);
         }
 
+        /**
+         * Set values to all views inside a single item in Configurations RecyclerView.
+         *
+         * @param currentFoodItem The Configurations RecyclerView item that is to be displayed next.
+         */
         void bindTo(FoodItem currentFoodItem) {
             foodItemLabel.setText(currentFoodItem.getLabel());
             foodItemBrand.setText(currentFoodItem.getBrand());
