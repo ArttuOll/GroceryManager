@@ -18,6 +18,10 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+/**
+ * Connects food-item data (list of food-items created by the user) to <code>RecyclerView</code> in
+ * MainActivity.
+ */
 public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.GroceryViewHolder> {
 
     private List<FoodItem> mFoodItems;
@@ -51,6 +55,9 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
         return mFoodItems.size();
     }
 
+    /**
+     * Contains a single item displayed in MainActivity <code>RecyclerView</code>.
+     */
     class GroceryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView foodItemLabel;
         private final TextView foodItemBrand;
@@ -70,6 +77,11 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             itemView.setOnClickListener(this);
         }
 
+        /**
+         * Set values to all views inside a single item in MainActivity RecyclerView.
+         *
+         * @param currentFoodItem The MainActivity RecyclerView item that is to be displayed next.
+         */
         void bindTo(FoodItem currentFoodItem) {
             foodItemLabel.setText(currentFoodItem.getLabel());
             foodItemBrand.setText(currentFoodItem.getBrand());

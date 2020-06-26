@@ -29,6 +29,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
 
     private List<FoodItem> mFoodItems;
     private LayoutInflater mInflater;
+    // Represents the activity in which this the RecyclerView of this adapter resides.
     private Context mContext;
 
     public ConfigurationsListAdapter(Context context, List<FoodItem> foodItems) {
@@ -58,6 +59,9 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
         return mFoodItems.size();
     }
 
+    /**
+     * Contains a single item displayed in Configurations <code>RecyclerView</code>.
+     */
     class ConfigsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final ConfigurationsListAdapter mAdapter;
         private final TextView foodItemLabel;
@@ -66,13 +70,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
         private final TextView foodItemTimeFrame;
         private final ImageView mFoodImage;
 
-        /**
-         * Contains a single item displayed in Configurations <code>RecyclerView</code>.
-         *
-         * @param itemView The view contained by this <code>ViewHolder</code>.
-         * @param adapter  The adapter that feeds <code>ViewHolders</code> into Configurations
-         *                 <code>RecyclerView</code>.
-         */
+
         ConfigsViewHolder(View itemView, ConfigurationsListAdapter adapter) {
             super(itemView);
 
