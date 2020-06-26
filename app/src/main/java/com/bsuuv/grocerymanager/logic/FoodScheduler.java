@@ -10,9 +10,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Keeps track of which foods should appear in the grocery list.
+ */
 public class FoodScheduler {
 
     private Set<String> mGroceryDays;
+    // List containing foods created by the user.
     private List<FoodItem> mFoodItems;
     private int mGroceryDaysAWeek;
     private Map<FoodItem, Double> mFoodItemTracker;
@@ -26,16 +30,27 @@ public class FoodScheduler {
         this.mFoodItemTracker = getFoodItemTracker();
     }
 
+    /**
+     * Gives a list of all food-items scheduled for the current grocery day.
+     *
+     * @return <code>List</code> containing <code>FoodItems</code>.
+     */
     public List<FoodItem> getGroceryList() {
         List<FoodItem> groceryList = new ArrayList<>();
 
         if (isGroceryDay()) {
             for (FoodItem foodItem : mFoodItemTracker.keySet()) {
+                // A double representing the frequency in which a food-item should appear in
+                // grocery list. If there's one grocery day a week and a food-item is to be had
+                // once every two weeks, then the frequency quotient is
+                // 1 per week / (1 grocery day * 2 weeks) = 1/2.
                 Double frequencyQuotient = mFoodItemTracker.get(foodItem);
                 double startingFrequencyQuotient = getFrequencyQuotient(foodItem);
 
                 // Calling .get() from a map returns a Double object, which can be null.
                 if (frequencyQuotient != null) {
+                    // If the frequency quotient for a food-item has reached 1, put it to grocery
+                    // list.
                     if (frequencyQuotient == 1) {
                         groceryList.add(foodItem);
 
@@ -54,6 +69,13 @@ public class FoodScheduler {
         return groceryList;
     }
 
+    /**
+     * Gets the FoodItemTracker from shared preferences and updates it according to
+     * <code>mFoodItems</code> or creates it if it wasn't saved before.
+     *
+     * @return <code>Map</code> containing <code>FoodItems</code> and their frequency quotients.
+     * Empty <code>Map</code> if nothing was saved before.
+     */
     Map<FoodItem, Double> getFoodItemTracker() {
         Map<FoodItem, Double> tracker = mSharedPrefsHelper.getFoodItemTracker();
 

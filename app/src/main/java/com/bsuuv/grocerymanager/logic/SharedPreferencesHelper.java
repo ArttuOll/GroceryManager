@@ -101,6 +101,9 @@ public class SharedPreferencesHelper {
         preferencesEditor.apply();
     }
 
+    /**
+     * Clears all items from <code>SharedPreferences</code>.
+     */
     public void clear() {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.clear();
