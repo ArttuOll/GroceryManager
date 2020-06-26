@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * An utility class to handle all interactions with <code>SharedPreferences</code>.
+ */
 public class SharedPreferencesHelper {
 
     private static final String GROCERY_DAYS_KEY = "grocerydays";
@@ -35,18 +38,34 @@ public class SharedPreferencesHelper {
         this.gson = builder.create();
     }
 
+    /**
+     * Returns a list of grocery days selected by the user in Settings.
+     *
+     * @return A <code>Set</code> containing the grocery days as lowercase strings. If none are
+     * selected, an empty <code>Set</code> is returned.
+     */
     public Set<String> getGroceryDays() {
         return mSharedPreferences.getStringSet(GROCERY_DAYS_KEY, new HashSet<>());
     }
 
+    /**
+     * Returns a list of all food-items created by the user.
+     *
+     * @return A list containing <code>FoodItem</code>s. If none was saved before, returns an empty
+     * <code>List</code>.
+     */
     public List<FoodItem> getFoodItems() {
         String jsonFoodItems = mSharedPreferences.getString(FOOD_ITEMS_KEY, "");
 
-        if (jsonFoodItems.equals("")) { return new ArrayList<>(); } else {
-            return gson.fromJson(jsonFoodItems, listType);
-        }
+        if (jsonFoodItems.equals("")) return new ArrayList<>();
+        else return gson.fromJson(jsonFoodItems, listType);
     }
 
+    /**
+     * Saves the list of given <code>FoodItems</code> to <code>SharedPreferences</code>.
+     *
+     * @param foodItems List of <code>FoodItems</code> to be saved.
+     */
     public void saveFoodItems(List<FoodItem> foodItems) {
         SharedPreferences.Editor preferencesEditor = mSharedPreferences.edit();
         String foodItemsJson = gson.toJson(foodItems, listType);
@@ -55,14 +74,25 @@ public class SharedPreferencesHelper {
         preferencesEditor.apply();
     }
 
+    /**
+     * Returns the saved <code>FoodItemTracker</code> required by {@link FoodScheduler}.
+     *
+     * @return <code>Map</code> containing <code>FoodItem</code>s and their frequency quotients. If
+     * none was saved before, returns an empty Map.
+     */
     public Map<FoodItem, Double> getFoodItemTracker() {
         String jsonQuotientMap = mSharedPreferences.getString(FOOD_ITEM_TRACKER_KEY, "");
 
-        if (jsonQuotientMap.equals("")) { return new HashMap<>(); } else {
-            return gson.fromJson(jsonQuotientMap, mapType);
-        }
+        if (jsonQuotientMap.equals("")) return new HashMap<>();
+        else return gson.fromJson(jsonQuotientMap, mapType);
     }
 
+    /**
+     * Saves <code>FoodItemTracker</code> required by {@link FoodScheduler}.
+     *
+     * @param foodItemQuotientMap <code>Map</code> containing FoodItems and their frequency
+     *                            quotients.
+     */
     public void saveFoodItemTracker(Map<FoodItem, Double> foodItemQuotientMap) {
         SharedPreferences.Editor preferencesEditor = mSharedPreferences.edit();
         String quotientMapJson = gson.toJson(foodItemQuotientMap, mapType);
