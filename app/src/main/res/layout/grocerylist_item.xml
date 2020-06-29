@@ -1,58 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    app:cardCornerRadius="6dp"
-    app:cardElevation="1dp">
+    android:orientation="horizontal">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/grocerylist_food_image"
+        style="@style/listitem_imageviews"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/imageview_grocerylist_content_description"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="6dp">
+        android:background="@drawable/listitem_bg">
 
-        <ImageView
-            android:id="@+id/grocerylist_food_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:background="@drawable/grocerylist_imageview_bg"
-            android:scaleType="fitCenter"
-            tools:layout_editor_absoluteX="6dp" />
-
-        <TextView
-            android:id="@+id/grocery_item_label"
-            style="@style/TextLabels"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="start" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-12dp"
-            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/grocery_item_label"
+                style="@style/TextLabels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Placeholder" />
 
             <TextView
                 android:id="@+id/grocery_item_brand"
                 style="@style/TextSubLabels"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="-10dp"
+                android:text="Placeholder" />
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/grocery_item_amount"
-                style="@style/TextSubLabels"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/grocery_item_amount"
+            style="@style/TextSubLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="12dp"
+            android:text="Placeholder"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
