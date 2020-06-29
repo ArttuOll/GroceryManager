@@ -19,7 +19,7 @@
         <activity
             android:name=".activities.Settings"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.MainActivity"></activity>
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.NewFoodItem"
             android:parentActivityName=".activities.Configurations" />

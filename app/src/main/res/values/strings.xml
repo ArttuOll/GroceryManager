@@ -103,5 +103,6 @@
     <string name="snackbar_not_enough_grocery_days">You don\'t have enough grocery days per week
         to have this food-item this often!</string>
     <string name="label_empty">The label field cannot be empty!</string>
+    <string name="imageview_grocerylist_content_description">Grocery Item</string>
 
 </resources>

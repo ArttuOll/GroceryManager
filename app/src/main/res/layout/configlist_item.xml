@@ -22,7 +22,7 @@
             android:layout_height="80dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:background="@drawable/configlist_imageview_bg"
+            android:background="@drawable/imageview_bg_square"
             android:contentDescription="@string/food_image_content_description"
             android:scaleType="centerCrop" />
 
