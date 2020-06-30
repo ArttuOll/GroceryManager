@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,67 +8,58 @@
 
     <ImageView
         android:id="@+id/imageView_detail"
-        android:layout_width="match_parent"
-        android:layout_height="184dp"
-        android:adjustViewBounds="true"
-        android:background="@drawable/imageview_bg_square"
-        android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/food_image_content_description"
-        app:layout_constraintTop_toTopOf="parent" />
+        style="@style/activity_imageviews"
+        android:contentDescription="@string/food_image_content_description" />
 
     <TextView
         android:id="@+id/textview_title"
         style="@style/TextLabels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="TextView" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Placeholder" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="-12dp">
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textview_amount"
             style="@style/TextSubLabels"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="@+id/textview_brand"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:layout_weight="1"
+            android:text="TextView" />
 
         <TextView
             android:id="@+id/textview_brand"
             style="@style/TextSubLabels"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-8dp"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:text="TextView" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textview_info_label"
         style="@style/TextSubLabels"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="-4dp"
-        android:text="Info:" />
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/fooditem_detail_more_info" />
 
     <TextView
         android:id="@+id/textview_info"
         style="@style/TextBody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="-12dp"
+        android:layout_marginStart="16dp"
         android:text="@string/textview_info_placeholder" />
 
 </LinearLayout>

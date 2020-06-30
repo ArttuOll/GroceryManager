@@ -104,5 +104,6 @@
         to have this food-item this often!</string>
     <string name="label_empty">The label field cannot be empty!</string>
     <string name="imageview_grocerylist_content_description">Grocery Item</string>
+    <string name="fooditem_detail_more_info">Info:</string>
 
 </resources>
