@@ -85,7 +85,6 @@ public class FoodScheduler {
                 tracker.put(foodItem, getFrequencyQuotient(foodItem));
             }
         } else {
-            // TODO: testaa näitä lambdoja.
             // Add foods not in tracker from mFoodItems.
             mFoodItems.stream().filter(foodItem -> !tracker.containsKey(foodItem))
                     .forEach(foodItem -> tracker.put(foodItem, getFrequencyQuotient(foodItem)));

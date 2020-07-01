@@ -188,7 +188,7 @@ public class NewFoodItem extends AppCompatActivity {
                 Glide.with(this).load(new File(mPhotoPath)).into(mFoodImageView);
             }
 
-            // Based on the frequency of the food item being edited, set the toggle buttons to
+            // Based on the time frame of the food item being edited, set the toggle buttons to
             // either checked or disabled.
             switch (fromConfigs.getIntExtra("time_frame", 0)) {
                 case FoodScheduler.TimeFrame.WEEK:

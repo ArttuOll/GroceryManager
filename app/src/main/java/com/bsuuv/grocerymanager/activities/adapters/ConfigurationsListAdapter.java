@@ -64,10 +64,10 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
      */
     class ConfigsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final ConfigurationsListAdapter mAdapter;
-        private final TextView foodItemLabel;
-        private final TextView foodItemBrand;
-        private final TextView foodItemAmount;
-        private final TextView foodItemTimeFrame;
+        private final TextView mFoodItemLabel;
+        private final TextView mFoodItemBrand;
+        private final TextView mFoodItemAmount;
+        private final TextView mSchedule;
         private final ImageView mFoodImage;
 
 
@@ -76,10 +76,10 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
 
             mFoodImage = itemView.findViewById(R.id.configlist_food_image);
             mFoodImage.setClipToOutline(true);
-            foodItemLabel = itemView.findViewById(R.id.config_item_label);
-            foodItemBrand = itemView.findViewById(R.id.config_item_brand);
-            foodItemAmount = itemView.findViewById(R.id.config_item_amount);
-            foodItemTimeFrame = itemView.findViewById(R.id.config_item_time_frame);
+            mFoodItemLabel = itemView.findViewById(R.id.config_item_label);
+            mFoodItemBrand = itemView.findViewById(R.id.config_item_brand);
+            mFoodItemAmount = itemView.findViewById(R.id.config_item_amount);
+            mSchedule = itemView.findViewById(R.id.config_item_schedule);
             this.mAdapter = adapter;
 
             itemView.setOnClickListener(this);
@@ -91,10 +91,12 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
          * @param currentFoodItem The Configurations RecyclerView item that is to be displayed next.
          */
         void bindTo(FoodItem currentFoodItem) {
-            foodItemLabel.setText(currentFoodItem.getLabel());
-            foodItemBrand.setText(currentFoodItem.getBrand());
-            foodItemAmount.setText(String.valueOf(currentFoodItem.getAmount()));
-            foodItemTimeFrame.setText(String.valueOf(currentFoodItem.getTimeFrame()));
+            mFoodItemLabel.setText(currentFoodItem.getLabel());
+            mFoodItemBrand.setText(mContext.getString(R.string.comma, currentFoodItem.getBrand()));
+            // TODO: format to add unit of quantity after amount.
+            mFoodItemAmount.setText(String.valueOf(currentFoodItem.getAmount()));
+            mSchedule.setText(getScheduleString(currentFoodItem.getFrequency(),
+                    currentFoodItem.getTimeFrame()));
             Glide.with(mContext).load(new File(String.valueOf(currentFoodItem.getImageUri())))
                     .into(mFoodImage);
         }
@@ -120,6 +122,22 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
             Activity configurations = (Activity) mContext;
             configurations.startActivityForResult(toNewFoodItem,
                     Configurations.FOOD_ITEM_EDIT_REQUEST);
+        }
+
+        private String getScheduleString(int frequency, int timeFrame) {
+            switch (timeFrame) {
+                case 1:
+                    return mContext.getResources().getQuantityString(
+                            R.plurals.times_a_week, frequency, frequency);
+                case 2:
+                    return mContext.getResources().getQuantityString(
+                            R.plurals.times_in_two_weeks, frequency, frequency);
+                case 4:
+                    return mContext.getResources().getQuantityString(
+                            R.plurals.times_in_a_month, frequency, frequency);
+                default:
+                    return "";
+            }
         }
     }
 }
