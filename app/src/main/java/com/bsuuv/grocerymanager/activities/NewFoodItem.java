@@ -253,11 +253,15 @@ public class NewFoodItem extends AppCompatActivity {
         });
     }
 
-    private void setToggleButtonStates(boolean weekButton, boolean twoWeekButton,
-                                       boolean monthButton) {
-        mWeekToggle.setEnabled(weekButton);
-        mTwoWeeksToggle.setEnabled(twoWeekButton);
-        mMonthlyToggle.setEnabled(monthButton);
+    private void setToggleButtonStates(boolean weekButtonSelected, boolean twoWeekButtonSelected,
+                                       boolean monthButtonSelected) {
+        mWeekToggle.setEnabled(weekButtonSelected);
+        mTwoWeeksToggle.setEnabled(twoWeekButtonSelected);
+        mMonthlyToggle.setEnabled(monthButtonSelected);
+
+        if (weekButtonSelected) mWeekToggle.setChecked(true);
+        else if (twoWeekButtonSelected) mTwoWeeksToggle.setChecked(true);
+        else if (monthButtonSelected) mMonthlyToggle.setChecked(true);
     }
 
     private File createImageFile() throws IOException {
