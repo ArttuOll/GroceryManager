@@ -2,50 +2,50 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginBottom="16dp"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editText_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_item_label"
-        android:importantForAutofill="no"
-        android:inputType="text" />
+    <ImageView
+        android:id="@+id/imageView_new_fooditem"
+        style="@style/activity_imageviews"
+        android:layout_marginVertical="8dp"
+        android:contentDescription="@string/food_image_content_description"
+        android:onClick="onFoodImageClick"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_camera" />
 
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/editText_brand"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/hint_brand"
+            android:hint="@string/hint_item_label"
             android:importantForAutofill="no"
             android:inputType="text" />
 
-        <EditText
-            android:id="@+id/editText_amount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/hint_amount"
-            android:importantForAutofill="no"
-            android:inputType="number" />
-    </LinearLayout>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <include layout="@layout/brand_amount_unit_newfooditem" />
 
     <include layout="@layout/freq_selection_newfooditem" />
 
-    <EditText
-        android:id="@+id/editText_info"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_more_information"
-        android:inputType="text" />
+        android:layout_height="match_parent">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            android:hint="@string/hint_more_information"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

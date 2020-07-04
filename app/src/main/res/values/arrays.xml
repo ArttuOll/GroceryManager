@@ -24,4 +24,12 @@
     <string-array name="empty_array">
 
     </string-array>
+
+    <!-- NewFoodItem Unit Dropdown Menu -->
+    <string-array name="units_plural">
+        <item>Pieces</item>
+        <item>Packets</item>
+        <item>Cans</item>
+        <item>Bags</item>
+    </string-array>
 </resources>

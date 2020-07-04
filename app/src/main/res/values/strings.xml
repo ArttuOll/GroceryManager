@@ -17,7 +17,7 @@
     <string name="hint_item_label">Item Label</string>
     <string name="hint_brand">Brand</string>
     <string name="hint_amount">Amount</string>
-    <string name="textview_frequency_1">Frequency</string>
+    <string name="textview_frequency_1">Frequency:</string>
     <string name="textview_frequency_2">times in</string>
     <string name="button_week">A Week</string>
     <string name="button_twoweeks">Two Weeks</string>
@@ -109,6 +109,7 @@
 
     <!-- Configurations Activity -->
     <string name="comma">%1$s,</string>
+    <string name="hint_unit">Unit</string>
 
     <plurals name="times_a_week">
         <item quantity="one">%1$d time a week</item>

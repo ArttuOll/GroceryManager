@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ToggleButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,9 +38,9 @@ public class NewFoodItem extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    private ToggleButton mWeekToggle;
-    private ToggleButton mTwoWeeksToggle;
-    private ToggleButton mMonthlyToggle;
+    private Button mWeekToggle;
+    private Button mTwoWeeksToggle;
+    private Button mMonthlyToggle;
     private EditText mLabelEditText;
     private EditText mBrandEditText;
     private EditText mAmountEditText;
@@ -62,8 +64,15 @@ public class NewFoodItem extends AppCompatActivity {
         this.mInfoEditText = findViewById(R.id.editText_info);
         this.mFrequencyEditText = findViewById(R.id.editText_freq);
         this.mFoodImageView = findViewById(R.id.imageView_new_fooditem);
+
         this.mSharedPrefsHelper = new SharedPreferencesHelper(PreferenceManager
                 .getDefaultSharedPreferences(this));
+
+        AutoCompleteTextView mUnitDropdown = findViewById(R.id.new_fooditem_unit_dropdown);
+        ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this,
+                R.layout.new_food_item_unit_dropdown_item,
+                getResources().getStringArray(R.array.units_plural));
+        mUnitDropdown.setAdapter(dropdownAdapter);
 
         setUpToggleButtons();
 
@@ -115,7 +124,7 @@ public class NewFoodItem extends AppCompatActivity {
      * @param view The view that has been clicked, in this case, the FAB.
      *             Default parameter required by the system.
      */
-    public void onCameraIconClick(View view) {
+    public void onFoodImageClick(View view) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Check if there exists a program that can handle the intent.
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -205,10 +214,13 @@ public class NewFoodItem extends AppCompatActivity {
     }
 
     private int getActiveToggleButton() {
-        if (mWeekToggle.isChecked()) return FoodScheduler.TimeFrame.WEEK;
-        else if (mTwoWeeksToggle.isChecked()) return FoodScheduler.TimeFrame.TWO_WEEKS;
-        else if (mMonthlyToggle.isChecked()) return FoodScheduler.TimeFrame.MONTH;
-        else return -1;
+        if (mWeekToggle.isSelected()) {
+            return FoodScheduler.TimeFrame.WEEK;
+        } else if (mTwoWeeksToggle.isSelected()) {
+            return FoodScheduler.TimeFrame.TWO_WEEKS;
+        } else if (mMonthlyToggle.isSelected()) { return FoodScheduler.TimeFrame.MONTH; } else {
+            return -1;
+        }
     }
 
     private void setUpToggleButtons() {
@@ -216,36 +228,27 @@ public class NewFoodItem extends AppCompatActivity {
         this.mTwoWeeksToggle = findViewById(R.id.togglebutton_two_weeks);
         this.mMonthlyToggle = findViewById(R.id.togglebutton_month);
 
-        String weekButton = getResources().getString(R.string.button_week);
         mWeekToggle.setText(R.string.button_week);
-        mWeekToggle.setTextOff(weekButton);
-        mWeekToggle.setTextOn(weekButton);
         mWeekToggle.setOnClickListener(view -> {
-            if (!mWeekToggle.isChecked()) {
+            if (mWeekToggle.isSelected()) {
                 setToggleButtonStates(true, true, true);
             } else {
                 setToggleButtonStates(true, false, false);
             }
         });
 
-        String twoWeeksButton = getResources().getString(R.string.button_twoweeks);
         mTwoWeeksToggle.setText(R.string.button_twoweeks);
-        mTwoWeeksToggle.setTextOff(twoWeeksButton);
-        mTwoWeeksToggle.setTextOn(twoWeeksButton);
         mTwoWeeksToggle.setOnClickListener(view -> {
-            if (!mTwoWeeksToggle.isChecked()) {
+            if (mTwoWeeksToggle.isSelected()) {
                 setToggleButtonStates(true, true, true);
             } else {
                 setToggleButtonStates(false, true, false);
             }
         });
 
-        String monthButton = getResources().getString(R.string.button_month);
         mMonthlyToggle.setText(R.string.button_month);
-        mMonthlyToggle.setTextOff(monthButton);
-        mMonthlyToggle.setTextOn(monthButton);
         mMonthlyToggle.setOnClickListener(view -> {
-            if (!mMonthlyToggle.isChecked()) {
+            if (mMonthlyToggle.isSelected()) {
                 setToggleButtonStates(true, true, true);
             } else {
                 setToggleButtonStates(false, false, true);
@@ -253,15 +256,25 @@ public class NewFoodItem extends AppCompatActivity {
         });
     }
 
-    private void setToggleButtonStates(boolean weekButtonSelected, boolean twoWeekButtonSelected,
-                                       boolean monthButtonSelected) {
-        mWeekToggle.setEnabled(weekButtonSelected);
-        mTwoWeeksToggle.setEnabled(twoWeekButtonSelected);
-        mMonthlyToggle.setEnabled(monthButtonSelected);
+    private void setToggleButtonStates(boolean weekButtonEnabled, boolean twoWeekButtonEnabled,
+                                       boolean monthButtonEnabled) {
+        mWeekToggle.setEnabled(weekButtonEnabled);
+        mTwoWeeksToggle.setEnabled(twoWeekButtonEnabled);
+        mMonthlyToggle.setEnabled(monthButtonEnabled);
 
-        if (weekButtonSelected) mWeekToggle.setChecked(true);
-        else if (twoWeekButtonSelected) mTwoWeeksToggle.setChecked(true);
-        else if (monthButtonSelected) mMonthlyToggle.setChecked(true);
+        if (weekButtonEnabled && !twoWeekButtonEnabled && !monthButtonEnabled) {
+            mWeekToggle.setSelected(true);
+            mTwoWeeksToggle.setSelected(false);
+            mMonthlyToggle.setSelected(false);
+        } else if (twoWeekButtonEnabled && !weekButtonEnabled && !monthButtonEnabled) {
+            mTwoWeeksToggle.setSelected(true);
+            mWeekToggle.setSelected(false);
+            mMonthlyToggle.setSelected(false);
+        } else if (monthButtonEnabled && !twoWeekButtonEnabled && !weekButtonEnabled) {
+            mMonthlyToggle.setSelected(true);
+            mWeekToggle.setSelected(false);
+            mTwoWeeksToggle.setSelected(false);
+        }
     }
 
     private File createImageFile() throws IOException {
