@@ -50,6 +50,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     private String mPhotoPath;
     private UUID mFoodItemId;
     private SharedPreferencesHelper mSharedPrefsHelper;
+    private int mEditPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,6 +175,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         toConfigs.putExtra("frequency", frequency);
         toConfigs.putExtra("uri", mPhotoPath);
         toConfigs.putExtra("id", mFoodItemId);
+        toConfigs.putExtra("editPosition", mEditPosition);
 
         return toConfigs;
     }
@@ -216,6 +218,8 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
             if (mPhotoPath != null) {
                 Glide.with(this).load(new File(mPhotoPath)).into(mFoodImageView);
             }
+
+            this.mEditPosition = fromConfigs.getIntExtra("editPosition", -1);
 
             // Based on the time frame of the food item being edited, set the toggle buttons to
             // either checked or disabled.
