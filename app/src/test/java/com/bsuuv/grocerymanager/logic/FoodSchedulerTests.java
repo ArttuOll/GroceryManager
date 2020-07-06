@@ -25,6 +25,8 @@ import static org.mockito.Mockito.when;
 public class FoodSchedulerTests {
 
     private FoodItem mCorrectFoodItem1;
+    private FoodItem mCorrectFoodItem2;
+    private FoodItem mCorrectFoodItem3;
     private FoodItem mFaultyFoodItem1;
     private List<FoodItem> mFoodItems;
     @Mock
@@ -38,6 +40,10 @@ public class FoodSchedulerTests {
         this.mFoodItems = new ArrayList<>();
         this.mCorrectFoodItem1 = new FoodItem("Juusto", "Valio", "Maukasta",
                 3, 4, 2, "");
+        this.mCorrectFoodItem2 = new FoodItem("Kurkku", "", "",
+                1, 2, 2, "");
+        this.mCorrectFoodItem3 = new FoodItem("Juusto", "Valio", "Maukasta",
+                3, 1, 1, "");
         this.mFaultyFoodItem1 = new FoodItem("Olut", "Karjala", "Helvetin hyvää",
                 3, 1, 3, "");
         this.mGroceryDays = new HashSet<>();
@@ -88,6 +94,8 @@ public class FoodSchedulerTests {
         // Add current weekday as grocery day
         mGroceryDays.add(intWeekDayToString(getTodayInt()));
         mFoodItems.add(mCorrectFoodItem1);
+        mFoodItems.add(mCorrectFoodItem2);
+        mFoodItems.add(mCorrectFoodItem3);
         // Override previous stubbing of the same method. Null is required for
         // FoodScheduler.getFoodItemTracker to create a new quotinent map.
         when(sharedPrefsHelper.getFoodItemTracker()).thenReturn(new HashMap<>());
@@ -96,6 +104,8 @@ public class FoodSchedulerTests {
 
         Map<FoodItem, Double> expected = new HashMap<>();
         expected.put(mCorrectFoodItem1, 0.5);
+        expected.put(mCorrectFoodItem2, 1.0);
+        expected.put(mCorrectFoodItem3, 1.0);
 
         Assert.assertEquals(expected, foodScheduler.getFoodItemTracker());
     }

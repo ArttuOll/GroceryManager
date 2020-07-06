@@ -1,62 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/textview_frequency_1" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="4dp"
+            android:text="@string/textview_frequency_1" />
 
         <EditText
             android:id="@+id/editText_freq"
-            android:layout_width="50dp"
+            android:layout_width="25dp"
             android:layout_height="match_parent"
             android:autofillHints=""
             android:inputType="number" />
 
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/textview_frequency_2" />
+            android:layout_marginStart="4dp"
+            android:paddingTop="12dp"
+            android:text="@string/textview_frequency_2"
+            android:textAlignment="textStart" />
     </LinearLayout>
 
-    <LinearLayout
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/freq_selection_togglegroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        app:singleSelection="true">
 
-        <ToggleButton
+        <Button
             android:id="@+id/togglebutton_week"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/button_week" />
 
-        <ToggleButton
+        <Button
             android:id="@+id/togglebutton_two_weeks"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/button_twoweeks" />
 
-        <ToggleButton
+        <Button
             android:id="@+id/togglebutton_month"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/button_month" />
-
-    </LinearLayout>
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
 </LinearLayout>

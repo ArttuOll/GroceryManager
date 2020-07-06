@@ -1,12 +1,10 @@
 package com.bsuuv.grocerymanager.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,11 +34,10 @@ public class MainActivity extends AppCompatActivity {
 
     private final static String MAIN_RECYCLERVIEW_STATE = "recyclerView_state";
 
-    private final Context mContext = this;
     private GroceryListAdapter mAdapter;
-    private List<FoodItem> mFoodItems;
     private List<FoodItem> mGroceryList;
     private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         SharedPreferencesHelper sharedPrefsHelper = new SharedPreferencesHelper(PreferenceManager.
                 getDefaultSharedPreferences(this));
-
-        this.mFoodItems = sharedPrefsHelper.getFoodItems();
 
         FoodScheduler scheduler = new FoodScheduler(sharedPrefsHelper);
         this.mGroceryList = scheduler.getGroceryList();
@@ -61,6 +56,12 @@ public class MainActivity extends AppCompatActivity {
         // Manages dragging and swiping items in mRecyclerView
         ItemTouchHelper helper = initializeItemTouchHelper();
         helper.attachToRecyclerView(mRecyclerView);
+
+        // Restore activity state after configuration change
+        if (savedInstanceState != null) {
+            Parcelable state = savedInstanceState.getParcelable(MAIN_RECYCLERVIEW_STATE);
+            mLayoutManager.onRestoreInstanceState(state);
+        }
     }
 
     @Override
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onSaveInstanceState(outState);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -97,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpRecyclerView() {
         this.mRecyclerView = findViewById(R.id.main_recyclerview);
-        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.mLayoutManager = new LinearLayoutManager(this);
+        this.mRecyclerView.setLayoutManager(mLayoutManager);
 
         this.mAdapter = new GroceryListAdapter(this, mGroceryList);
         this.mRecyclerView.setAdapter(mAdapter);
@@ -125,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 int from = viewHolder.getAdapterPosition();
                 int to = target.getAdapterPosition();
 
-                Collections.swap(mFoodItems, from, to);
+                Collections.swap(mGroceryList, from, to);
 
                 mAdapter.notifyItemMoved(from, to);
                 return true;
@@ -133,10 +136,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                mFoodItems.remove(viewHolder.getAdapterPosition());
+                mGroceryList.remove(viewHolder.getAdapterPosition());
                 mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-                Toast toast = Toast.makeText(mContext, R.string.toast_checked, Toast.LENGTH_SHORT);
-                toast.show();
             }
         });
     }
