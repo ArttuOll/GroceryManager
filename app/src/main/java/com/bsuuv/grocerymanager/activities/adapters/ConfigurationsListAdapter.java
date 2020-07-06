@@ -92,9 +92,9 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
          */
         void bindTo(FoodItem currentFoodItem) {
             mFoodItemLabel.setText(currentFoodItem.getLabel());
-            mFoodItemBrand.setText(mContext.getString(R.string.comma, currentFoodItem.getBrand()));
-            // TODO: format to add unit of quantity after amount.
-            mFoodItemAmount.setText(String.valueOf(currentFoodItem.getAmount()));
+            mFoodItemBrand.setText(currentFoodItem.getBrand());
+            mFoodItemAmount.setText(String.format("%s %s", currentFoodItem.getAmount(),
+                    currentFoodItem.getUnit()));
             mSchedule.setText(getScheduleString(currentFoodItem.getFrequency(),
                     currentFoodItem.getTimeFrame()));
             Glide.with(mContext).load(new File(String.valueOf(currentFoodItem.getImageUri())))
@@ -110,6 +110,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
             toNewFoodItem.putExtra("brand", currentFoodItem.getBrand());
             toNewFoodItem.putExtra("info", currentFoodItem.getInfo());
             toNewFoodItem.putExtra("amount", currentFoodItem.getAmount());
+            toNewFoodItem.putExtra("unit", currentFoodItem.getUnit());
             toNewFoodItem.putExtra("time_frame", currentFoodItem.getTimeFrame());
             toNewFoodItem.putExtra("frequency", currentFoodItem.getFrequency());
             toNewFoodItem.putExtra("id", currentFoodItem.getId());

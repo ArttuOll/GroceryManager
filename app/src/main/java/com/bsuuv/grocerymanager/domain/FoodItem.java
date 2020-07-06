@@ -15,28 +15,31 @@ public class FoodItem {
     private String mBrand;
     private String mInfo;
     private int mAmount;
+    private String mUnit;
     private int mTimeFrame;
     private int mFrequency;
     private UUID mId;
 
-    public FoodItem(String label, String brand, String info, int amount, int timeFrame,
+    public FoodItem(String label, String brand, String info, int amount, String unit, int timeFrame,
                     int frequency, String imageUri) {
         this.mLabel = label;
         this.mBrand = brand;
         this.mInfo = info;
         this.mAmount = amount;
+        this.mUnit = unit;
         this.mTimeFrame = timeFrame;
         this.mFrequency = frequency;
         this.imageUri = imageUri;
         this.mId = UUID.randomUUID();
     }
 
-    public FoodItem(String label, String brand, String info, int amount, int timeFrame,
+    public FoodItem(String label, String brand, String info, int amount, String unit, int timeFrame,
                     int frequency, String imageUri, UUID id) {
         this.mLabel = label;
         this.mBrand = brand;
         this.mInfo = info;
         this.mAmount = amount;
+        this.mUnit = unit;
         this.mTimeFrame = timeFrame;
         this.mFrequency = frequency;
         this.imageUri = imageUri;
@@ -71,6 +74,22 @@ public class FoodItem {
         return mBrand;
     }
 
+    public UUID getId() {
+        return mId;
+    }
+
+    public void setId(UUID mId) {
+        this.mId = mId;
+    }
+
+    public String getUnit() {
+        return mUnit;
+    }
+
+    public void setUnit(String mUnit) {
+        this.mUnit = mUnit;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,28 +98,22 @@ public class FoodItem {
         return mAmount == foodItem.mAmount &&
                 mTimeFrame == foodItem.mTimeFrame &&
                 mFrequency == foodItem.mFrequency &&
-                Objects.equals(getImageUri(), foodItem.getImageUri()) &&
+                Objects.equals(imageUri, foodItem.imageUri) &&
                 mLabel.equals(foodItem.mLabel) &&
                 Objects.equals(mBrand, foodItem.mBrand) &&
-                Objects.equals(mInfo, foodItem.mInfo);
+                Objects.equals(mInfo, foodItem.mInfo) &&
+                Objects.equals(mUnit, foodItem.mUnit);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getImageUri(), mLabel, mBrand, mInfo, mAmount, mTimeFrame, mFrequency);
+        return Objects.hash(imageUri, mLabel, mBrand, mInfo, mAmount, mUnit, mTimeFrame,
+                mFrequency);
     }
 
     @NonNull
     @Override
     public String toString() {
         return getLabel() + " " + getBrand() + " " + getAmount() + " " + getInfo();
-    }
-
-    public UUID getId() {
-        return mId;
-    }
-
-    public void setId(UUID mId) {
-        this.mId = mId;
     }
 }

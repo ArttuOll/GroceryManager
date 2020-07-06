@@ -46,6 +46,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     private EditText mInfoEditText;
     private EditText mFrequencyEditText;
     private ImageView mFoodImageView;
+    private AutoCompleteTextView mUnitDropdown;
     private String mPhotoPath;
     private UUID mFoodItemId;
     private SharedPreferencesHelper mSharedPrefsHelper;
@@ -66,7 +67,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         this.mSharedPrefsHelper = new SharedPreferencesHelper(PreferenceManager
                 .getDefaultSharedPreferences(this));
 
-        AutoCompleteTextView mUnitDropdown = findViewById(R.id.new_fooditem_unit_dropdown);
+        this.mUnitDropdown = findViewById(R.id.new_fooditem_unit_dropdown);
         ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this,
                 R.layout.new_food_item_unit_dropdown_item,
                 getResources().getStringArray(R.array.units_plural));
@@ -98,6 +99,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         String label = mLabelEditText.getText().toString();
         String brand = mBrandEditText.getText().toString();
         int amount = Integer.parseInt(mAmountEditText.getText().toString());
+        String unit = mUnitDropdown.getText().toString();
         String info = mInfoEditText.getText().toString();
         int timeFrame = getActiveToggleButton();
         int frequency = Integer.parseInt(mFrequencyEditText.getText().toString());
@@ -107,7 +109,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
                 ((double) timeFrame * (double) groceryDaysAWeek);
 
         if (constraintsFulfilled(groceryDaysAWeek, label, frequencyQuotient)) {
-            Intent toConfigs = createIntentToConfigs(label, brand, amount, info, timeFrame,
+            Intent toConfigs = createIntentToConfigs(label, brand, amount, unit, info, timeFrame,
                     frequency, mPhotoPath, mFoodItemId);
 
             setResult(RESULT_OK, toConfigs);
@@ -158,13 +160,15 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private Intent createIntentToConfigs(String label, String brand, int amount, String info,
-                                         int timeFrame, int frequency,
-                                         String mPhotoPath, UUID mFoodItemId) {
+    private Intent createIntentToConfigs(String label, String brand, int amount, String unit,
+                                         String info,
+                                         int timeFrame, int frequency, String mPhotoPath,
+                                         UUID mFoodItemId) {
         Intent toConfigs = new Intent(this, Configurations.class);
         toConfigs.putExtra("label", label);
         toConfigs.putExtra("brand", brand);
         toConfigs.putExtra("amount", amount);
+        toConfigs.putExtra("unit", unit);
         toConfigs.putExtra("info", info);
         toConfigs.putExtra("time_frame", timeFrame);
         toConfigs.putExtra("frequency", frequency);
@@ -202,6 +206,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
             this.mLabelEditText.setText(fromConfigs.getStringExtra("label"));
             this.mBrandEditText.setText(fromConfigs.getStringExtra("brand"));
             this.mAmountEditText.setText(String.valueOf(fromConfigs.getIntExtra("amount", 0)));
+            this.mUnitDropdown.setText(fromConfigs.getStringExtra("unit"));
             this.mInfoEditText.setText(fromConfigs.getStringExtra("info"));
             this.mFrequencyEditText.setText(String.valueOf(
                     fromConfigs.getIntExtra("frequency", 0)));

@@ -112,13 +112,14 @@ public class Configurations extends AppCompatActivity {
         String label = data.getStringExtra("label");
         String brand = data.getStringExtra("brand");
         int amount = data.getIntExtra("amount", 0);
+        String unit = data.getStringExtra("unit");
         String info = data.getStringExtra("info");
         int timeFrame = data.getIntExtra("time_frame", 0);
         int frequency = data.getIntExtra("frequency", 0);
         String imageUri = data.getStringExtra("uri");
         UUID id = (UUID) data.getSerializableExtra("id");
 
-        FoodItem editedItem = new FoodItem(label, brand, info, amount, timeFrame, frequency,
+        FoodItem editedItem = new FoodItem(label, brand, info, amount, unit, timeFrame, frequency,
                 imageUri, id);
 
         // Replace the old food-item with the edited one.
@@ -136,12 +137,13 @@ public class Configurations extends AppCompatActivity {
         String label = data.getStringExtra("label");
         String brand = data.getStringExtra("brand");
         int amount = data.getIntExtra("amount", 0);
+        String unit = data.getStringExtra("unit");
         String info = data.getStringExtra("info");
         int timeFrame = data.getIntExtra("time_frame", 0);
         int frequency = data.getIntExtra("frequency", 0);
         String imageUri = data.getStringExtra("uri");
 
-        return new FoodItem(label, brand, info, amount, timeFrame, frequency, imageUri);
+        return new FoodItem(label, brand, info, amount, unit, timeFrame, frequency, imageUri);
     }
 
     private void setUpRecyclerView() {
@@ -154,7 +156,7 @@ public class Configurations extends AppCompatActivity {
 
     private int getFoodItemInsertionPosition(int frequency) {
         int weeks = 0;
-        int twoweeks = 0;
+        int twoWeeks = 0;
         int months = 0;
 
         for (FoodItem foodItem : mFoodItems) {
@@ -163,7 +165,7 @@ public class Configurations extends AppCompatActivity {
                     weeks++;
                     break;
                 case FoodScheduler.TimeFrame.TWO_WEEKS:
-                    twoweeks++;
+                    twoWeeks++;
                     break;
                 case FoodScheduler.TimeFrame.MONTH:
                     months++;
@@ -177,9 +179,9 @@ public class Configurations extends AppCompatActivity {
             case FoodScheduler.TimeFrame.WEEK:
                 return weeks;
             case FoodScheduler.TimeFrame.TWO_WEEKS:
-                return weeks + twoweeks;
+                return weeks + twoWeeks;
             case FoodScheduler.TimeFrame.MONTH:
-                return weeks + twoweeks + months;
+                return weeks + twoWeeks + months;
             default:
                 return 0;
         }
