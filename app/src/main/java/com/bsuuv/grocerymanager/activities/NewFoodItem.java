@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -77,6 +78,11 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         setUpToggleButtons();
 
         manageIntent();
+
+        if (savedInstanceState != null) {
+            mPhotoPath = savedInstanceState.getString("photoPath");
+            Glide.with(this).load(new File(mPhotoPath)).into(mFoodImageView);
+        }
     }
 
     @Override
@@ -86,6 +92,13 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
             Glide.with(this).load(new File(mPhotoPath)).into(mFoodImageView);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString("photoPath", mPhotoPath);
+
+        super.onSaveInstanceState(outState);
     }
 
     /**

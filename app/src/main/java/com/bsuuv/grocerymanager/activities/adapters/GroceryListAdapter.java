@@ -24,14 +24,14 @@ import java.util.List;
  */
 public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.GroceryViewHolder> {
 
-    private List<FoodItem> mFoodItems;
+    private List<FoodItem> mGroceryItems;
     private LayoutInflater mInflater;
     // Represents the activity in which this the RecyclerView of this adapter resides.
     private Context mContext;
 
-    public GroceryListAdapter(Context context, List<FoodItem> foodItems) {
+    public GroceryListAdapter(Context context, List<FoodItem> groceryItems) {
         this.mInflater = LayoutInflater.from(context);
-        this.mFoodItems = foodItems;
+        this.mGroceryItems = groceryItems;
         this.mContext = context;
     }
 
@@ -45,14 +45,14 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull GroceryListAdapter.GroceryViewHolder holder, int position) {
-        FoodItem currentFoodItem = mFoodItems.get(position);
+        FoodItem currentFoodItem = mGroceryItems.get(position);
 
         holder.bindTo(currentFoodItem);
     }
 
     @Override
     public int getItemCount() {
-        return mFoodItems.size();
+        return mGroceryItems.size();
     }
 
     /**
@@ -91,7 +91,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
         @Override
         public void onClick(View v) {
-            FoodItem currentFoodItem = mFoodItems.get(getAdapterPosition());
+            FoodItem currentFoodItem = mGroceryItems.get(getAdapterPosition());
 
             Intent foodItemDetail = new Intent(mContext, FoodItemDetail.class);
             foodItemDetail.putExtra("label", currentFoodItem.getLabel());

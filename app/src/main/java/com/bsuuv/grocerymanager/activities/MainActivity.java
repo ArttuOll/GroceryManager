@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private GroceryListAdapter mAdapter;
     private List<FoodItem> mGroceryList;
     private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,12 @@ public class MainActivity extends AppCompatActivity {
         // Manages dragging and swiping items in mRecyclerView
         ItemTouchHelper helper = initializeItemTouchHelper();
         helper.attachToRecyclerView(mRecyclerView);
+
+        // Restore activity state after configuration change
+        if (savedInstanceState != null) {
+            Parcelable state = savedInstanceState.getParcelable(MAIN_RECYCLERVIEW_STATE);
+            mLayoutManager.onRestoreInstanceState(state);
+        }
     }
 
     @Override
@@ -65,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onSaveInstanceState(outState);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpRecyclerView() {
         this.mRecyclerView = findViewById(R.id.main_recyclerview);
-        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.mLayoutManager = new LinearLayoutManager(this);
+        this.mRecyclerView.setLayoutManager(mLayoutManager);
 
         this.mAdapter = new GroceryListAdapter(this, mGroceryList);
         this.mRecyclerView.setAdapter(mAdapter);
