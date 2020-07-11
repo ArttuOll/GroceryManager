@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.activities;
+package com.bsuuv.grocerymanager.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -19,9 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
 
+import com.bsuuv.grocerymanager.FoodScheduler;
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.logic.FoodScheduler;
-import com.bsuuv.grocerymanager.logic.SharedPreferencesHelper;
+import com.bsuuv.grocerymanager.SharedPreferencesHelper;
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.snackbar.Snackbar;
@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * An <code>Activity</code> for adding new food-items into the grocery list configurations and
@@ -49,9 +48,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     private ImageView mFoodImageView;
     private AutoCompleteTextView mUnitDropdown;
     private String mPhotoPath;
-    private UUID mFoodItemId;
     private SharedPreferencesHelper mSharedPrefsHelper;
-    private int mEditPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,9 +119,10 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         double frequencyQuotient = (double) frequency /
                 ((double) timeFrame * (double) groceryDaysAWeek);
 
+        // TODO: must get id from database. First implement saving food-item to database.
         if (constraintsFulfilled(groceryDaysAWeek, label, frequencyQuotient)) {
             Intent toConfigs = createIntentToConfigs(label, brand, amount, unit, info, timeFrame,
-                    frequency, mPhotoPath, mFoodItemId);
+                    frequency, mPhotoPath);
 
             setResult(RESULT_OK, toConfigs);
             finish();
@@ -175,9 +173,8 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     }
 
     private Intent createIntentToConfigs(String label, String brand, int amount, String unit,
-                                         String info,
-                                         int timeFrame, int frequency, String mPhotoPath,
-                                         UUID mFoodItemId) {
+                                         String info, int timeFrame, int frequency,
+                                         String mPhotoPath) {
         Intent toConfigs = new Intent(this, Configurations.class);
         toConfigs.putExtra("label", label);
         toConfigs.putExtra("brand", brand);
@@ -187,8 +184,6 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         toConfigs.putExtra("time_frame", timeFrame);
         toConfigs.putExtra("frequency", frequency);
         toConfigs.putExtra("uri", mPhotoPath);
-        toConfigs.putExtra("id", mFoodItemId);
-        toConfigs.putExtra("editPosition", mEditPosition);
 
         return toConfigs;
     }
@@ -225,14 +220,11 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
             this.mInfoEditText.setText(fromConfigs.getStringExtra("info"));
             this.mFrequencyEditText.setText(String.valueOf(
                     fromConfigs.getIntExtra("frequency", 0)));
-            this.mFoodItemId = (UUID) fromConfigs.getSerializableExtra("id");
 
             this.mPhotoPath = fromConfigs.getStringExtra("uri");
             if (mPhotoPath != null) {
                 Glide.with(this).load(new File(mPhotoPath)).into(mFoodImageView);
             }
-
-            this.mEditPosition = fromConfigs.getIntExtra("editPosition", -1);
 
             // Based on the time frame of the food item being edited, set the toggle buttons to
             // either checked or disabled.

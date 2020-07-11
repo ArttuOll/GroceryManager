@@ -1,8 +1,8 @@
-package com.bsuuv.grocerymanager.logic;
+package com.bsuuv.grocerymanager;
 
 import android.content.SharedPreferences;
 
-import com.bsuuv.grocerymanager.domain.FoodItem;
+import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -25,9 +25,9 @@ public class SharedPreferencesHelper {
     private static final String FOOD_ITEM_TRACKER_KEY = "foodItemTracker";
 
     private final SharedPreferences mSharedPreferences;
-    private final Type mapType = new TypeToken<Map<FoodItem, Double>>() {
+    private final Type mapType = new TypeToken<Map<FoodItemEntity, Double>>() {
     }.getType();
-    private final Type listType = new TypeToken<List<FoodItem>>() {
+    private final Type listType = new TypeToken<List<FoodItemEntity>>() {
     }.getType();
     private Gson gson;
 
@@ -54,11 +54,12 @@ public class SharedPreferencesHelper {
      * @return A list containing <code>FoodItem</code>s. If none was saved before, returns an empty
      * <code>List</code>.
      */
-    public List<FoodItem> getFoodItems() {
+    public List<FoodItemEntity> getFoodItems() {
         String jsonFoodItems = mSharedPreferences.getString(FOOD_ITEMS_KEY, "");
 
-        if (jsonFoodItems.equals("")) return new ArrayList<>();
-        else return gson.fromJson(jsonFoodItems, listType);
+        if (jsonFoodItems.equals("")) { return new ArrayList<>(); } else {
+            return gson.fromJson(jsonFoodItems, listType);
+        }
     }
 
     /**
@@ -66,7 +67,7 @@ public class SharedPreferencesHelper {
      *
      * @param foodItems List of <code>FoodItems</code> to be saved.
      */
-    public void saveFoodItems(List<FoodItem> foodItems) {
+    public void saveFoodItems(List<FoodItemEntity> foodItems) {
         SharedPreferences.Editor preferencesEditor = mSharedPreferences.edit();
         String foodItemsJson = gson.toJson(foodItems, listType);
 
@@ -80,11 +81,12 @@ public class SharedPreferencesHelper {
      * @return <code>Map</code> containing <code>FoodItem</code>s and their frequency quotients. If
      * none was saved before, returns an empty Map.
      */
-    public Map<FoodItem, Double> getFoodItemTracker() {
+    public Map<FoodItemEntity, Double> getFoodItemTracker() {
         String jsonQuotientMap = mSharedPreferences.getString(FOOD_ITEM_TRACKER_KEY, "");
 
-        if (jsonQuotientMap.equals("")) return new HashMap<>();
-        else return gson.fromJson(jsonQuotientMap, mapType);
+        if (jsonQuotientMap.equals("")) { return new HashMap<>(); } else {
+            return gson.fromJson(jsonQuotientMap, mapType);
+        }
     }
 
     /**
@@ -93,7 +95,7 @@ public class SharedPreferencesHelper {
      * @param foodItemQuotientMap <code>Map</code> containing FoodItems and their frequency
      *                            quotients.
      */
-    public void saveFoodItemTracker(Map<FoodItem, Double> foodItemQuotientMap) {
+    public void saveFoodItemTracker(Map<FoodItemEntity, Double> foodItemQuotientMap) {
         SharedPreferences.Editor preferencesEditor = mSharedPreferences.edit();
         String quotientMapJson = gson.toJson(foodItemQuotientMap, mapType);
 

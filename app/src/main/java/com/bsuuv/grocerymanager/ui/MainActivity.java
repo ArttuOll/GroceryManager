@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.activities;
+package com.bsuuv.grocerymanager.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bsuuv.grocerymanager.FoodScheduler;
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.activities.adapters.GroceryListAdapter;
-import com.bsuuv.grocerymanager.domain.FoodItem;
-import com.bsuuv.grocerymanager.logic.FoodScheduler;
-import com.bsuuv.grocerymanager.logic.SharedPreferencesHelper;
+import com.bsuuv.grocerymanager.SharedPreferencesHelper;
+import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String MAIN_RECYCLERVIEW_STATE = "recyclerView_state";
 
     private GroceryListAdapter mAdapter;
-    private List<FoodItem> mGroceryList;
+    private List<FoodItemEntity> mGroceryList;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
 

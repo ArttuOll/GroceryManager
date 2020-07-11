@@ -1,27 +1,51 @@
-package com.bsuuv.grocerymanager.domain;
+package com.bsuuv.grocerymanager.db.entity;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+import com.bsuuv.grocerymanager.model.FoodItem;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * A class representing a food-item in the grocery list.
  */
-public class FoodItem {
+@Entity
+public class FoodItemEntity implements FoodItem {
 
-    private String imageUri;
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    private int mId;
+    @ColumnInfo(name = "image_uri")
+    private String mImageUri;
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "label")
     private String mLabel;
+    @ColumnInfo(name = "brand")
     private String mBrand;
+    @ColumnInfo(name = "info")
     private String mInfo;
+    @ColumnInfo(name = "amount")
     private int mAmount;
+    @ColumnInfo(name = "unit")
     private String mUnit;
+    @ColumnInfo(name = "time_frame")
     private int mTimeFrame;
+    @ColumnInfo(name = "frequency")
     private int mFrequency;
-    private UUID mId;
 
-    public FoodItem(String label, String brand, String info, int amount, String unit, int timeFrame,
-                    int frequency, String imageUri) {
+    @Ignore
+    public FoodItemEntity(int id, @NotNull String label, String brand, String info, int amount,
+                          String unit,
+                          int timeFrame,
+                          int frequency, String mImageUri) {
+        this.mId = id;
         this.mLabel = label;
         this.mBrand = brand;
         this.mInfo = info;
@@ -29,12 +53,11 @@ public class FoodItem {
         this.mUnit = unit;
         this.mTimeFrame = timeFrame;
         this.mFrequency = frequency;
-        this.imageUri = imageUri;
-        this.mId = UUID.randomUUID();
+        this.mImageUri = mImageUri;
     }
 
-    public FoodItem(String label, String brand, String info, int amount, String unit, int timeFrame,
-                    int frequency, String imageUri, UUID id) {
+    public FoodItemEntity(@NotNull String label, String brand, String info, int amount, String unit,
+                          int timeFrame, int frequency, String mImageUri) {
         this.mLabel = label;
         this.mBrand = brand;
         this.mInfo = info;
@@ -42,8 +65,15 @@ public class FoodItem {
         this.mUnit = unit;
         this.mTimeFrame = timeFrame;
         this.mFrequency = frequency;
-        this.imageUri = imageUri;
-        this.mId = id;
+        this.mImageUri = mImageUri;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int mId) {
+        this.mId = mId;
     }
 
     public int getTimeFrame() {
@@ -67,38 +97,26 @@ public class FoodItem {
     }
 
     public String getImageUri() {
-        return imageUri;
+        return mImageUri;
     }
 
     public String getBrand() {
         return mBrand;
     }
 
-    public UUID getId() {
-        return mId;
-    }
-
-    public void setId(UUID mId) {
-        this.mId = mId;
-    }
-
     public String getUnit() {
         return mUnit;
-    }
-
-    public void setUnit(String mUnit) {
-        this.mUnit = mUnit;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FoodItem foodItem = (FoodItem) o;
+        FoodItemEntity foodItem = (FoodItemEntity) o;
         return mAmount == foodItem.mAmount &&
                 mTimeFrame == foodItem.mTimeFrame &&
                 mFrequency == foodItem.mFrequency &&
-                Objects.equals(imageUri, foodItem.imageUri) &&
+                Objects.equals(mImageUri, foodItem.mImageUri) &&
                 mLabel.equals(foodItem.mLabel) &&
                 Objects.equals(mBrand, foodItem.mBrand) &&
                 Objects.equals(mInfo, foodItem.mInfo) &&
@@ -107,7 +125,7 @@ public class FoodItem {
 
     @Override
     public int hashCode() {
-        return Objects.hash(imageUri, mLabel, mBrand, mInfo, mAmount, mUnit, mTimeFrame,
+        return Objects.hash(mImageUri, mLabel, mBrand, mInfo, mAmount, mUnit, mTimeFrame,
                 mFrequency);
     }
 

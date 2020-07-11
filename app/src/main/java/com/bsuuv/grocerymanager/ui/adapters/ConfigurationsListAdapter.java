@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.activities.adapters;
+package com.bsuuv.grocerymanager.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,9 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.activities.Configurations;
-import com.bsuuv.grocerymanager.activities.NewFoodItem;
-import com.bsuuv.grocerymanager.domain.FoodItem;
+import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.ui.Configurations;
+import com.bsuuv.grocerymanager.ui.NewFoodItem;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -27,14 +27,13 @@ import java.util.List;
  */
 public class ConfigurationsListAdapter extends RecyclerView.Adapter<ConfigurationsListAdapter.ConfigsViewHolder> {
 
-    private List<FoodItem> mFoodItems;
+    private List<FoodItemEntity> mFoodItems;
     private LayoutInflater mInflater;
     // Represents the activity in which this the RecyclerView of this adapter resides.
     private Context mContext;
 
-    public ConfigurationsListAdapter(Context context, List<FoodItem> foodItems) {
+    public ConfigurationsListAdapter(Context context) {
         this.mInflater = LayoutInflater.from(context);
-        this.mFoodItems = foodItems;
         this.mContext = context;
     }
 
@@ -49,7 +48,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
     @Override
     public void onBindViewHolder(@NonNull ConfigurationsListAdapter.ConfigsViewHolder holder,
                                  int position) {
-        FoodItem currentFoodItem = mFoodItems.get(position);
+        FoodItemEntity currentFoodItem = mFoodItems.get(position);
 
         holder.bindTo(currentFoodItem);
     }
@@ -57,6 +56,14 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
     @Override
     public int getItemCount() {
         return mFoodItems.size();
+    }
+
+    public FoodItemEntity getFoodItemAtPosition(int position) {
+        return mFoodItems.get(position);
+    }
+
+    public void setFoodItems(List<FoodItemEntity> foodItemEntities) {
+        this.mFoodItems = foodItemEntities;
     }
 
     /**
@@ -90,7 +97,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
          *
          * @param currentFoodItem The Configurations RecyclerView item that is to be displayed next.
          */
-        void bindTo(FoodItem currentFoodItem) {
+        void bindTo(FoodItemEntity currentFoodItem) {
             mFoodItemLabel.setText(currentFoodItem.getLabel());
             mFoodItemBrand.setText(currentFoodItem.getBrand());
             mFoodItemAmount.setText(String.format("%s %s", currentFoodItem.getAmount(),
@@ -103,7 +110,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
 
         @Override
         public void onClick(View v) {
-            FoodItem currentFoodItem = mFoodItems.get(getAdapterPosition());
+            FoodItemEntity currentFoodItem = mFoodItems.get(getAdapterPosition());
 
             Intent toNewFoodItem = new Intent(mContext, NewFoodItem.class);
             toNewFoodItem.putExtra("label", currentFoodItem.getLabel());
