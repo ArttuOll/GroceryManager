@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.activities.adapters;
+package com.bsuuv.grocerymanager.ui.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.activities.FoodItemDetail;
-import com.bsuuv.grocerymanager.model.FoodItem;
+import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.ui.FoodItemDetail;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -24,12 +24,12 @@ import java.util.List;
  */
 public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.GroceryViewHolder> {
 
-    private List<FoodItem> mGroceryItems;
+    private List<FoodItemEntity> mGroceryItems;
     private LayoutInflater mInflater;
     // Represents the activity in which this the RecyclerView of this adapter resides.
     private Context mContext;
 
-    public GroceryListAdapter(Context context, List<FoodItem> groceryItems) {
+    public GroceryListAdapter(Context context, List<FoodItemEntity> groceryItems) {
         this.mInflater = LayoutInflater.from(context);
         this.mGroceryItems = groceryItems;
         this.mContext = context;
@@ -45,7 +45,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull GroceryListAdapter.GroceryViewHolder holder, int position) {
-        FoodItem currentFoodItem = mGroceryItems.get(position);
+        FoodItemEntity currentFoodItem = mGroceryItems.get(position);
 
         holder.bindTo(currentFoodItem);
     }
@@ -82,20 +82,20 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
          *
          * @param currentFoodItem The MainActivity RecyclerView item that is to be displayed next.
          */
-        void bindTo(FoodItem currentFoodItem) {
+        void bindTo(FoodItemEntity currentFoodItem) {
             foodItemLabel.setText(currentFoodItem.getLabel());
             foodItemBrand.setText(currentFoodItem.getBrand());
             foodItemAmount.setText(String.valueOf(currentFoodItem.getAmount()));
-            Glide.with(mContext).load(currentFoodItem.getmImageUri()).into(mFoodImage);
+            Glide.with(mContext).load(currentFoodItem.getImageUri()).into(mFoodImage);
         }
 
         @Override
         public void onClick(View v) {
-            FoodItem currentFoodItem = mGroceryItems.get(getAdapterPosition());
+            FoodItemEntity currentFoodItem = mGroceryItems.get(getAdapterPosition());
 
             Intent foodItemDetail = new Intent(mContext, FoodItemDetail.class);
             foodItemDetail.putExtra("label", currentFoodItem.getLabel());
-            foodItemDetail.putExtra("image_resource", currentFoodItem.getmImageUri());
+            foodItemDetail.putExtra("image_resource", currentFoodItem.getImageUri());
             foodItemDetail.putExtra("brand", currentFoodItem.getBrand());
             foodItemDetail.putExtra("info", currentFoodItem.getInfo());
             foodItemDetail.putExtra("amount", currentFoodItem.getAmount());

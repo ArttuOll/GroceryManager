@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.activities;
+package com.bsuuv.grocerymanager.ui;
 
 import android.os.Bundle;
 import android.widget.ImageView;

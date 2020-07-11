@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.activities;
+package com.bsuuv.grocerymanager.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bsuuv.grocerymanager.FoodScheduler;
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.activities.adapters.ConfigurationsListAdapter;
-import com.bsuuv.grocerymanager.logic.FoodScheduler;
-import com.bsuuv.grocerymanager.logic.SharedPreferencesHelper;
-import com.bsuuv.grocerymanager.model.FoodItem;
+import com.bsuuv.grocerymanager.SharedPreferencesHelper;
+import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.ui.adapters.ConfigurationsListAdapter;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +31,7 @@ public class Configurations extends AppCompatActivity {
 
     public static final int FOOD_ITEM_EDIT_REQUEST = 2;
     private static final int FOOD_ITEM_CREATE_REQUEST = 1;
-    private List<FoodItem> mFoodItems;
+    private List<FoodItemEntity> mFoodItems;
     private ConfigurationsListAdapter mAdapter;
     private SharedPreferencesHelper mSharedPrefsHelper;
     private RecyclerView mRecyclerView;
@@ -61,7 +61,7 @@ public class Configurations extends AppCompatActivity {
         if (requestCode == FOOD_ITEM_CREATE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    FoodItem result = createFoodItemFromIntent(data);
+                    FoodItemEntity result = createFoodItemFromIntent(data);
 
                     // Position in mRecyclerView, where the new food-item is inserted.
                     int insertionPosition = getFoodItemInsertionPosition(result.getTimeFrame());
@@ -78,7 +78,7 @@ public class Configurations extends AppCompatActivity {
         } else if (requestCode == FOOD_ITEM_EDIT_REQUEST) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    FoodItem result = modifyFoodItemByIntent(data);
+                    FoodItemEntity result = modifyFoodItemByIntent(data);
 
                     int editedPosition = data.getIntExtra("editPosition", -1);
 
@@ -108,7 +108,8 @@ public class Configurations extends AppCompatActivity {
         startActivityForResult(toNewFoodItem, FOOD_ITEM_CREATE_REQUEST);
     }
 
-    private FoodItem modifyFoodItemByIntent(Intent data) {
+    // TODO: modify to use int id.
+    private FoodItemEntity modifyFoodItemByIntent(Intent data) {
         String label = data.getStringExtra("label");
         String brand = data.getStringExtra("brand");
         int amount = data.getIntExtra("amount", 0);
@@ -119,11 +120,12 @@ public class Configurations extends AppCompatActivity {
         String imageUri = data.getStringExtra("uri");
         UUID id = (UUID) data.getSerializableExtra("id");
 
-        return new FoodItem(label, brand, info, amount, unit, timeFrame, frequency,
+        return new FoodItemEntity(label, brand, info, amount, unit, timeFrame, frequency,
                 imageUri, id);
     }
 
-    private FoodItem createFoodItemFromIntent(Intent data) {
+    // TODO: modify to use int id.
+    private FoodItemEntity createFoodItemFromIntent(Intent data) {
         String label = data.getStringExtra("label");
         String brand = data.getStringExtra("brand");
         int amount = data.getIntExtra("amount", 0);
@@ -133,7 +135,7 @@ public class Configurations extends AppCompatActivity {
         int frequency = data.getIntExtra("frequency", 0);
         String imageUri = data.getStringExtra("uri");
 
-        return new FoodItem(label, brand, info, amount, unit, timeFrame, frequency, imageUri);
+        return new FoodItemEntity(label, brand, info, amount, unit, timeFrame, frequency, imageUri);
     }
 
     private void setUpRecyclerView() {
@@ -149,7 +151,7 @@ public class Configurations extends AppCompatActivity {
         int twoWeeks = 0;
         int months = 0;
 
-        for (FoodItem foodItem : mFoodItems) {
+        for (FoodItemEntity foodItem : mFoodItems) {
             switch (foodItem.getTimeFrame()) {
                 case FoodScheduler.TimeFrame.WEEK:
                     weeks++;

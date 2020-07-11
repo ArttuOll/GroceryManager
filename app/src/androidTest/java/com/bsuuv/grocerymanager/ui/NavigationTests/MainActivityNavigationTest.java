@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.activities.NavigationTests;
+package com.bsuuv.grocerymanager.ui.NavigationTests;
 
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -7,7 +7,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.activities.MainActivity;
+import com.bsuuv.grocerymanager.ui.MainActivity;
 
 import org.junit.Rule;
 import org.junit.Test;

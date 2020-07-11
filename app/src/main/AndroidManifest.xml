@@ -17,20 +17,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.Settings"
+            android:name=".ui.Settings"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName=".ui.MainActivity" />
         <activity
-            android:name=".activities.NewFoodItem"
-            android:parentActivityName=".activities.Configurations" />
+            android:name=".ui.NewFoodItem"
+            android:parentActivityName=".ui.Configurations" />
         <activity
-            android:name=".activities.Configurations"
-            android:parentActivityName=".activities.MainActivity" />
+            android:name=".ui.Configurations"
+            android:parentActivityName=".ui.MainActivity" />
         <activity
-            android:name=".activities.FoodItemDetail"
-            android:parentActivityName=".activities.MainActivity" />
+            android:name=".ui.FoodItemDetail"
+            android:parentActivityName=".ui.MainActivity" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

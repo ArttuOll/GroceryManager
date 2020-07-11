@@ -1,6 +1,6 @@
-package com.bsuuv.grocerymanager.logic;
+package com.bsuuv.grocerymanager;
 
-import com.bsuuv.grocerymanager.model.FoodItem;
+import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,9 +17,9 @@ public class FoodScheduler {
 
     private Set<String> mGroceryDays;
     // List containing foods created by the user.
-    private List<FoodItem> mFoodItems;
+    private List<FoodItemEntity> mFoodItems;
     private int mGroceryDaysAWeek;
-    private Map<FoodItem, Double> mFoodItemTracker;
+    private Map<FoodItemEntity, Double> mFoodItemTracker;
     private SharedPreferencesHelper mSharedPrefsHelper;
 
     public FoodScheduler(SharedPreferencesHelper sharedPrefsHelper) {
@@ -35,11 +35,11 @@ public class FoodScheduler {
      *
      * @return <code>List</code> containing <code>FoodItems</code>.
      */
-    public List<FoodItem> getGroceryList() {
-        List<FoodItem> groceryList = new ArrayList<>();
+    public List<FoodItemEntity> getGroceryList() {
+        List<FoodItemEntity> groceryList = new ArrayList<>();
 
         if (isGroceryDay()) {
-            for (FoodItem foodItem : mFoodItemTracker.keySet()) {
+            for (FoodItemEntity foodItem : mFoodItemTracker.keySet()) {
                 // A double representing the frequency in which a food-item should appear in
                 // grocery list. If there's one grocery day a week and a food-item is to be had
                 // once every two weeks, then the frequency quotient is
@@ -76,12 +76,12 @@ public class FoodScheduler {
      * @return <code>Map</code> containing <code>FoodItems</code> and their frequency quotients.
      * Empty <code>Map</code> if nothing was saved before.
      */
-    Map<FoodItem, Double> getFoodItemTracker() {
-        Map<FoodItem, Double> tracker = mSharedPrefsHelper.getFoodItemTracker();
+    public Map<FoodItemEntity, Double> getFoodItemTracker() {
+        Map<FoodItemEntity, Double> tracker = mSharedPrefsHelper.getFoodItemTracker();
 
         // If no tracker was previously saved, create a new one.
         if (tracker.isEmpty()) {
-            for (FoodItem foodItem : mFoodItems) {
+            for (FoodItemEntity foodItem : mFoodItems) {
                 tracker.put(foodItem, getFrequencyQuotient(foodItem));
             }
         } else {
@@ -89,7 +89,7 @@ public class FoodScheduler {
             mFoodItems.stream().filter(foodItem -> !tracker.containsKey(foodItem))
                     .forEach(foodItem -> tracker.put(foodItem, getFrequencyQuotient(foodItem)));
             // Delete from tracker foods not in mFoodItems.
-            List<FoodItem> uselessKeys = tracker.keySet().stream()
+            List<FoodItemEntity> uselessKeys = tracker.keySet().stream()
                     .filter(key -> !mFoodItems.contains(key))
                     .collect(Collectors.toList());
             uselessKeys.forEach(tracker::remove);
@@ -100,7 +100,7 @@ public class FoodScheduler {
         return tracker;
     }
 
-    private double getFrequencyQuotient(FoodItem foodItem) {
+    private double getFrequencyQuotient(FoodItemEntity foodItem) {
         double frequencyQuotient = ((double) foodItem.getFrequency()) /
                 (foodItem.getTimeFrame() * mGroceryDaysAWeek);
 

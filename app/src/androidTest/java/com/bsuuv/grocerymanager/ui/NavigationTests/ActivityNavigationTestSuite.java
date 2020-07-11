@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.activities.NavigationTests;
+package com.bsuuv.grocerymanager.ui.NavigationTests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

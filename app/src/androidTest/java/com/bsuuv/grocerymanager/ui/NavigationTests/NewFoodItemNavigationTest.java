@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.activities.NavigationTests;
+package com.bsuuv.grocerymanager.ui.NavigationTests;
 
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -6,7 +6,7 @@ import androidx.test.filters.SmallTest;
 import androidx.test.rule.ActivityTestRule;
 
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.activities.NewFoodItem;
+import com.bsuuv.grocerymanager.ui.NewFoodItem;
 
 import org.junit.Rule;
 import org.junit.Test;

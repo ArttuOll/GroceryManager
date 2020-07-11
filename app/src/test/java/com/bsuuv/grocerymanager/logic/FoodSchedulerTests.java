@@ -1,6 +1,8 @@
 package com.bsuuv.grocerymanager.logic;
 
-import com.bsuuv.grocerymanager.model.FoodItem;
+import com.bsuuv.grocerymanager.FoodScheduler;
+import com.bsuuv.grocerymanager.SharedPreferencesHelper;
+import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,27 +26,27 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class FoodSchedulerTests {
 
-    private FoodItem mCorrectFoodItem1;
-    private FoodItem mCorrectFoodItem2;
-    private FoodItem mCorrectFoodItem3;
-    private FoodItem mFaultyFoodItem1;
-    private List<FoodItem> mFoodItems;
+    private FoodItemEntity mCorrectFoodItem1;
+    private FoodItemEntity mCorrectFoodItem2;
+    private FoodItemEntity mCorrectFoodItem3;
+    private FoodItemEntity mFaultyFoodItem1;
+    private List<FoodItemEntity> mFoodItems;
     @Mock
     SharedPreferencesHelper sharedPrefsHelper;
     private Set<String> mGroceryDays;
-    private Map<FoodItem, Double> mFoodItemTracker;
+    private Map<FoodItemEntity, Double> mFoodItemTracker;
 
     @Before
     public void initialize() {
         MockitoAnnotations.initMocks(this);
         this.mFoodItems = new ArrayList<>();
-        this.mCorrectFoodItem1 = new FoodItem("Juusto", "Valio", "Maukasta",
+        this.mCorrectFoodItem1 = new FoodItemEntity(1, "Juusto", "Valio", "Maukasta",
                 3, "Cans", 4, 2, "");
-        this.mCorrectFoodItem2 = new FoodItem("Kurkku", "", "",
+        this.mCorrectFoodItem2 = new FoodItemEntity(2, "Kurkku", "", "",
                 1, "Cans", 2, 2, "");
-        this.mCorrectFoodItem3 = new FoodItem("Juusto", "Valio", "Maukasta",
+        this.mCorrectFoodItem3 = new FoodItemEntity(3, "Juusto", "Valio", "Maukasta",
                 3, "Cans", 1, 1, "");
-        this.mFaultyFoodItem1 = new FoodItem("Olut", "Karjala", "Helvetin hyvää",
+        this.mFaultyFoodItem1 = new FoodItemEntity(4, "Olut", "Karjala", "Helvetin hyvää",
                 3, "Cans", 1, 3, "");
         this.mGroceryDays = new HashSet<>();
         this.mFoodItemTracker = new HashMap<>();
@@ -102,7 +104,7 @@ public class FoodSchedulerTests {
 
         FoodScheduler foodScheduler = new FoodScheduler(sharedPrefsHelper);
 
-        Map<FoodItem, Double> expected = new HashMap<>();
+        Map<FoodItemEntity, Double> expected = new HashMap<>();
         expected.put(mCorrectFoodItem1, 0.5);
         expected.put(mCorrectFoodItem2, 1.0);
         expected.put(mCorrectFoodItem3, 1.0);
