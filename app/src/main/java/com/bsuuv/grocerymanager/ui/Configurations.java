@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.SharedPreferencesHelper;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.adapters.ConfigurationsListAdapter;
+import com.bsuuv.grocerymanager.viewmodel.FoodItemViewModel;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +35,7 @@ public class Configurations extends AppCompatActivity {
     private static final int FOOD_ITEM_CREATE_REQUEST = 1;
     private List<FoodItemEntity> mFoodItems;
     private ConfigurationsListAdapter mAdapter;
+    private FoodItemViewModel mFoodItemViewModel;
     private SharedPreferencesHelper mSharedPrefsHelper;
     private RecyclerView mRecyclerView;
 
@@ -41,6 +44,11 @@ public class Configurations extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configurations);
         setTitle("Configurations");
+
+        this.mFoodItemViewModel = new ViewModelProvider(this).get(FoodItemViewModel.class);
+        mFoodItemViewModel.getFoodItems().observe(this,
+                foodItemEntities -> mAdapter.setFoodItems(foodItemEntities));
+
 
         this.mSharedPrefsHelper = new SharedPreferencesHelper(PreferenceManager.
                 getDefaultSharedPreferences(this));
@@ -142,7 +150,7 @@ public class Configurations extends AppCompatActivity {
         this.mRecyclerView = findViewById(R.id.config_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        this.mAdapter = new ConfigurationsListAdapter(this, mFoodItems);
+        this.mAdapter = new ConfigurationsListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
     }
 

@@ -35,4 +35,8 @@ public class FoodItemViewModel extends AndroidViewModel {
    public void update(FoodItemEntity foodItem) {
       mRepository.update(foodItem);
    }
+
+   public LiveData<List<FoodItemEntity>> getFoodItems() {
+      return mFoodItems;
+   }
 }
