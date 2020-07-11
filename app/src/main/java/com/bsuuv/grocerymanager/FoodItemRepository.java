@@ -11,12 +11,12 @@ import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 
 import java.util.List;
 
-class FoodItemRepository {
+public class FoodItemRepository {
 
     private FoodItemDao mFoodItemDao;
     private LiveData<List<FoodItemEntity>> mFoodItems;
 
-    FoodItemRepository(Application application) {
+    public FoodItemRepository(Application application) {
         FoodItemRoomDatabase database = FoodItemRoomDatabase.getInstance(application);
         mFoodItemDao = database.foodItemDao();
         mFoodItems = mFoodItemDao.getAllFoodItems();
@@ -30,6 +30,18 @@ class FoodItemRepository {
         new InsertAsyncTask(mFoodItemDao).execute(foodItem);
     }
 
+    public void delete(FoodItemEntity foodItem) {
+        new DeleteAsyncTask(mFoodItemDao).execute(foodItem);
+    }
+
+    public void update(FoodItemEntity foodItem) {
+        new UpdateAsyncTask(mFoodItemDao).execute(foodItem);
+    }
+
+    public void deleteAll(FoodItemEntity foodItem) {
+        new DeleteAllAsyncTask(mFoodItemDao).execute(foodItem);
+    }
+
     private static class InsertAsyncTask extends AsyncTask<FoodItemEntity, Void, Void> {
 
         private FoodItemDao mAsyncTaskFoodItemDao;
@@ -41,6 +53,51 @@ class FoodItemRepository {
         @Override
         protected Void doInBackground(FoodItemEntity... foodItems) {
             mAsyncTaskFoodItemDao.insert(foodItems[0]);
+            return null;
+        }
+    }
+
+    private static class DeleteAsyncTask extends AsyncTask<FoodItemEntity, Void, Void> {
+
+        private FoodItemDao mAsyncTaskFoodItemDao;
+
+        DeleteAsyncTask(FoodItemDao foodItemDao) {
+            this.mAsyncTaskFoodItemDao = foodItemDao;
+        }
+
+        @Override
+        protected Void doInBackground(FoodItemEntity... foodItems) {
+            mAsyncTaskFoodItemDao.delete(foodItems[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateAsyncTask extends AsyncTask<FoodItemEntity, Void, Void> {
+
+        private FoodItemDao mAsyncTaskFoodItemDao;
+
+        UpdateAsyncTask(FoodItemDao foodItemDao) {
+            this.mAsyncTaskFoodItemDao = foodItemDao;
+        }
+
+        @Override
+        protected Void doInBackground(FoodItemEntity... foodItems) {
+            mAsyncTaskFoodItemDao.update(foodItems[0]);
+            return null;
+        }
+    }
+
+    private static class DeleteAllAsyncTask extends AsyncTask<FoodItemEntity, Void, Void> {
+
+        private FoodItemDao mAsyncTaskFoodItemDao;
+
+        DeleteAllAsyncTask(FoodItemDao foodItemDao) {
+            this.mAsyncTaskFoodItemDao = foodItemDao;
+        }
+
+        @Override
+        protected Void doInBackground(FoodItemEntity... foodItems) {
+            mAsyncTaskFoodItemDao.deleteAll();
             return null;
         }
     }
