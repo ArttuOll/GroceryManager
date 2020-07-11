@@ -35,7 +35,11 @@ public class FoodItemDetail extends AppCompatActivity {
         TextView info = findViewById(R.id.textview_info);
 
         title.setText(getIntent().getStringExtra("label"));
-        amount.setText(String.valueOf(getIntent().getIntExtra("amount", 0)));
+
+        int amountValue = getIntent().getIntExtra("amount", 0);
+        String unit = getIntent().getStringExtra("unit");
+        amount.setText(String.format("%s %s", amountValue, unit));
+
         brand.setText(getIntent().getStringExtra("brand"));
         info.setText(getIntent().getStringExtra("info"));
     }

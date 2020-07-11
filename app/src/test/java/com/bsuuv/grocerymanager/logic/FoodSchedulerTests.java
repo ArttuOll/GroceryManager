@@ -39,13 +39,13 @@ public class FoodSchedulerTests {
         MockitoAnnotations.initMocks(this);
         this.mFoodItems = new ArrayList<>();
         this.mCorrectFoodItem1 = new FoodItem("Juusto", "Valio", "Maukasta",
-                3, 4, 2, "");
+                3, "Cans", 4, 2, "");
         this.mCorrectFoodItem2 = new FoodItem("Kurkku", "", "",
-                1, 2, 2, "");
+                1, "Cans", 2, 2, "");
         this.mCorrectFoodItem3 = new FoodItem("Juusto", "Valio", "Maukasta",
-                3, 1, 1, "");
+                3, "Cans", 1, 1, "");
         this.mFaultyFoodItem1 = new FoodItem("Olut", "Karjala", "Helvetin hyvää",
-                3, 1, 3, "");
+                3, "Cans", 1, 3, "");
         this.mGroceryDays = new HashSet<>();
         this.mFoodItemTracker = new HashMap<>();
 
