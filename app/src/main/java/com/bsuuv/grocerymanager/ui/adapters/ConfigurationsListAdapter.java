@@ -32,9 +32,8 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
     // Represents the activity in which this the RecyclerView of this adapter resides.
     private Context mContext;
 
-    public ConfigurationsListAdapter(Context context, List<FoodItemEntity> foodItems) {
+    public ConfigurationsListAdapter(Context context) {
         this.mInflater = LayoutInflater.from(context);
-        this.mFoodItems = foodItems;
         this.mContext = context;
     }
 
@@ -57,6 +56,15 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
     @Override
     public int getItemCount() {
         return mFoodItems.size();
+    }
+
+    public void setFoodItems(List<FoodItemEntity> foodItems) {
+        this.mFoodItems = foodItems;
+        notifyDataSetChanged();
+    }
+
+    public FoodItemEntity getFoodItemAtPosition(int position) {
+        return mFoodItems.get(position);
     }
 
     /**
