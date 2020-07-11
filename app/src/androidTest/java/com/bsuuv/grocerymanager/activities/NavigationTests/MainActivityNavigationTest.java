@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.activities;
+package com.bsuuv.grocerymanager.activities.NavigationTests;
 
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -7,6 +7,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.activities.MainActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,7 +24,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @SmallTest
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class MainActivityNavigationTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule =

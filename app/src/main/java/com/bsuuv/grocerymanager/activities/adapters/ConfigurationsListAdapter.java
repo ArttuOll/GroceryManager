@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.activities.Configurations;
 import com.bsuuv.grocerymanager.activities.NewFoodItem;
-import com.bsuuv.grocerymanager.domain.FoodItem;
+import com.bsuuv.grocerymanager.model.FoodItem;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -97,7 +97,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
                     currentFoodItem.getUnit()));
             mSchedule.setText(getScheduleString(currentFoodItem.getFrequency(),
                     currentFoodItem.getTimeFrame()));
-            Glide.with(mContext).load(new File(String.valueOf(currentFoodItem.getImageUri())))
+            Glide.with(mContext).load(new File(String.valueOf(currentFoodItem.getmImageUri())))
                     .into(mFoodImage);
         }
 
@@ -116,8 +116,8 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
             toNewFoodItem.putExtra("id", currentFoodItem.getId());
             toNewFoodItem.putExtra("editPosition", getAdapterPosition());
 
-            String uri = (currentFoodItem.getImageUri() != null) ?
-                    currentFoodItem.getImageUri() : "";
+            String uri = (currentFoodItem.getmImageUri() != null) ?
+                    currentFoodItem.getmImageUri() : "";
             toNewFoodItem.putExtra("uri", uri);
 
             Activity configurations = (Activity) mContext;

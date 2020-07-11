@@ -2,7 +2,7 @@ package com.bsuuv.grocerymanager.logic;
 
 import android.content.SharedPreferences;
 
-import com.bsuuv.grocerymanager.domain.FoodItem;
+import com.bsuuv.grocerymanager.model.FoodItem;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

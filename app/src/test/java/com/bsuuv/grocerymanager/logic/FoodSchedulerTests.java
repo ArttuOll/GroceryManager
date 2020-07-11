@@ -1,6 +1,6 @@
 package com.bsuuv.grocerymanager.logic;
 
-import com.bsuuv.grocerymanager.domain.FoodItem;
+import com.bsuuv.grocerymanager.model.FoodItem;
 
 import org.junit.Assert;
 import org.junit.Before;

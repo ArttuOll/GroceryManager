@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.activities.FoodItemDetail;
-import com.bsuuv.grocerymanager.domain.FoodItem;
+import com.bsuuv.grocerymanager.model.FoodItem;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -86,7 +86,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             foodItemLabel.setText(currentFoodItem.getLabel());
             foodItemBrand.setText(currentFoodItem.getBrand());
             foodItemAmount.setText(String.valueOf(currentFoodItem.getAmount()));
-            Glide.with(mContext).load(currentFoodItem.getImageUri()).into(mFoodImage);
+            Glide.with(mContext).load(currentFoodItem.getmImageUri()).into(mFoodImage);
         }
 
         @Override
@@ -95,7 +95,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
             Intent foodItemDetail = new Intent(mContext, FoodItemDetail.class);
             foodItemDetail.putExtra("label", currentFoodItem.getLabel());
-            foodItemDetail.putExtra("image_resource", currentFoodItem.getImageUri());
+            foodItemDetail.putExtra("image_resource", currentFoodItem.getmImageUri());
             foodItemDetail.putExtra("brand", currentFoodItem.getBrand());
             foodItemDetail.putExtra("info", currentFoodItem.getInfo());
             foodItemDetail.putExtra("amount", currentFoodItem.getAmount());

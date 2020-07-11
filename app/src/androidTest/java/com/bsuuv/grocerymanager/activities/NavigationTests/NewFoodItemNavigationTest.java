@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.activities;
+package com.bsuuv.grocerymanager.activities.NavigationTests;
 
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -6,6 +6,7 @@ import androidx.test.filters.SmallTest;
 import androidx.test.rule.ActivityTestRule;
 
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.activities.NewFoodItem;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,7 +19,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 @SmallTest
 @RunWith(AndroidJUnit4.class)
-public class NewFoodItemTest {
+public class NewFoodItemNavigationTest {
 
     @Rule
     public ActivityTestRule<NewFoodItem> mNewFoodItemTestRule =

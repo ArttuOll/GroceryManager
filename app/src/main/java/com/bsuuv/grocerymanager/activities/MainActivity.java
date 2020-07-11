@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.activities.adapters.GroceryListAdapter;
-import com.bsuuv.grocerymanager.domain.FoodItem;
 import com.bsuuv.grocerymanager.logic.FoodScheduler;
 import com.bsuuv.grocerymanager.logic.SharedPreferencesHelper;
+import com.bsuuv.grocerymanager.model.FoodItem;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
