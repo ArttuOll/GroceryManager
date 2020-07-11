@@ -56,6 +56,18 @@ public class FoodItemEntity implements FoodItem {
         this.mImageUri = mImageUri;
     }
 
+    public FoodItemEntity(@NotNull String label, String brand, String info, int amount, String unit,
+                          int timeFrame, int frequency, String mImageUri) {
+        this.mLabel = label;
+        this.mBrand = brand;
+        this.mInfo = info;
+        this.mAmount = amount;
+        this.mUnit = unit;
+        this.mTimeFrame = timeFrame;
+        this.mFrequency = frequency;
+        this.mImageUri = mImageUri;
+    }
+
     public int getId() {
         return mId;
     }
