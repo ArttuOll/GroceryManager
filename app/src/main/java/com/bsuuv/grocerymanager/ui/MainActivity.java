@@ -9,14 +9,12 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.FoodScheduler;
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.SharedPreferencesHelper;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter;
 
@@ -43,10 +41,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferencesHelper sharedPrefsHelper = new SharedPreferencesHelper(PreferenceManager.
-                getDefaultSharedPreferences(this));
 
-        FoodScheduler scheduler = new FoodScheduler(sharedPrefsHelper);
+        FoodScheduler scheduler = new FoodScheduler(this);
         this.mGroceryList = scheduler.getGroceryList();
 
         setUpToolbar();

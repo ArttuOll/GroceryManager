@@ -1,27 +1,5 @@
 package com.bsuuv.grocerymanager.logic;
 
-import com.bsuuv.grocerymanager.FoodScheduler;
-import com.bsuuv.grocerymanager.SharedPreferencesHelper;
-import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static org.mockito.Mockito.when;
 //TODO: rewrite
 /*@RunWith(MockitoJUnitRunner.class)
 public class FoodSchedulerTests {

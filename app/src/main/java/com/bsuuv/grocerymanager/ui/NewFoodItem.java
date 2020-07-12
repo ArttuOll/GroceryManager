@@ -2,6 +2,7 @@ package com.bsuuv.grocerymanager.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,7 +22,6 @@ import androidx.preference.PreferenceManager;
 
 import com.bsuuv.grocerymanager.FoodScheduler;
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.SharedPreferencesHelper;
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.snackbar.Snackbar;
@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 
 /**
  * An <code>Activity</code> for adding new food-items into the grocery list configurations and
@@ -38,6 +39,7 @@ import java.util.Date;
 public class NewFoodItem extends AppCompatActivity implements View.OnClickListener {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final String GROCERY_DAYS_KEY = "grocerydays";
 
     private MaterialButtonToggleGroup mToggleGroup;
     private EditText mLabelEditText;
@@ -48,7 +50,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     private ImageView mFoodImageView;
     private AutoCompleteTextView mUnitDropdown;
     private String mPhotoPath;
-    private SharedPreferencesHelper mSharedPrefsHelper;
+    private SharedPreferences mSharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +65,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         this.mFrequencyEditText = findViewById(R.id.editText_freq);
         this.mFoodImageView = findViewById(R.id.imageView_new_fooditem);
 
-        this.mSharedPrefsHelper = new SharedPreferencesHelper(PreferenceManager
-                .getDefaultSharedPreferences(this));
+        this.mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         this.mUnitDropdown = findViewById(R.id.new_fooditem_unit_dropdown);
         ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this,
@@ -114,7 +115,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         String info = mInfoEditText.getText().toString();
         int timeFrame = getActiveToggleButton();
         int frequency = Integer.parseInt(mFrequencyEditText.getText().toString());
-        int groceryDaysAWeek = mSharedPrefsHelper.getGroceryDays().size();
+        int groceryDaysAWeek = mSharedPrefs.getStringSet(GROCERY_DAYS_KEY, new HashSet<>()).size();
 
         double frequencyQuotient = (double) frequency /
                 ((double) timeFrame * (double) groceryDaysAWeek);
