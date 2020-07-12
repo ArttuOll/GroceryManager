@@ -21,24 +21,34 @@ public class FoodItemEntity implements FoodItem {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int mId;
+
     @ColumnInfo(name = "image_uri")
     private String mImageUri;
-    @PrimaryKey
+
     @NonNull
     @ColumnInfo(name = "label")
     private String mLabel;
+
     @ColumnInfo(name = "brand")
     private String mBrand;
+
     @ColumnInfo(name = "info")
     private String mInfo;
+
     @ColumnInfo(name = "amount")
     private int mAmount;
+
     @ColumnInfo(name = "unit")
     private String mUnit;
+
     @ColumnInfo(name = "time_frame")
     private int mTimeFrame;
+
     @ColumnInfo(name = "frequency")
     private int mFrequency;
+
+    @ColumnInfo(name = "countdown_value")
+    private double mCountdownValue;
 
     @Ignore
     public FoodItemEntity(int id, @NotNull String label, String brand, String info, int amount,
@@ -54,6 +64,7 @@ public class FoodItemEntity implements FoodItem {
         this.mTimeFrame = timeFrame;
         this.mFrequency = frequency;
         this.mImageUri = mImageUri;
+        this.mCountdownValue = 0;
     }
 
     public FoodItemEntity(@NotNull String label, String brand, String info, int amount, String unit,
@@ -66,6 +77,15 @@ public class FoodItemEntity implements FoodItem {
         this.mTimeFrame = timeFrame;
         this.mFrequency = frequency;
         this.mImageUri = mImageUri;
+        this.mCountdownValue = 0;
+    }
+
+    public double getCountdownValue() {
+        return mCountdownValue;
+    }
+
+    public void setCountdownValue(double mCountdownValue) {
+        this.mCountdownValue = mCountdownValue;
     }
 
     public int getId() {

@@ -1,33 +1,38 @@
 package com.bsuuv.grocerymanager;
 
+import android.app.Application;
+import android.content.SharedPreferences;
+
+import androidx.lifecycle.LiveData;
+import androidx.preference.PreferenceManager;
+
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Keeps track of which foods should appear in the grocery list.
  */
 public class FoodScheduler {
 
+    private static final String GROCERY_DAYS_KEY = "grocerydays";
     private Set<String> mGroceryDays;
-    // List containing foods created by the user.
-    private List<FoodItemEntity> mFoodItems;
+    private LiveData<List<FoodItemEntity>> mFoodItemLiveData;
     private int mGroceryDaysAWeek;
-    private Map<FoodItemEntity, Double> mFoodItemTracker;
-    private SharedPreferencesHelper mSharedPrefsHelper;
+    private final FoodItemRepository mFoodItemRepository;
 
-    public FoodScheduler(SharedPreferencesHelper sharedPrefsHelper) {
-        this.mSharedPrefsHelper = sharedPrefsHelper;
-        this.mGroceryDays = sharedPrefsHelper.getGroceryDays();
+    public FoodScheduler(Application application) {
+        this.mFoodItemRepository = new FoodItemRepository(application);
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
+        this.mGroceryDays = sharedPrefs.getStringSet(GROCERY_DAYS_KEY, new HashSet<>());
         this.mGroceryDaysAWeek = mGroceryDays.size();
-        this.mFoodItems = sharedPrefsHelper.getFoodItems();
-        this.mFoodItemTracker = getFoodItemTracker();
+        this.mFoodItemLiveData = mFoodItemRepository.getFoodItems();
     }
 
     /**
@@ -37,79 +42,43 @@ public class FoodScheduler {
      */
     public List<FoodItemEntity> getGroceryList() {
         List<FoodItemEntity> groceryList = new ArrayList<>();
+        List<FoodItemEntity> foodItems = mFoodItemLiveData.getValue();
 
-        if (isGroceryDay()) {
-            for (FoodItemEntity foodItem : mFoodItemTracker.keySet()) {
-                // A double representing the frequency in which a food-item should appear in
-                // grocery list. If there's one grocery day a week and a food-item is to be had
-                // once every two weeks, then the frequency quotient is
-                // 1 per week / (1 grocery day * 2 weeks) = 1/2.
-                Double frequencyQuotient = mFoodItemTracker.get(foodItem);
-                double startingFrequencyQuotient = getFrequencyQuotient(foodItem);
+        if (isGroceryDay() && foodItems != null) {
+            for (FoodItemEntity foodItem : foodItems) {
+                // Each grocery day the countdown value is incremented by the value of frequency quotient.
+                // When it reaches 1, it's time for the item to appear in the grocery list.
+                double countdownValue = foodItem.getCountdownValue();
 
-                // Calling .get() from a map returns a Double object, which can be null.
-                if (frequencyQuotient != null) {
-                    // If the frequency quotient for a food-item has reached 1, put it to grocery
-                    // list.
-                    if (frequencyQuotient == 1) {
-                        groceryList.add(foodItem);
+                // If the frequency quotient for a food-item has reached 1, put it to grocery
+                // list. The value can be greater than one if the number of grocery days decreases
+                // while the countdownValue has already been assigned a value.
+                if (countdownValue >= 1) {
+                    groceryList.add(foodItem);
 
-                        // Reset the food-item frequency quotient back to its original value.
-                        mFoodItemTracker.put(foodItem, startingFrequencyQuotient);
-                    } else {
-                        // Increment the food-item frequency quotient in the tracker by adding to
-                        // it the original value.
-                        mFoodItemTracker.put(foodItem, frequencyQuotient +
-                                startingFrequencyQuotient);
-                    }
+                    // Reset the food-item frequency quotient.
+                    foodItem.setCountdownValue(0);
+                } else {
+                    double frequencyQuotient = getFrequencyQuotient(foodItem);
+
+                    // Increment the food-item countdown value by adding to
+                    // it the original value.
+                    foodItem.setCountdownValue(countdownValue + frequencyQuotient);
                 }
+                mFoodItemRepository.update(foodItem);
             }
         }
 
         return groceryList;
     }
 
-    /**
-     * Gets the FoodItemTracker from shared preferences and updates it according to
-     * <code>mFoodItems</code> or creates it if it wasn't saved before.
-     *
-     * @return <code>Map</code> containing <code>FoodItems</code> and their frequency quotients.
-     * Empty <code>Map</code> if nothing was saved before.
-     */
-    public Map<FoodItemEntity, Double> getFoodItemTracker() {
-        Map<FoodItemEntity, Double> tracker = mSharedPrefsHelper.getFoodItemTracker();
-
-        // If no tracker was previously saved, create a new one.
-        if (tracker.isEmpty()) {
-            for (FoodItemEntity foodItem : mFoodItems) {
-                tracker.put(foodItem, getFrequencyQuotient(foodItem));
-            }
-        } else {
-            // Add foods not in tracker from mFoodItems.
-            mFoodItems.stream().filter(foodItem -> !tracker.containsKey(foodItem))
-                    .forEach(foodItem -> tracker.put(foodItem, getFrequencyQuotient(foodItem)));
-            // Delete from tracker foods not in mFoodItems.
-            List<FoodItemEntity> uselessKeys = tracker.keySet().stream()
-                    .filter(key -> !mFoodItems.contains(key))
-                    .collect(Collectors.toList());
-            uselessKeys.forEach(tracker::remove);
-        }
-
-        if (!tracker.isEmpty()) mSharedPrefsHelper.saveFoodItemTracker(tracker);
-
-        return tracker;
-    }
-
     private double getFrequencyQuotient(FoodItemEntity foodItem) {
-        double frequencyQuotient = ((double) foodItem.getFrequency()) /
+        // A double representing the frequency in which a food-item should appear in
+        // grocery list. If there's one grocery day a week and a food-item is to be had
+        // once every two weeks, then the frequency quotient is
+        // 1 per week / (1 grocery day * 2 weeks) = 1/2.
+        return ((double) foodItem.getFrequency()) /
                 (foodItem.getTimeFrame() * mGroceryDaysAWeek);
-
-        if (frequencyQuotient <= 1) {
-            return frequencyQuotient;
-        } else {
-            throw new UnsupportedOperationException("Frequency quotient for food-item: " +
-                    foodItem.getLabel() + " was over 1!");
-        }
     }
 
     private boolean isGroceryDay() {
