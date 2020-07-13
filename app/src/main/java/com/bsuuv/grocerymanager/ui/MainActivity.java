@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FoodScheduler scheduler = new FoodScheduler(this);
+        FoodScheduler scheduler = new FoodScheduler(this.getApplication());
         this.mGroceryList = scheduler.getGroceryList();
 
         setUpToolbar();

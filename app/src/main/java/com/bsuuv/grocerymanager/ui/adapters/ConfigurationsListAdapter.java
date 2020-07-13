@@ -55,7 +55,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
 
     @Override
     public int getItemCount() {
-        return mFoodItems.size();
+        if (mFoodItems == null) { return 0; } else return mFoodItems.size();
     }
 
     public FoodItemEntity getFoodItemAtPosition(int position) {

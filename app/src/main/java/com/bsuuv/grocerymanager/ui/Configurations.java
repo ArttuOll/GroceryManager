@@ -38,11 +38,9 @@ public class Configurations extends AppCompatActivity {
         setContentView(R.layout.activity_configurations);
         setTitle("Configurations");
 
-        this.mFoodItemViewModel = new ViewModelProvider(this).get(FoodItemViewModel.class);
-        mFoodItemViewModel.getFoodItems().observe(this,
-                foodItemEntities -> mAdapter.setFoodItems(foodItemEntities));
-
         setUpRecyclerView();
+
+        setUpViewModel();
 
         // Manages dragging and swiping items in mRecyclerView
         ItemTouchHelper helper = initializeItemTouchHelper();
@@ -131,5 +129,14 @@ public class Configurations extends AppCompatActivity {
                 mFoodItemViewModel.delete(mAdapter.getFoodItemAtPosition(deletedPosition));
             }
         });
+    }
+
+    private void setUpViewModel() {
+        this.mFoodItemViewModel = new ViewModelProvider(this).get(FoodItemViewModel.class);
+        mFoodItemViewModel.getFoodItems().observe(this,
+                foodItemEntities -> {
+                    mAdapter.setFoodItems(foodItemEntities);
+                    mAdapter.notifyDataSetChanged();
+                });
     }
 }
