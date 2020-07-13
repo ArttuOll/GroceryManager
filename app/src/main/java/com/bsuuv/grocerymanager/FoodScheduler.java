@@ -42,6 +42,7 @@ public class FoodScheduler {
      */
     public List<FoodItemEntity> getGroceryList() {
         List<FoodItemEntity> groceryList = new ArrayList<>();
+        // TODO: should I rather observe the LiveData?
         List<FoodItemEntity> foodItems = mFoodItemLiveData.getValue();
 
         if (isGroceryDay() && foodItems != null) {
