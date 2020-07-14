@@ -20,6 +20,7 @@ import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -36,14 +37,15 @@ public class MainActivity extends AppCompatActivity {
     private List<FoodItemEntity> mGroceryList;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
+    private FoodScheduler mFoodScheduler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FoodScheduler scheduler = new FoodScheduler(this.getApplication());
-        this.mGroceryList = scheduler.getGroceryList();
+        this.mFoodScheduler = new FoodScheduler(this.getApplication());
+        this.mGroceryList = new ArrayList<>();
 
         setUpToolbar();
 
@@ -58,6 +60,18 @@ public class MainActivity extends AppCompatActivity {
             Parcelable state = savedInstanceState.getParcelable(MAIN_RECYCLERVIEW_STATE);
             mLayoutManager.onRestoreInstanceState(state);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.mGroceryList = mFoodScheduler.getGroceryList();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mFoodScheduler.removeObserver();
     }
 
     @Override

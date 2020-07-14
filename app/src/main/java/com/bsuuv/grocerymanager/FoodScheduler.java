@@ -21,10 +21,12 @@ import java.util.Set;
 public class FoodScheduler {
 
     private static final String GROCERY_DAYS_KEY = "grocerydays";
+    private final FoodItemRepository mFoodItemRepository;
     private Set<String> mGroceryDays;
     private LiveData<List<FoodItemEntity>> mFoodItemLiveData;
     private int mGroceryDaysAWeek;
-    private final FoodItemRepository mFoodItemRepository;
+    private List<FoodItemEntity> mFoodItems;
+    private androidx.lifecycle.Observer<List<FoodItemEntity>> mObserver;
 
     public FoodScheduler(Application application) {
         this.mFoodItemRepository = new FoodItemRepository(application);
@@ -33,6 +35,8 @@ public class FoodScheduler {
         this.mGroceryDays = sharedPrefs.getStringSet(GROCERY_DAYS_KEY, new HashSet<>());
         this.mGroceryDaysAWeek = mGroceryDays.size();
         this.mFoodItemLiveData = mFoodItemRepository.getFoodItems();
+        this.mObserver = foodItemEntities -> mFoodItems = foodItemEntities;
+        mFoodItemLiveData.observeForever(mObserver);
     }
 
     /**
@@ -45,9 +49,10 @@ public class FoodScheduler {
         // TODO: should I rather observe the LiveData?
         List<FoodItemEntity> foodItems = mFoodItemLiveData.getValue();
 
-        if (isGroceryDay() && foodItems != null) {
-            for (FoodItemEntity foodItem : foodItems) {
-                // Each grocery day the countdown value is incremented by the value of frequency quotient.
+        if (isGroceryDay() && mFoodItems != null) {
+            for (FoodItemEntity foodItem : mFoodItems) {
+                // Each grocery day the countdown value is incremented by the value of frequency
+                // quotient.
                 // When it reaches 1, it's time for the item to appear in the grocery list.
                 double countdownValue = foodItem.getCountdownValue();
 
@@ -71,6 +76,10 @@ public class FoodScheduler {
         }
 
         return groceryList;
+    }
+
+    public void removeObserver() {
+        mFoodItemLiveData.removeObserver(mObserver);
     }
 
     private double getFrequencyQuotient(FoodItemEntity foodItem) {

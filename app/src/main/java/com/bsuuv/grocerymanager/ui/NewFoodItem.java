@@ -51,6 +51,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     private AutoCompleteTextView mUnitDropdown;
     private String mPhotoPath;
     private SharedPreferences mSharedPrefs;
+    private int mId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +121,6 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         double frequencyQuotient = (double) frequency /
                 ((double) timeFrame * (double) groceryDaysAWeek);
 
-        // TODO: must get id from database. First implement saving food-item to database.
         if (constraintsFulfilled(groceryDaysAWeek, label, frequencyQuotient)) {
             Intent toConfigs = createIntentToConfigs(label, brand, amount, unit, info, timeFrame,
                     frequency, mPhotoPath);
@@ -185,6 +185,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         toConfigs.putExtra("time_frame", timeFrame);
         toConfigs.putExtra("frequency", frequency);
         toConfigs.putExtra("uri", mPhotoPath);
+        toConfigs.putExtra("id", mId);
 
         return toConfigs;
     }
@@ -221,6 +222,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
             this.mInfoEditText.setText(fromConfigs.getStringExtra("info"));
             this.mFrequencyEditText.setText(String.valueOf(
                     fromConfigs.getIntExtra("frequency", 0)));
+            this.mId = fromConfigs.getIntExtra("id", 0);
 
             this.mPhotoPath = fromConfigs.getStringExtra("uri");
             if (mPhotoPath != null) {

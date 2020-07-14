@@ -59,7 +59,7 @@ public class Configurations extends AppCompatActivity {
             // RecyclerView.
         } else if (requestCode == FOOD_ITEM_EDIT_REQUEST) {
             if (resultCode == RESULT_OK && data != null) {
-                FoodItemEntity result = modifyFoodItemByIntent(data);
+                FoodItemEntity result = updateFoodItemByIntent(data);
                 mFoodItemViewModel.update(result);
             }
         }
@@ -77,7 +77,7 @@ public class Configurations extends AppCompatActivity {
         startActivityForResult(toNewFoodItem, FOOD_ITEM_CREATE_REQUEST);
     }
 
-    private FoodItemEntity modifyFoodItemByIntent(Intent data) {
+    private FoodItemEntity updateFoodItemByIntent(Intent data) {
         String label = data.getStringExtra("label");
         String brand = data.getStringExtra("brand");
         int amount = data.getIntExtra("amount", 0);
@@ -86,8 +86,9 @@ public class Configurations extends AppCompatActivity {
         int timeFrame = data.getIntExtra("time_frame", 0);
         int frequency = data.getIntExtra("frequency", 0);
         String imageUri = data.getStringExtra("uri");
+        int id = data.getIntExtra("id", 0);
 
-        return new FoodItemEntity(Objects.requireNonNull(label), brand, info, amount, unit,
+        return new FoodItemEntity(id, Objects.requireNonNull(label), brand, info, amount, unit,
                 timeFrame, frequency, imageUri);
     }
 
