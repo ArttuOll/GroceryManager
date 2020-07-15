@@ -1,11 +1,14 @@
-package com.bsuuv.grocerymanager;
+package com.bsuuv.grocerymanager.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
 
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 import androidx.preference.PreferenceManager;
 
+import com.bsuuv.grocerymanager.FoodItemRepository;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 
 import java.util.ArrayList;
@@ -15,45 +18,31 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-// TODO: create GroceryItemViewModel that contains all food-items as LiveData and applies
-//  Transformations to it, using the logic in this class, to create another LiveData-object.
-
-/**
- * Keeps track of which foods should appear in the grocery list.
- */
-public class FoodScheduler {
-
+public class GroceryItemViewModel extends AndroidViewModel {
     private static final String GROCERY_DAYS_KEY = "grocerydays";
-    private final FoodItemRepository mFoodItemRepository;
-    private Set<String> mGroceryDays;
-    private LiveData<List<FoodItemEntity>> mFoodItemLiveData;
-    private int mGroceryDaysAWeek;
-    private List<FoodItemEntity> mFoodItems;
-    private androidx.lifecycle.Observer<List<FoodItemEntity>> mObserver;
+    private final Set<String> mGroceryDays;
+    private final int mGroceryDaysAWeek;
+    private FoodItemRepository mRepository;
+    private LiveData<List<FoodItemEntity>> mGroceryItems;
 
-    public FoodScheduler(Application application) {
-        this.mFoodItemRepository = new FoodItemRepository(application);
+    public GroceryItemViewModel(Application application) {
+        super(application);
+        this.mRepository = new FoodItemRepository(application);
+        this.mGroceryItems = mRepository.getFoodItems();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
         this.mGroceryDays = sharedPrefs.getStringSet(GROCERY_DAYS_KEY, new HashSet<>());
         this.mGroceryDaysAWeek = mGroceryDays.size();
-        this.mFoodItemLiveData = mFoodItemRepository.getFoodItems();
-        this.mObserver = foodItemEntities -> mFoodItems = foodItemEntities;
-        mFoodItemLiveData.observeForever(mObserver);
     }
 
-    /**
-     * Gives a list of all food-items scheduled for the current grocery day.
-     *
-     * @return <code>List</code> containing <code>FoodItems</code>.
-     */
-    public List<FoodItemEntity> getGroceryList() {
-        List<FoodItemEntity> groceryList = new ArrayList<>();
-        // TODO: should I rather observe the LiveData?
-        List<FoodItemEntity> foodItems = mFoodItemLiveData.getValue();
+    public LiveData<List<FoodItemEntity>> getGroceryList() {
+        return Transformations.map(mGroceryItems, this::getGroceryItemsFromFoodItems);
+    }
 
-        if (isGroceryDay() && mFoodItems != null) {
-            for (FoodItemEntity foodItem : mFoodItems) {
+    private List<FoodItemEntity> getGroceryItemsFromFoodItems(List<FoodItemEntity> foodItems) {
+        List<FoodItemEntity> groceryItems = new ArrayList<>();
+        if (isGroceryDay()) {
+            for (FoodItemEntity foodItem : foodItems) {
                 // Each grocery day the countdown value is incremented by the value of frequency
                 // quotient.
                 // When it reaches 1, it's time for the item to appear in the grocery list.
@@ -63,7 +52,7 @@ public class FoodScheduler {
                 // list. The value can be greater than one if the number of grocery days decreases
                 // while the countdownValue has already been assigned a value.
                 if (countdownValue >= 1) {
-                    groceryList.add(foodItem);
+                    groceryItems.add(foodItem);
 
                     // Reset the food-item frequency quotient.
                     foodItem.setCountdownValue(0);
@@ -74,15 +63,10 @@ public class FoodScheduler {
                     // it the original value.
                     foodItem.setCountdownValue(countdownValue + frequencyQuotient);
                 }
-                mFoodItemRepository.update(foodItem);
+//                mRepository.update(foodItem);
             }
         }
-
-        return groceryList;
-    }
-
-    public void removeObserver() {
-        mFoodItemLiveData.removeObserver(mObserver);
+        return groceryItems;
     }
 
     private double getFrequencyQuotient(FoodItemEntity foodItem) {
@@ -126,11 +110,5 @@ public class FoodScheduler {
             default:
                 return 0;
         }
-    }
-
-    public interface TimeFrame {
-        int WEEK = 1;
-        int TWO_WEEKS = 2;
-        int MONTH = 4;
     }
 }

@@ -29,9 +29,8 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     // Represents the activity in which this the RecyclerView of this adapter resides.
     private Context mContext;
 
-    public GroceryListAdapter(Context context, List<FoodItemEntity> groceryItems) {
+    public GroceryListAdapter(Context context) {
         this.mInflater = LayoutInflater.from(context);
-        this.mGroceryItems = groceryItems;
         this.mContext = context;
     }
 
@@ -52,7 +51,12 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
     @Override
     public int getItemCount() {
+        if (mGroceryItems == null) return 0;
         return mGroceryItems.size();
+    }
+
+    public void setGroceryItems(List<FoodItemEntity> groceryListItems) {
+        this.mGroceryItems = groceryListItems;
     }
 
     /**

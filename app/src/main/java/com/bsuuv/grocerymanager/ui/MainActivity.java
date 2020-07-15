@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.bsuuv.grocerymanager.FoodScheduler;
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter;
+import com.bsuuv.grocerymanager.viewmodel.GroceryItemViewModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private FoodScheduler mFoodScheduler;
+    private GroceryItemViewModel mGroceryViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
         setUpToolbar();
 
         setUpRecyclerView();
+
+        this.mGroceryViewModel = new ViewModelProvider(this).get(GroceryItemViewModel.class);
+        mGroceryViewModel.getGroceryList().observe(this, groceryListItems -> {
+            mAdapter.setGroceryItems(groceryListItems);
+            mAdapter.notifyDataSetChanged();
+        });
 
         // Manages dragging and swiping items in mRecyclerView
         ItemTouchHelper helper = initializeItemTouchHelper();
@@ -112,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         this.mLayoutManager = new LinearLayoutManager(this);
         this.mRecyclerView.setLayoutManager(mLayoutManager);
 
-        this.mAdapter = new GroceryListAdapter(this, mGroceryList);
+        this.mAdapter = new GroceryListAdapter(this);
         this.mRecyclerView.setAdapter(mAdapter);
     }
 
