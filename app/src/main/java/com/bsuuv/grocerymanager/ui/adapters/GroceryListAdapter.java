@@ -59,6 +59,10 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
         this.mGroceryItems = groceryListItems;
     }
 
+    public FoodItemEntity getFoodItemAtPosition(int position) {
+        return mGroceryItems.get(position);
+    }
+
     /**
      * Contains a single item displayed in MainActivity <code>RecyclerView</code>.
      */

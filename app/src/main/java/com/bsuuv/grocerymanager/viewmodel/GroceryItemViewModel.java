@@ -41,6 +41,10 @@ public class GroceryItemViewModel extends AndroidViewModel {
         return Transformations.map(mGroceryItems, this::getGroceryItemsFromFoodItems);
     }
 
+    public void delete(FoodItemEntity foodItem) {
+        mRepository.deleteAll(foodItem);
+    }
+
     @Override
     public void onCleared() {
         for (FoodItemEntity foodItem : mUpdateList) {

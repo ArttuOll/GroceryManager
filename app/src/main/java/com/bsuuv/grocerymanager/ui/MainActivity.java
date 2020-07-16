@@ -16,16 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.FoodScheduler;
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter;
 import com.bsuuv.grocerymanager.viewmodel.GroceryItemViewModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -36,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private final static String MAIN_RECYCLERVIEW_STATE = "recyclerView_state";
 
     private GroceryListAdapter mAdapter;
-    private List<FoodItemEntity> mGroceryList;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private FoodScheduler mFoodScheduler;
@@ -48,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.mFoodScheduler = new FoodScheduler(this.getApplication());
-        this.mGroceryList = new ArrayList<>();
-        this.mGroceryList = mFoodScheduler.getGroceryList();
 
         setUpToolbar();
 
@@ -133,18 +126,13 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMove(@NonNull RecyclerView recyclerView,
                                   @NonNull RecyclerView.ViewHolder viewHolder,
                                   @NonNull RecyclerView.ViewHolder target) {
-                int from = viewHolder.getAdapterPosition();
-                int to = target.getAdapterPosition();
-
-                Collections.swap(mGroceryList, from, to);
-
-                mAdapter.notifyItemMoved(from, to);
                 return true;
             }
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                mGroceryList.remove(viewHolder.getAdapterPosition());
+                int deletedPosition = viewHolder.getAdapterPosition();
+                mGroceryViewModel.delete(mAdapter.getFoodItemAtPosition(deletedPosition));
                 mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
             }
         });
