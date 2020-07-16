@@ -25,7 +25,8 @@ import java.util.Calendar;
 import java.util.Objects;
 
 /**
- * Main activity of the app. Displays the grocery list and includes options menu to settings and to configure groceries.
+ * Main activity of the app. Displays the grocery list and includes options menu to settings and
+ * to configure groceries.
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -133,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int deletedPosition = viewHolder.getAdapterPosition();
                 mGroceryViewModel.delete(mAdapter.getFoodItemAtPosition(deletedPosition));
-                mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
             }
         });
     }

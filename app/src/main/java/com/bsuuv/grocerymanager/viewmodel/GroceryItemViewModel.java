@@ -10,31 +10,33 @@ import androidx.preference.PreferenceManager;
 
 import com.bsuuv.grocerymanager.FoodItemRepository;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.logic.SharedPreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class GroceryItemViewModel extends AndroidViewModel {
-    private static final String GROCERY_DAYS_KEY = "grocerydays";
     private final Set<String> mGroceryDays;
     private final int mGroceryDaysAWeek;
     private FoodItemRepository mRepository;
     private LiveData<List<FoodItemEntity>> mGroceryItems;
     private List<FoodItemEntity> mUpdateList;
+    private SharedPreferencesHelper mSharedPrefsHelper;
 
     public GroceryItemViewModel(Application application) {
         super(application);
         this.mRepository = new FoodItemRepository(application);
         this.mGroceryItems = mRepository.getFoodItems();
-        this.mUpdateList = new ArrayList<>();
-
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
-        this.mGroceryDays = sharedPrefs.getStringSet(GROCERY_DAYS_KEY, new HashSet<>());
+        this.mSharedPrefsHelper = new SharedPreferencesHelper(sharedPrefs);
+
+        this.mGroceryDays = mSharedPrefsHelper.getGroceryDays();
         this.mGroceryDaysAWeek = mGroceryDays.size();
+
+        this.mUpdateList = mSharedPrefsHelper.getUpdateList();
     }
 
     public LiveData<List<FoodItemEntity>> getGroceryList() {
@@ -42,7 +44,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
     }
 
     public void delete(FoodItemEntity foodItem) {
-        mRepository.deleteAll(foodItem);
+        mRepository.delete(foodItem);
     }
 
     @Override
