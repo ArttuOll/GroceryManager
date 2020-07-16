@@ -24,11 +24,13 @@ public class GroceryItemViewModel extends AndroidViewModel {
     private final int mGroceryDaysAWeek;
     private FoodItemRepository mRepository;
     private LiveData<List<FoodItemEntity>> mGroceryItems;
+    private List<FoodItemEntity> mUpdateList;
 
     public GroceryItemViewModel(Application application) {
         super(application);
         this.mRepository = new FoodItemRepository(application);
         this.mGroceryItems = mRepository.getFoodItems();
+        this.mUpdateList = new ArrayList<>();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
         this.mGroceryDays = sharedPrefs.getStringSet(GROCERY_DAYS_KEY, new HashSet<>());
@@ -37,6 +39,13 @@ public class GroceryItemViewModel extends AndroidViewModel {
 
     public LiveData<List<FoodItemEntity>> getGroceryList() {
         return Transformations.map(mGroceryItems, this::getGroceryItemsFromFoodItems);
+    }
+
+    @Override
+    public void onCleared() {
+        for (FoodItemEntity foodItem : mUpdateList) {
+            mRepository.update(foodItem);
+        }
     }
 
     private List<FoodItemEntity> getGroceryItemsFromFoodItems(List<FoodItemEntity> foodItems) {
@@ -63,7 +72,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
                     // it the original value.
                     foodItem.setCountdownValue(countdownValue + frequencyQuotient);
                 }
-//                mRepository.update(foodItem);
+                mUpdateList.add(foodItem);
             }
         }
         return groceryItems;

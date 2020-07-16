@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.mFoodScheduler = new FoodScheduler(this.getApplication());
         this.mGroceryList = new ArrayList<>();
+        this.mGroceryList = mFoodScheduler.getGroceryList();
 
         setUpToolbar();
 
@@ -69,18 +70,6 @@ public class MainActivity extends AppCompatActivity {
             Parcelable state = savedInstanceState.getParcelable(MAIN_RECYCLERVIEW_STATE);
             mLayoutManager.onRestoreInstanceState(state);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        this.mGroceryList = mFoodScheduler.getGroceryList();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mFoodScheduler.removeObserver();
     }
 
     @Override
