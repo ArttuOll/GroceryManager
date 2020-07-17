@@ -1,6 +1,9 @@
-package com.bsuuv.grocerymanager.logic;
+package com.bsuuv.grocerymanager;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+
+import androidx.preference.PreferenceManager;
 
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.google.gson.Gson;
@@ -19,17 +22,17 @@ import java.util.Set;
 public class SharedPreferencesHelper {
 
     private static final String GROCERY_DAYS_KEY = "grocerydays";
-    private static final String UPDATE_LIST_KEY = "updatelist";
+    private static final String MODIFIED_LIST_KEY = "modifiedlist";
 
     private final SharedPreferences mSharedPreferences;
     private final Type listType = new TypeToken<List<FoodItemEntity>>() {
     }.getType();
     private Gson gson;
 
-    public SharedPreferencesHelper(SharedPreferences sharedPreferences) {
-        this.mSharedPreferences = sharedPreferences;
+    public SharedPreferencesHelper(Context context) {
+        this.mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
         GsonBuilder builder = new GsonBuilder();
-        builder.enableComplexMapKeySerialization();
         this.gson = builder.create();
     }
 
@@ -43,15 +46,15 @@ public class SharedPreferencesHelper {
         return mSharedPreferences.getStringSet(GROCERY_DAYS_KEY, new HashSet<>());
     }
 
-    public void saveUpdateList(List<FoodItemEntity> updateList) {
+    public void saveModifiedList(List<FoodItemEntity> updateList) {
         String json = gson.toJson(updateList, listType);
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(UPDATE_LIST_KEY, json);
+        editor.putString(MODIFIED_LIST_KEY, json);
         editor.apply();
     }
 
-    public List<FoodItemEntity> getUpdateList() {
-        String json = mSharedPreferences.getString(UPDATE_LIST_KEY, "");
+    public List<FoodItemEntity> getModifiedList() {
+        String json = mSharedPreferences.getString(MODIFIED_LIST_KEY, "");
         if (json.equals("")) { return new ArrayList<>(); } else {
             return gson.fromJson(json, listType);
         }
@@ -59,7 +62,7 @@ public class SharedPreferencesHelper {
 
     public void clearUpdateList() {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.remove(UPDATE_LIST_KEY);
+        editor.remove(MODIFIED_LIST_KEY);
         editor.apply();
     }
 

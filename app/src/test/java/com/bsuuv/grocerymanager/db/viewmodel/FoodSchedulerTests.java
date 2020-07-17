@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.logic;
+package com.bsuuv.grocerymanager.db.viewmodel;
 
 //TODO: rewrite
 /*@RunWith(MockitoJUnitRunner.class)
