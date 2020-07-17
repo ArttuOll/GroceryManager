@@ -57,6 +57,12 @@ public class SharedPreferencesHelper {
         }
     }
 
+    public void clearUpdateList() {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.remove(UPDATE_LIST_KEY);
+        editor.apply();
+    }
+
     /**
      * Clears all items from <code>SharedPreferences</code>.
      */
