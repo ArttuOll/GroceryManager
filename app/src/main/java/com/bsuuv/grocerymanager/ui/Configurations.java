@@ -48,18 +48,19 @@ public class Configurations extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    @Nullable Intent fromNewFoodItem) {
+        super.onActivityResult(requestCode, resultCode, fromNewFoodItem);
 
         // Result when NewFoodItem was launched to create a new food-item using the FAB.
-        if (requestCode == FOOD_ITEM_CREATE_REQUEST && resultCode == RESULT_OK && data != null) {
-            FoodItemEntity result = createFoodItemFromIntent(data);
+        if (requestCode == FOOD_ITEM_CREATE_REQUEST && resultCode == RESULT_OK && fromNewFoodItem != null) {
+            FoodItemEntity result = createFoodItemFromIntent(fromNewFoodItem);
             mFoodItemViewModel.insert(result);
             // Result when NewFoodItem was launched to edit a food-item by clicking one in the
             // RecyclerView.
         } else if (requestCode == FOOD_ITEM_EDIT_REQUEST) {
-            if (resultCode == RESULT_OK && data != null) {
-                FoodItemEntity result = updateFoodItemByIntent(data);
+            if (resultCode == RESULT_OK && fromNewFoodItem != null) {
+                FoodItemEntity result = updateFoodItemByIntent(fromNewFoodItem);
                 mFoodItemViewModel.update(result);
             }
         }
@@ -77,30 +78,31 @@ public class Configurations extends AppCompatActivity {
         startActivityForResult(toNewFoodItem, FOOD_ITEM_CREATE_REQUEST);
     }
 
-    private FoodItemEntity updateFoodItemByIntent(Intent data) {
-        String label = data.getStringExtra("label");
-        String brand = data.getStringExtra("brand");
-        int amount = data.getIntExtra("amount", 0);
-        String unit = data.getStringExtra("unit");
-        String info = data.getStringExtra("info");
-        int timeFrame = data.getIntExtra("time_frame", 0);
-        int frequency = data.getIntExtra("frequency", 0);
-        String imageUri = data.getStringExtra("uri");
-        int id = data.getIntExtra("id", 0);
+    private FoodItemEntity updateFoodItemByIntent(Intent fromNewFoodItem) {
+        String label = fromNewFoodItem.getStringExtra("label");
+        String brand = fromNewFoodItem.getStringExtra("brand");
+        int amount = fromNewFoodItem.getIntExtra("amount", 0);
+        String unit = fromNewFoodItem.getStringExtra("unit");
+        String info = fromNewFoodItem.getStringExtra("info");
+        int timeFrame = fromNewFoodItem.getIntExtra("time_frame", 0);
+        int frequency = fromNewFoodItem.getIntExtra("frequency", 0);
+        String imageUri = fromNewFoodItem.getStringExtra("uri");
+        int id = fromNewFoodItem.getIntExtra("id", 0);
+        double countdownValue = fromNewFoodItem.getDoubleExtra("countdownValue", 0);
 
         return new FoodItemEntity(id, Objects.requireNonNull(label), brand, info, amount, unit,
-                timeFrame, frequency, imageUri);
+                timeFrame, frequency, countdownValue, imageUri);
     }
 
-    private FoodItemEntity createFoodItemFromIntent(Intent data) {
-        String label = data.getStringExtra("label");
-        String brand = data.getStringExtra("brand");
-        int amount = data.getIntExtra("amount", 0);
-        String unit = data.getStringExtra("unit");
-        String info = data.getStringExtra("info");
-        int timeFrame = data.getIntExtra("time_frame", 0);
-        int frequency = data.getIntExtra("frequency", 0);
-        String imageUri = data.getStringExtra("uri");
+    private FoodItemEntity createFoodItemFromIntent(Intent fromNewFoodItem) {
+        String label = fromNewFoodItem.getStringExtra("label");
+        String brand = fromNewFoodItem.getStringExtra("brand");
+        int amount = fromNewFoodItem.getIntExtra("amount", 0);
+        String unit = fromNewFoodItem.getStringExtra("unit");
+        String info = fromNewFoodItem.getStringExtra("info");
+        int timeFrame = fromNewFoodItem.getIntExtra("time_frame", 0);
+        int frequency = fromNewFoodItem.getIntExtra("frequency", 0);
+        String imageUri = fromNewFoodItem.getStringExtra("uri");
 
         return new FoodItemEntity(Objects.requireNonNull(label), brand, info, amount, unit,
                 timeFrame, frequency, imageUri);

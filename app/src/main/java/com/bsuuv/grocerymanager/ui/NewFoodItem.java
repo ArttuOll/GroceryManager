@@ -51,6 +51,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     private String mPhotoPath;
     private SharedPreferences mSharedPrefs;
     private int mId;
+    private double mCountdownValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +186,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         toConfigs.putExtra("frequency", frequency);
         toConfigs.putExtra("uri", mPhotoPath);
         toConfigs.putExtra("id", mId);
+        toConfigs.putExtra("countdownValue", mCountdownValue);
 
         return toConfigs;
     }
@@ -222,6 +224,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
             this.mFrequencyEditText.setText(String.valueOf(
                     fromConfigs.getIntExtra("frequency", 0)));
             this.mId = fromConfigs.getIntExtra("id", 0);
+            this.mCountdownValue = fromConfigs.getDoubleExtra("countdownValue", 0.0);
 
             this.mPhotoPath = fromConfigs.getStringExtra("uri");
             if (mPhotoPath != null) {

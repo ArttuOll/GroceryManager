@@ -52,9 +52,8 @@ public class FoodItemEntity implements FoodItem {
 
     @Ignore
     public FoodItemEntity(int id, @NotNull String label, String brand, String info, int amount,
-                          String unit,
-                          int timeFrame,
-                          int frequency, String mImageUri) {
+                          String unit, int timeFrame, int frequency, double countdownValue,
+                          String mImageUri) {
         this.mId = id;
         this.mLabel = label;
         this.mBrand = brand;
@@ -64,7 +63,7 @@ public class FoodItemEntity implements FoodItem {
         this.mTimeFrame = timeFrame;
         this.mFrequency = frequency;
         this.mImageUri = mImageUri;
-        this.mCountdownValue = 0;
+        this.mCountdownValue = countdownValue;
     }
 
     public FoodItemEntity(@NotNull String label, String brand, String info, int amount, String unit,

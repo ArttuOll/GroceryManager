@@ -27,9 +27,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
 
         this.mModifiedList = mGroceryListManager.getModifiedList();
 
-        if (!mGroceryListManager.isGroceryDay()) {
-            updateDatabase();
-        }
+        if (!mGroceryListManager.isGroceryDay()) updateDatabase();
     }
 
     public LiveData<List<FoodItemEntity>> getGroceryList() {
@@ -48,9 +46,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
         }
     }
     private void updateDatabase() {
-        for (FoodItemEntity foodItem : mModifiedList) {
-            mRepository.update(foodItem);
-        }
+        for (FoodItemEntity foodItem : mModifiedList) mRepository.update(foodItem);
         mGroceryListManager.clearUpdateList();
     }
 }
