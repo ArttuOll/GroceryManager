@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager;
+package com.bsuuv.grocerymanager.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

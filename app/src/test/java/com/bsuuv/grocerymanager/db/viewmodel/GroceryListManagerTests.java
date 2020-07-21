@@ -1,8 +1,8 @@
 package com.bsuuv.grocerymanager.db.viewmodel;
 
 import com.bsuuv.grocerymanager.GroceryListManager;
-import com.bsuuv.grocerymanager.SharedPreferencesHelper;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 
 import org.junit.After;
 import org.junit.Assert;

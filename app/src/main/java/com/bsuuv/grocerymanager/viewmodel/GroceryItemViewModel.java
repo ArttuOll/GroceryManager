@@ -8,8 +8,8 @@ import androidx.lifecycle.Transformations;
 
 import com.bsuuv.grocerymanager.FoodItemRepository;
 import com.bsuuv.grocerymanager.GroceryListManager;
-import com.bsuuv.grocerymanager.SharedPreferencesHelper;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 
 import java.util.List;
 
