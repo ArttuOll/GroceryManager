@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bsuuv.grocerymanager.FoodScheduler;
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter;
 import com.bsuuv.grocerymanager.viewmodel.GroceryItemViewModel;
@@ -35,16 +34,12 @@ public class MainActivity extends AppCompatActivity {
     private GroceryListAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-    private FoodScheduler mFoodScheduler;
     private GroceryItemViewModel mGroceryViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        this.mFoodScheduler = new FoodScheduler(this.getApplication());
-
         setUpToolbar();
 
         setUpRecyclerView();

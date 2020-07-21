@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
 
-import com.bsuuv.grocerymanager.FoodScheduler;
 import com.bsuuv.grocerymanager.R;
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -232,13 +231,13 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
             // Based on the time frame of the food item being edited, set the toggle buttons to
             // either checked or disabled.
             switch (fromConfigs.getIntExtra("time_frame", 0)) {
-                case FoodScheduler.TimeFrame.WEEK:
+                case TimeFrame.WEEK:
                     mToggleGroup.check(R.id.togglebutton_week);
                     break;
-                case FoodScheduler.TimeFrame.TWO_WEEKS:
+                case TimeFrame.TWO_WEEKS:
                     mToggleGroup.check(R.id.togglebutton_two_weeks);
                     break;
-                case FoodScheduler.TimeFrame.MONTH:
+                case TimeFrame.MONTH:
                     mToggleGroup.check(R.id.togglebutton_month);
                     break;
             }
@@ -248,11 +247,11 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     private int getActiveToggleButton() {
         switch (mToggleGroup.getCheckedButtonId()) {
             case R.id.togglebutton_week:
-                return FoodScheduler.TimeFrame.WEEK;
+                return TimeFrame.WEEK;
             case R.id.togglebutton_two_weeks:
-                return FoodScheduler.TimeFrame.TWO_WEEKS;
+                return TimeFrame.TWO_WEEKS;
             case R.id.togglebutton_month:
-                return FoodScheduler.TimeFrame.MONTH;
+                return TimeFrame.MONTH;
             default:
                 return -1;
         }
@@ -287,5 +286,11 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         mPhotoPath = Uri.parse(image.toURI().getPath()).getPath();
 
         return image;
+    }
+
+    private interface TimeFrame {
+        int WEEK = 1;
+        int TWO_WEEKS = 2;
+        int MONTH = 4;
     }
 }
