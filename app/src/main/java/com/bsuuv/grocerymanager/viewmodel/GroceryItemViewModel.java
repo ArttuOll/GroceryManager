@@ -8,6 +8,7 @@ import androidx.lifecycle.Transformations;
 
 import com.bsuuv.grocerymanager.FoodItemRepository;
 import com.bsuuv.grocerymanager.GroceryListManager;
+import com.bsuuv.grocerymanager.SharedPreferencesHelper;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
         super(application);
         this.mRepository = new FoodItemRepository(application);
         this.mFoodItems = mRepository.getFoodItems();
-        this.mGroceryListManager = new GroceryListManager(application);
+        this.mGroceryListManager = new GroceryListManager(new SharedPreferencesHelper(application));
 
         this.mModifiedList = mGroceryListManager.getModifiedList();
 

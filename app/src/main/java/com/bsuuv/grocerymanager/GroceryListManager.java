@@ -1,7 +1,5 @@
 package com.bsuuv.grocerymanager;
 
-import android.app.Application;
-
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 
 import java.util.ArrayList;
@@ -16,19 +14,12 @@ public class GroceryListManager {
     private List<FoodItemEntity> mModifiedList;
     private SharedPreferencesHelper mSharedPrefsHelper;
 
-    public GroceryListManager(Application application) {
-        this.mSharedPrefsHelper =
-                new SharedPreferencesHelper(application.getApplicationContext());
-
+    public GroceryListManager(SharedPreferencesHelper sharedPreferencesHelper) {
+        this.mSharedPrefsHelper = sharedPreferencesHelper;
         this.mGroceryDays = mSharedPrefsHelper.getGroceryDays();
         this.mGroceryDaysAWeek = mGroceryDays.size();
 
         this.mModifiedList = mSharedPrefsHelper.getModifiedList();
-
-    }
-
-    public GroceryListManager make(Application application) {
-        return new GroceryListManager(application);
     }
 
     public List<FoodItemEntity> getGroceryItemsFromFoodItems(List<FoodItemEntity> foodItems) {
