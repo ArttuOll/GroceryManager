@@ -93,7 +93,8 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
         void bindTo(FoodItemEntity currentFoodItem) {
             foodItemLabel.setText(currentFoodItem.getLabel());
             foodItemBrand.setText(currentFoodItem.getBrand());
-            foodItemAmount.setText(String.valueOf(currentFoodItem.getAmount()));
+            foodItemAmount.setText(String.format("%s %s", currentFoodItem.getAmount(),
+                    currentFoodItem.getUnit()));
             Glide.with(mContext).load(currentFoodItem.getImageUri()).into(mFoodImage);
         }
 
