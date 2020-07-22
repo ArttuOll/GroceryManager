@@ -20,7 +20,7 @@ public interface FoodItemDao {
     @Delete
     void delete(FoodItemEntity foodItem);
 
-    @Query("SELECT * FROM FoodItemEntity")
+    @Query("SELECT * FROM FoodItemEntity ORDER BY label ASC")
     LiveData<List<FoodItemEntity>> getAllFoodItems();
 
     @Update
