@@ -38,7 +38,7 @@ import java.util.HashSet;
 public class NewFoodItem extends AppCompatActivity implements View.OnClickListener {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final String GROCERY_DAYS_KEY = "grocerydays";
+    public static final String GROCERY_DAYS_KEY = "grocerydays";
 
     private MaterialButtonToggleGroup mToggleGroup;
     private EditText mLabelEditText;
