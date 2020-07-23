@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private GroceryListAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private TextView mRecyclerViewPlaceHolder;
     private LinearLayoutManager mLayoutManager;
     private GroceryItemViewModel mGroceryViewModel;
     private int mNumberOfGroceryDays;
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.mGroceryViewModel = new ViewModelProvider(this).get(GroceryItemViewModel.class);
         mGroceryViewModel.getGroceryList().observe(this, groceryListItems -> {
+            setRecyclerViewVisibility();
             mAdapter.setGroceryItems(groceryListItems);
             mAdapter.notifyDataSetChanged();
         });
@@ -67,6 +71,25 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             Parcelable state = savedInstanceState.getParcelable(MAIN_RECYCLERVIEW_STATE);
             mLayoutManager.onRestoreInstanceState(state);
+        }
+    }
+
+    private void setRecyclerViewVisibility() {
+        if (mInspector.isGroceryDay()) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mRecyclerViewPlaceHolder.setVisibility(View.GONE);
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+            mRecyclerViewPlaceHolder.setVisibility(View.VISIBLE);
+            setPlaceholderText();
+        }
+    }
+
+    private void setPlaceholderText() {
+        if (mNumberOfGroceryDays == 0) {
+            mRecyclerViewPlaceHolder.setText(R.string.main_no_grocery_days_set);
+        } else {
+            mRecyclerViewPlaceHolder.setText(R.string.main_not_grocery_day);
         }
     }
 
@@ -109,7 +132,8 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         this.mAdapter = new GroceryListAdapter(this);
-        this.mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setVisibility(View.GONE);
     }
 
     private void setUpToolbar() {

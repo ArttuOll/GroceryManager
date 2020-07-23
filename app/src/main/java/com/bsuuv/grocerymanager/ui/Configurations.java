@@ -3,6 +3,7 @@ package com.bsuuv.grocerymanager.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +32,7 @@ public class Configurations extends AppCompatActivity {
     private ConfigurationsListAdapter mAdapter;
     private FoodItemViewModel mFoodItemViewModel;
     private RecyclerView mRecyclerView;
+    private TextView mRecyclerViewPlaceHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class Configurations extends AppCompatActivity {
         setContentView(R.layout.activity_configurations);
         setTitle("Configurations");
 
+        this.mRecyclerViewPlaceHolder = findViewById(R.id.config_recyclerview_placeholder);
         setUpRecyclerView();
 
         setUpViewModel();
@@ -138,8 +141,20 @@ public class Configurations extends AppCompatActivity {
         this.mFoodItemViewModel = new ViewModelProvider(this).get(FoodItemViewModel.class);
         mFoodItemViewModel.getFoodItems().observe(this,
                 foodItemEntities -> {
+                    setRecyclerViewVisibility(foodItemEntities.size());
                     mAdapter.setFoodItems(foodItemEntities);
                     mAdapter.notifyDataSetChanged();
                 });
+    }
+
+    private void setRecyclerViewVisibility(int size) {
+        if (size > 0) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mRecyclerViewPlaceHolder.setVisibility(View.GONE);
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+            mRecyclerViewPlaceHolder.setVisibility(View.VISIBLE);
+            mRecyclerViewPlaceHolder.setText(R.string.no_grocery_items);
+        }
     }
 }
