@@ -160,8 +160,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                int deletedPosition = viewHolder.getAdapterPosition();
-                mGroceryViewModel.delete(mAdapter.getFoodItemAtPosition(deletedPosition));
+                int swipedPosition = viewHolder.getAdapterPosition();
+                mGroceryViewModel.check(mAdapter.getFoodItemAtPosition(swipedPosition));
             }
         });
     }

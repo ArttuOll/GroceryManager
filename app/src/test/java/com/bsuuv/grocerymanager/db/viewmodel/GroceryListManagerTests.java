@@ -35,14 +35,21 @@ public class GroceryListManagerTests {
     @Mock
     private List<FoodItemEntity> mModifiedList;
 
+    @Mock
+    private List<FoodItemEntity> mCheckedItems;
+
+
     @InjectMocks
     private GroceryListManager mGroceryListManager;
 
     private Set<String> mGroceryDays;
     private List<FoodItemEntity> mFoodItems;
+    // TODO: nimeä käyttötarkoituksien mukaan
     private FoodItemEntity mFoodItem1;
     private FoodItemEntity mFoodItem2;
     private FoodItemEntity mFoodItem3;
+    private FoodItemEntity mFoodItem4;
+    private FoodItemEntity mFoodItem5;
 
     @Before
     public void initialize() {
@@ -58,12 +65,21 @@ public class GroceryListManagerTests {
                 3, "Bags", 2, 2, "");
         this.mFoodItem3 = new FoodItemEntity("Parsakaali", "", "Tylsää",
                 5, "Bags", 1, 1, "");
+        this.mFoodItem4 = new FoodItemEntity("Kanaa", "Saarioinen", "Tylsää",
+                5, "Bags", 1, 1, "");
+        this.mFoodItem5 = new FoodItemEntity("Voi", "Valio", "Tylsää",
+                5, "Bags", 1, 1, "");
+
 
         when(mMockSharedPrefsHelper.getGroceryDays()).thenReturn(mGroceryDays);
         when(mMockSharedPrefsHelper.getModifiedList()).thenReturn(mModifiedList);
+        when(mMockSharedPrefsHelper.getCheckedItems()).thenReturn(mCheckedItems);
         when(mModifiedList.contains(mFoodItem1)).thenReturn(false);
         when(mModifiedList.contains(mFoodItem2)).thenReturn(false);
         when(mModifiedList.contains(mFoodItem3)).thenReturn(true);
+        when(mModifiedList.contains(mFoodItem5)).thenReturn(true);
+        when(mCheckedItems.contains(mFoodItem4)).thenReturn(true);
+        when(mCheckedItems.contains(mFoodItem5)).thenReturn(true);
     }
 
     @After
@@ -146,6 +162,44 @@ public class GroceryListManagerTests {
         // The food-item was added to grocery list
         Assert.assertEquals(expected, actual);
     }
+
+    @Test
+    public void getGroceryList_isGroceryDay_notAddedIfInCheckedItems() {
+        mFoodItems.add(mFoodItem4);
+        mFoodItem4.setCountdownValue(1.0);
+
+        mGroceryListManager = new GroceryListManager(mMockSharedPrefsHelper);
+        List<FoodItemEntity> actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+        List<FoodItemEntity> expected = new ArrayList<>();
+
+        // Nothing was added to the list of modified food-items.
+        verify(mCheckedItems, never()).add(mFoodItem4);
+
+        // The food-item was not added to grocery list
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getGroceryList_isGroceryDay_foodItemInCheckedAndModified() {
+        mFoodItems.add(mFoodItem4);
+        mFoodItems.add(mFoodItem5);
+        mFoodItem4.setCountdownValue(1.0);
+        mFoodItem5.setCountdownValue(1.0);
+
+        mGroceryListManager = new GroceryListManager(mMockSharedPrefsHelper);
+        List<FoodItemEntity> actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+        List<FoodItemEntity> expected = new ArrayList<>();
+
+        // Nothing was added to the list of modified food-items.
+        verify(mCheckedItems, never()).add(mFoodItem4);
+
+        // Nothing was added to the list of modified food-items.
+        verify(mModifiedList, never()).add(mFoodItem3);
+
+        // The food-item was not added to grocery list
+        Assert.assertEquals(expected, actual);
+    }
+
 
     private int getTodayInt() {
         Calendar calendar = Calendar.getInstance();

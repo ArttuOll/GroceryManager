@@ -11,6 +11,7 @@ import java.util.Set;
 public class GroceryListManager {
     private final int mGroceryDaysAWeek;
     private List<FoodItemEntity> mModifiedList;
+    private List<FoodItemEntity> mCheckedItems;
     private SharedPreferencesHelper mSharedPrefsHelper;
     private GroceryDayInspector mInspector;
 
@@ -22,6 +23,7 @@ public class GroceryListManager {
         this.mInspector = new GroceryDayInspector(sharedPreferencesHelper);
 
         this.mModifiedList = mSharedPrefsHelper.getModifiedList();
+        this.mCheckedItems = mSharedPrefsHelper.getCheckedItems();
     }
 
     public List<FoodItemEntity> getGroceryItemsFromFoodItems(List<FoodItemEntity> foodItems) {
@@ -36,7 +38,7 @@ public class GroceryListManager {
                 // If the frequency quotient for a food-item has reached 1, put it to grocery
                 // list. The value can be greater than one if the number of grocery days decreases
                 // while the countdownValue has already been assigned a value.
-                if (countdownValue >= 1) {
+                if (countdownValue >= 1 && !mCheckedItems.contains(foodItem)) {
                     groceryItems.add(foodItem);
 
                     // Reset the food-item frequency quotient.
@@ -54,18 +56,23 @@ public class GroceryListManager {
         return groceryItems;
     }
 
-
-
     public List<FoodItemEntity> getModifiedList() {
         return mModifiedList;
     }
 
-    public void saveUpdateList(List<FoodItemEntity> mModifiedList) {
-        mSharedPrefsHelper.saveModifiedList(mModifiedList);
+    public List<FoodItemEntity> getCheckedItems() {
+        return mCheckedItems;
     }
 
-    public void clearUpdateList() {
+    public void saveBuffers(List<FoodItemEntity> modifiedItems,
+                            List<FoodItemEntity> checkedItems) {
+        mSharedPrefsHelper.saveModifiedList(modifiedItems);
+        mSharedPrefsHelper.saveCheckedItems(checkedItems);
+    }
+
+    public void clearBuffers() {
         mSharedPrefsHelper.clearUpdateList();
+        mSharedPrefsHelper.clearCheckedItems();
     }
 
     private double getFrequencyQuotient(FoodItemEntity foodItem) {

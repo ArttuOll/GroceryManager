@@ -23,6 +23,7 @@ public class SharedPreferencesHelper {
 
     private static final String GROCERY_DAYS_KEY = "grocerydays";
     private static final String MODIFIED_LIST_KEY = "modifiedlist";
+    private static final String CHECKED_ITEMS_KEY = "checkeditems";
 
     private final SharedPreferences mSharedPreferences;
     private final Type listType = new TypeToken<List<FoodItemEntity>>() {
@@ -53,8 +54,23 @@ public class SharedPreferencesHelper {
         editor.apply();
     }
 
+    public void saveCheckedItems(List<FoodItemEntity> checkedItems) {
+        String json = gson.toJson(checkedItems, listType);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(CHECKED_ITEMS_KEY, json);
+        editor.apply();
+    }
+
+    // TODO: muokkaa metodeja yleiskäyttöisemmiksi, esim. saveList(String key) jne...
     public List<FoodItemEntity> getModifiedList() {
         String json = mSharedPreferences.getString(MODIFIED_LIST_KEY, "");
+        if (json.equals("")) { return new ArrayList<>(); } else {
+            return gson.fromJson(json, listType);
+        }
+    }
+
+    public List<FoodItemEntity> getCheckedItems() {
+        String json = mSharedPreferences.getString(CHECKED_ITEMS_KEY, "");
         if (json.equals("")) { return new ArrayList<>(); } else {
             return gson.fromJson(json, listType);
         }
@@ -63,6 +79,12 @@ public class SharedPreferencesHelper {
     public void clearUpdateList() {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.remove(MODIFIED_LIST_KEY);
+        editor.apply();
+    }
+
+    public void clearCheckedItems() {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.remove(CHECKED_ITEMS_KEY);
         editor.apply();
     }
 
