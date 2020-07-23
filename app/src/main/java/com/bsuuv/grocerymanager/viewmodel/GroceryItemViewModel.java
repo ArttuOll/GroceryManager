@@ -9,6 +9,7 @@ import androidx.lifecycle.Transformations;
 import com.bsuuv.grocerymanager.FoodItemRepository;
 import com.bsuuv.grocerymanager.GroceryListManager;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.util.GroceryDayInspector;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 
 import java.util.List;
@@ -18,16 +19,18 @@ public class GroceryItemViewModel extends AndroidViewModel {
     private LiveData<List<FoodItemEntity>> mFoodItems;
     private List<FoodItemEntity> mModifiedList;
     private GroceryListManager mGroceryListManager;
+    private GroceryDayInspector mInspector;
 
     public GroceryItemViewModel(Application application) {
         super(application);
         this.mRepository = new FoodItemRepository(application);
         this.mFoodItems = mRepository.getFoodItems();
         this.mGroceryListManager = new GroceryListManager(new SharedPreferencesHelper(application));
+        this.mInspector = new GroceryDayInspector(application);
 
         this.mModifiedList = mGroceryListManager.getModifiedList();
 
-        if (!mGroceryListManager.isGroceryDay()) updateDatabase();
+        if (!mInspector.isGroceryDay()) updateDatabase();
     }
 
     public LiveData<List<FoodItemEntity>> getGroceryList() {
@@ -41,7 +44,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        if (mGroceryListManager.isGroceryDay()) {
+        if (mInspector.isGroceryDay()) {
             mGroceryListManager.saveUpdateList(mModifiedList);
         }
     }

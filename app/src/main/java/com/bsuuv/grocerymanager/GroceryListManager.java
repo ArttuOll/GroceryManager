@@ -1,31 +1,32 @@
 package com.bsuuv.grocerymanager;
 
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.util.GroceryDayInspector;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 public class GroceryListManager {
-    private final Set<String> mGroceryDays;
     private final int mGroceryDaysAWeek;
     private List<FoodItemEntity> mModifiedList;
     private SharedPreferencesHelper mSharedPrefsHelper;
+    private GroceryDayInspector mInspector;
 
     public GroceryListManager(SharedPreferencesHelper sharedPreferencesHelper) {
         this.mSharedPrefsHelper = sharedPreferencesHelper;
-        this.mGroceryDays = mSharedPrefsHelper.getGroceryDays();
+
+        Set<String> mGroceryDays = mSharedPrefsHelper.getGroceryDays();
         this.mGroceryDaysAWeek = mGroceryDays.size();
+        this.mInspector = new GroceryDayInspector(sharedPreferencesHelper);
 
         this.mModifiedList = mSharedPrefsHelper.getModifiedList();
     }
 
     public List<FoodItemEntity> getGroceryItemsFromFoodItems(List<FoodItemEntity> foodItems) {
         List<FoodItemEntity> groceryItems = new ArrayList<>();
-        if (isGroceryDay()) {
+        if (mInspector.isGroceryDay()) {
             for (FoodItemEntity foodItem : foodItems) {
                 // Each grocery day the countdown value is incremented by the value of frequency
                 // quotient.
@@ -53,18 +54,6 @@ public class GroceryListManager {
         return groceryItems;
     }
 
-    public boolean isGroceryDay() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setFirstDayOfWeek(Calendar.SUNDAY);
-        // When Date-object is instantiated without parameters, it is set to the current day.
-        calendar.setTime(new Date());
-        int today = calendar.get(Calendar.DAY_OF_WEEK);
-
-        for (String groceryDay : mGroceryDays)
-            if (stringWeekDayToInt(groceryDay) == today) return true;
-
-        return false;
-    }
 
 
     public List<FoodItemEntity> getModifiedList() {
@@ -88,25 +77,5 @@ public class GroceryListManager {
                 (foodItem.getTimeFrame() * mGroceryDaysAWeek);
     }
 
-    private int stringWeekDayToInt(String groceryDay) {
-        switch (groceryDay) {
-            case "sunday":
-                return 1;
-            case "monday":
-                return 2;
-            case "tuesday":
-                return 3;
-            case "wednesday":
-                return 4;
-            case "thursday":
-                return 5;
-            case "friday":
-                return 6;
-            case "saturday":
-                return 7;
-            default:
-                return 0;
-        }
-    }
 
 }

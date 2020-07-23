@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter;
+import com.bsuuv.grocerymanager.util.GroceryDayInspector;
+import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import com.bsuuv.grocerymanager.viewmodel.GroceryItemViewModel;
 
 import java.text.DateFormat;
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private GroceryItemViewModel mGroceryViewModel;
+    private int mNumberOfGroceryDays;
+    private GroceryDayInspector mInspector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
         setUpToolbar();
 
         setUpRecyclerView();
+        this.mRecyclerViewPlaceHolder = findViewById(R.id.main_recyclerview_placeholder);
+
+        SharedPreferencesHelper sharedPrefsHelper = new SharedPreferencesHelper(this);
+        this.mNumberOfGroceryDays = sharedPrefsHelper.getGroceryDays().size();
+        this.mInspector = new GroceryDayInspector(this);
 
         this.mGroceryViewModel = new ViewModelProvider(this).get(GroceryItemViewModel.class);
         mGroceryViewModel.getGroceryList().observe(this, groceryListItems -> {
@@ -97,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpRecyclerView() {
         this.mRecyclerView = findViewById(R.id.main_recyclerview);
         this.mLayoutManager = new LinearLayoutManager(this);
-        this.mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
         this.mAdapter = new GroceryListAdapter(this);
         this.mRecyclerView.setAdapter(mAdapter);
