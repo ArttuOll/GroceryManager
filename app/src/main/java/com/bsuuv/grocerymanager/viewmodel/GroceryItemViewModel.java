@@ -9,7 +9,7 @@ import androidx.lifecycle.Transformations;
 import com.bsuuv.grocerymanager.FoodItemRepository;
 import com.bsuuv.grocerymanager.GroceryListManager;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
-import com.bsuuv.grocerymanager.util.GroceryDayInspector;
+import com.bsuuv.grocerymanager.util.DateHelper;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
     private LiveData<List<FoodItemEntity>> mFoodItems;
     private List<FoodItemEntity> mModifiedList;
     private GroceryListManager mGroceryListManager;
-    private GroceryDayInspector mInspector;
+    private DateHelper mInspector;
     private List<FoodItemEntity> mCheckedItems;
 
     public GroceryItemViewModel(Application application) {
@@ -27,7 +27,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
         this.mRepository = new FoodItemRepository(application);
         this.mFoodItems = mRepository.getFoodItems();
         this.mGroceryListManager = new GroceryListManager(new SharedPreferencesHelper(application));
-        this.mInspector = new GroceryDayInspector(application);
+        this.mInspector = new DateHelper(application);
 
         this.mCheckedItems = mGroceryListManager.getCheckedItems();
         this.mModifiedList = mGroceryListManager.getModifiedList();

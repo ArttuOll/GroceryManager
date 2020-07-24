@@ -18,13 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter;
-import com.bsuuv.grocerymanager.util.GroceryDayInspector;
+import com.bsuuv.grocerymanager.util.DateHelper;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import com.bsuuv.grocerymanager.viewmodel.GroceryItemViewModel;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Objects;
 
 /**
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayoutManager mLayoutManager;
     private GroceryItemViewModel mGroceryViewModel;
     private int mNumberOfGroceryDays;
-    private GroceryDayInspector mInspector;
+    private DateHelper mDateHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +46,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setUpToolbar();
 
-        setUpRecyclerView();
+        this.mDateHelper = new DateHelper(this);
         this.mRecyclerViewPlaceHolder = findViewById(R.id.main_recyclerview_placeholder);
 
         SharedPreferencesHelper sharedPrefsHelper = new SharedPreferencesHelper(this);
         this.mNumberOfGroceryDays = sharedPrefsHelper.getGroceryDays().size();
-        this.mInspector = new GroceryDayInspector(this);
 
-        this.mGroceryViewModel = new ViewModelProvider(this).get(GroceryItemViewModel.class);
-        mGroceryViewModel.getGroceryList().observe(this, groceryListItems -> {
-            setRecyclerViewVisibility();
-            mAdapter.setGroceryItems(groceryListItems);
-            mAdapter.notifyDataSetChanged();
-        });
+        setUpRecyclerView();
 
-        // Manages dragging and swiping items in mRecyclerView
+        setUpViewModel();
+
         ItemTouchHelper helper = initializeItemTouchHelper();
         helper.attachToRecyclerView(mRecyclerView);
 
@@ -74,8 +66,50 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        Parcelable state = Objects.requireNonNull(mRecyclerView.getLayoutManager())
+                .onSaveInstanceState();
+        outState.putParcelable(MAIN_RECYCLERVIEW_STATE, state);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_configure:
+                Intent toConfigs = new Intent(this, Configurations.class);
+                this.startActivity(toConfigs);
+
+                return true;
+            case R.id.action_settings:
+                Intent toSettings = new Intent(this, Settings.class);
+                this.startActivity(toSettings);
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setUpViewModel() {
+        this.mGroceryViewModel = new ViewModelProvider(this).get(GroceryItemViewModel.class);
+        mGroceryViewModel.getGroceryList().observe(this, groceryListItems -> {
+            setRecyclerViewVisibility();
+            mAdapter.setGroceryItems(groceryListItems);
+            mAdapter.notifyDataSetChanged();
+        });
+    }
+
     private void setRecyclerViewVisibility() {
-        if (mInspector.isGroceryDay()) {
+        if (mDateHelper.isGroceryDay()) {
             mRecyclerView.setVisibility(View.VISIBLE);
             mRecyclerViewPlaceHolder.setVisibility(View.GONE);
         } else {
@@ -93,39 +127,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        Parcelable state = Objects.requireNonNull(mRecyclerView.getLayoutManager())
-                .onSaveInstanceState();
-        outState.putParcelable(MAIN_RECYCLERVIEW_STATE, state);
-
-        super.onSaveInstanceState(outState);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_configure) {
-            Intent toConfigs = new Intent(this, Configurations.class);
-            this.startActivity(toConfigs);
-
-            return true;
-        } else if (item.getItemId() == R.id.action_settings) {
-            Intent toSettings = new Intent(this, Settings.class);
-            this.startActivity(toSettings);
-
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
     private void setUpRecyclerView() {
         this.mRecyclerView = findViewById(R.id.main_recyclerview);
         this.mLayoutManager = new LinearLayoutManager(this);
@@ -139,12 +140,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(getString(R.string.mainActivity_actionbar_label) + " " + getCurrentDate());
-    }
-
-    private String getCurrentDate() {
-        DateFormat format = SimpleDateFormat.getDateInstance();
-        return format.format(Calendar.getInstance().getTime());
+        setTitle(getString(R.string.mainActivity_actionbar_label) + " " + mDateHelper.getCurrentDate());
     }
 
     private ItemTouchHelper initializeItemTouchHelper() {

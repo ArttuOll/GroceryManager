@@ -2,32 +2,27 @@ package com.bsuuv.grocerymanager.util;
 
 import android.content.Context;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
-public class GroceryDayInspector {
+public class DateHelper {
 
     private Calendar mCalendar;
     private Set<String> mGroceryDays;
 
-    public GroceryDayInspector(Context context) {
+    public DateHelper(Context context) {
         init();
         SharedPreferencesHelper sharedPrefsHelper = new SharedPreferencesHelper(context);
         this.mGroceryDays = sharedPrefsHelper.getGroceryDays();
 
     }
 
-    public GroceryDayInspector(SharedPreferencesHelper sharedPreferencesHelper) {
+    public DateHelper(SharedPreferencesHelper sharedPreferencesHelper) {
         init();
         this.mGroceryDays = sharedPreferencesHelper.getGroceryDays();
-    }
-
-    private void init() {
-        this.mCalendar = Calendar.getInstance();
-        mCalendar.setFirstDayOfWeek(Calendar.SUNDAY);
-        // When Date-object is instantiated without parameters, it is set to the current day.
-        mCalendar.setTime(new Date());
     }
 
     public boolean isGroceryDay() {
@@ -38,6 +33,18 @@ public class GroceryDayInspector {
         }
 
         return false;
+    }
+
+    public String getCurrentDate() {
+        DateFormat format = SimpleDateFormat.getDateInstance();
+        return format.format(Calendar.getInstance().getTime());
+    }
+
+    private void init() {
+        this.mCalendar = Calendar.getInstance();
+        mCalendar.setFirstDayOfWeek(Calendar.SUNDAY);
+        // When Date-object is instantiated without parameters, it is set to the current day.
+        mCalendar.setTime(new Date());
     }
 
     private int stringWeekDayToInt(String groceryDay) {

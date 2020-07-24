@@ -67,9 +67,9 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
      * Contains a single item displayed in MainActivity <code>RecyclerView</code>.
      */
     class GroceryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView foodItemLabel;
-        private final TextView foodItemBrand;
-        private final TextView foodItemAmount;
+        private final TextView mFoodItemLabel;
+        private final TextView mFoodItemBrand;
+        private final TextView mFoodItemAmount;
         final GroceryListAdapter mAdapter;
         private ImageView mFoodImage;
 
@@ -77,9 +77,9 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             super(itemView);
             mFoodImage = itemView.findViewById(R.id.grocerylist_food_image);
             mFoodImage.setClipToOutline(true);
-            foodItemLabel = itemView.findViewById(R.id.grocery_item_label);
-            foodItemBrand = itemView.findViewById(R.id.grocery_item_brand);
-            foodItemAmount = itemView.findViewById(R.id.grocery_item_amount);
+            mFoodItemLabel = itemView.findViewById(R.id.grocery_item_label);
+            mFoodItemBrand = itemView.findViewById(R.id.grocery_item_brand);
+            mFoodItemAmount = itemView.findViewById(R.id.grocery_item_amount);
             this.mAdapter = adapter;
 
             itemView.setOnClickListener(this);
@@ -91,9 +91,9 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
          * @param currentFoodItem The MainActivity RecyclerView item that is to be displayed next.
          */
         void bindTo(FoodItemEntity currentFoodItem) {
-            foodItemLabel.setText(currentFoodItem.getLabel());
-            foodItemBrand.setText(currentFoodItem.getBrand());
-            foodItemAmount.setText(String.format("%s %s", currentFoodItem.getAmount(),
+            mFoodItemLabel.setText(currentFoodItem.getLabel());
+            mFoodItemBrand.setText(currentFoodItem.getBrand());
+            mFoodItemAmount.setText(String.format("%s %s", currentFoodItem.getAmount(),
                     currentFoodItem.getUnit()));
             Glide.with(mContext).load(currentFoodItem.getImageUri()).into(mFoodImage);
         }

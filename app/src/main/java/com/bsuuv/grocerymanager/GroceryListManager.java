@@ -1,7 +1,7 @@
 package com.bsuuv.grocerymanager;
 
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
-import com.bsuuv.grocerymanager.util.GroceryDayInspector;
+import com.bsuuv.grocerymanager.util.DateHelper;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 
 import java.util.ArrayList;
@@ -16,14 +16,14 @@ public class GroceryListManager {
     private List<FoodItemEntity> mModifiedList;
     private List<FoodItemEntity> mCheckedItems;
     private SharedPreferencesHelper mSharedPrefsHelper;
-    private GroceryDayInspector mInspector;
+    private DateHelper mInspector;
 
     public GroceryListManager(SharedPreferencesHelper sharedPreferencesHelper) {
         this.mSharedPrefsHelper = sharedPreferencesHelper;
 
         Set<String> mGroceryDays = mSharedPrefsHelper.getGroceryDays();
         this.mGroceryDaysAWeek = mGroceryDays.size();
-        this.mInspector = new GroceryDayInspector(sharedPreferencesHelper);
+        this.mInspector = new DateHelper(sharedPreferencesHelper);
 
         this.mModifiedList = mSharedPrefsHelper.getList(MODIFIED_LIST_KEY);
         this.mCheckedItems = mSharedPrefsHelper.getList(CHECKED_ITEMS_KEY);
