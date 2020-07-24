@@ -2,29 +2,27 @@ package com.bsuuv.grocerymanager;
 
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.DateHelper;
+import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class GroceryListManager {
 
     public static final String MODIFIED_LIST_KEY = "modifiedlist";
     public static final String CHECKED_ITEMS_KEY = "checkeditems";
 
-    private final int mGroceryDaysAWeek;
     private List<FoodItemEntity> mModifiedList;
     private List<FoodItemEntity> mCheckedItems;
-    private SharedPreferencesHelper mSharedPrefsHelper;
     private DateHelper mInspector;
+    private FrequencyQuotientCalculator mFqCalculator;
+    private SharedPreferencesHelper mSharedPrefsHelper;
 
     public GroceryListManager(SharedPreferencesHelper sharedPreferencesHelper) {
         this.mSharedPrefsHelper = sharedPreferencesHelper;
-
-        Set<String> mGroceryDays = mSharedPrefsHelper.getGroceryDays();
-        this.mGroceryDaysAWeek = mGroceryDays.size();
-        this.mInspector = new DateHelper(sharedPreferencesHelper);
+        this.mInspector = new DateHelper(mSharedPrefsHelper);
+        this.mFqCalculator = new FrequencyQuotientCalculator(mSharedPrefsHelper);
 
         this.mModifiedList = mSharedPrefsHelper.getList(MODIFIED_LIST_KEY);
         this.mCheckedItems = mSharedPrefsHelper.getList(CHECKED_ITEMS_KEY);
@@ -34,6 +32,7 @@ public class GroceryListManager {
         List<FoodItemEntity> groceryItems = new ArrayList<>();
         if (mInspector.isGroceryDay()) {
             for (FoodItemEntity foodItem : foodItems) {
+                double frequencyQuotient = mFqCalculator.getFrequencyQuotient(foodItem);
                 // Each grocery day the countdown value is incremented by the value of frequency
                 // quotient.
                 // When it reaches 1, it's time for the item to appear in the grocery list.
@@ -48,7 +47,6 @@ public class GroceryListManager {
 
                     foodItem.setCountdownValue(0);
                 } else {
-                    double frequencyQuotient = getFrequencyQuotient(foodItem);
 
                     // Increment the food-item countdown value by adding to
                     // it the original value.
@@ -79,12 +77,4 @@ public class GroceryListManager {
         mSharedPrefsHelper.clearList(CHECKED_ITEMS_KEY);
     }
 
-    private double getFrequencyQuotient(FoodItemEntity foodItem) {
-        // A double representing the frequency in which a food-item should appear in
-        // grocery list. If there's one grocery day a week and a food-item is to be had
-        // once every two weeks, then the frequency quotient is
-        // 1 per week / (1 grocery day * 2 weeks) = 1/2.
-        return ((double) foodItem.getFrequency()) /
-                (foodItem.getTimeFrame() * mGroceryDaysAWeek);
-    }
 }

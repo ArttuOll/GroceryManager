@@ -21,6 +21,7 @@ import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
 
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.snackbar.Snackbar;
@@ -37,8 +38,8 @@ import java.util.HashSet;
  */
 public class NewFoodItem extends AppCompatActivity implements View.OnClickListener {
 
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final String GROCERY_DAYS_KEY = "grocerydays";
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private MaterialButtonToggleGroup mToggleGroup;
     private EditText mLabelEditText;
@@ -52,6 +53,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     private SharedPreferences mSharedPrefs;
     private int mId;
     private double mCountdownValue;
+    private FrequencyQuotientCalculator mFqCalc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         this.mFrequencyEditText = findViewById(R.id.editText_freq);
         this.mFoodImageView = findViewById(R.id.imageView_new_fooditem);
 
+        this.mFqCalc = new FrequencyQuotientCalculator(this);
         this.mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         this.mUnitDropdown = findViewById(R.id.new_fooditem_unit_dropdown);
@@ -118,8 +121,8 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         int frequency = Integer.parseInt(mFrequencyEditText.getText().toString());
         int groceryDaysAWeek = mSharedPrefs.getStringSet(GROCERY_DAYS_KEY, new HashSet<>()).size();
 
-        double frequencyQuotient = (double) frequency /
-                ((double) timeFrame * (double) groceryDaysAWeek);
+        double frequencyQuotient = mFqCalc.getFrequencyQuotient(frequency, timeFrame,
+                groceryDaysAWeek);
 
         if (constraintsFulfilled(groceryDaysAWeek, label, frequencyQuotient)) {
             Intent toConfigs = createIntentToConfigs(label, brand, amount, unit, info, timeFrame,
