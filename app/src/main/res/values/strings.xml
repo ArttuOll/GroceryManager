@@ -48,6 +48,7 @@
 
     <string name="imageview_grocerylist_content_description">Grocery Item</string>
     <string name="fooditem_detail_more_info">Info:</string>
+    <string name="hint_freq_input">frequency_input</string>
 
 
     <!-- Plurals -->
