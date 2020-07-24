@@ -44,13 +44,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setUpToolbar();
 
         this.mDateHelper = new DateHelper(this);
         this.mRecyclerViewPlaceHolder = findViewById(R.id.main_recyclerview_placeholder);
 
         SharedPreferencesHelper sharedPrefsHelper = new SharedPreferencesHelper(this);
         this.mNumberOfGroceryDays = sharedPrefsHelper.getGroceryDays().size();
+
+        setUpToolbar();
 
         setUpRecyclerView();
 

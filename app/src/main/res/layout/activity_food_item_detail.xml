@@ -28,7 +28,7 @@
             android:layout_gravity="bottom"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="4dp"
-            android:text="Placeholder" />
+            />
 
     </FrameLayout>
 
@@ -44,15 +44,13 @@
             style="@style/TextImageViewSubLabels"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/textview_amount"
             style="@style/TextImageViewSubLabels"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -70,7 +68,6 @@
         style="@style/TextBody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/layout_horizontal_margins"
-        android:text="@string/textview_info_placeholder" />
+        android:layout_marginHorizontal="@dimen/layout_horizontal_margins" />
 
 </LinearLayout>

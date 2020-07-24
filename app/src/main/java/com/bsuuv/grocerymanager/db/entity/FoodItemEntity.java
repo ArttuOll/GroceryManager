@@ -127,6 +127,7 @@ public class FoodItemEntity implements FoodItem {
         return mUnit;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

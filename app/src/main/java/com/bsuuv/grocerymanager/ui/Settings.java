@@ -49,6 +49,7 @@ public class Settings extends AppCompatActivity {
             for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++) {
                 Preference preference = getPreferenceScreen().getPreference(i);
 
+                //Preference group is base class for parent preference classes
                 if (preference instanceof PreferenceGroup) {
                     PreferenceGroup preferenceGroup = (PreferenceGroup) preference;
 

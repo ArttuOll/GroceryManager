@@ -12,6 +12,7 @@ public class GroceryListManager {
 
     public static final String MODIFIED_LIST_KEY = "modifiedlist";
     public static final String CHECKED_ITEMS_KEY = "checkeditems";
+
     private final int mGroceryDaysAWeek;
     private List<FoodItemEntity> mModifiedList;
     private List<FoodItemEntity> mCheckedItems;
@@ -38,13 +39,13 @@ public class GroceryListManager {
                 // When it reaches 1, it's time for the item to appear in the grocery list.
                 double countdownValue = foodItem.getCountdownValue();
 
-                // If the frequency quotient for a food-item has reached 1, put it to grocery
-                // list. The value can be greater than one if the number of grocery days decreases
-                // while the countdownValue has already been assigned a value.
+                // If the countdown value for a food-item has reached 1 and the user hasn't
+                // removed it from RecyclerView in MainActivity, put it to grocery list.
+                // The value can be greater than one if the number of grocery days decreases while
+                // the countdownValue has already been assigned a value.
                 if (countdownValue >= 1 && !mCheckedItems.contains(foodItem)) {
                     groceryItems.add(foodItem);
 
-                    // Reset the food-item frequency quotient.
                     foodItem.setCountdownValue(0);
                 } else {
                     double frequencyQuotient = getFrequencyQuotient(foodItem);
@@ -86,6 +87,4 @@ public class GroceryListManager {
         return ((double) foodItem.getFrequency()) /
                 (foodItem.getTimeFrame() * mGroceryDaysAWeek);
     }
-
-
 }
