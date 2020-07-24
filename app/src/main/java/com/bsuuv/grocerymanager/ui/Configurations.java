@@ -94,7 +94,7 @@ public class Configurations extends AppCompatActivity {
         double countdownValue = fromNewFoodItem.getDoubleExtra("countdownValue", 0);
 
         return new FoodItemEntity(id, Objects.requireNonNull(label), brand, info, amount, unit,
-                timeFrame, frequency, countdownValue, imageUri);
+                timeFrame, frequency, imageUri, countdownValue);
     }
 
     private FoodItemEntity createFoodItemFromIntent(Intent fromNewFoodItem) {
@@ -106,9 +106,10 @@ public class Configurations extends AppCompatActivity {
         int timeFrame = fromNewFoodItem.getIntExtra("time_frame", 0);
         int frequency = fromNewFoodItem.getIntExtra("frequency", 0);
         String imageUri = fromNewFoodItem.getStringExtra("uri");
+        double initCountdownValue = fromNewFoodItem.getDoubleExtra("frequencyQuotient", 0.0);
 
         return new FoodItemEntity(Objects.requireNonNull(label), brand, info, amount, unit,
-                timeFrame, frequency, imageUri);
+                timeFrame, frequency, imageUri, initCountdownValue);
     }
 
     private void setUpRecyclerView() {

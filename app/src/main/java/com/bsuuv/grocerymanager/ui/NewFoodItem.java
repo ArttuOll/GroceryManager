@@ -126,7 +126,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
 
         if (constraintsFulfilled(groceryDaysAWeek, label, frequencyQuotient)) {
             Intent toConfigs = createIntentToConfigs(label, brand, amount, unit, info, timeFrame,
-                    frequency, mPhotoPath);
+                    frequency, mPhotoPath, frequencyQuotient);
 
             setResult(RESULT_OK, toConfigs);
             finish();
@@ -178,7 +178,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
 
     private Intent createIntentToConfigs(String label, String brand, int amount, String unit,
                                          String info, int timeFrame, int frequency,
-                                         String mPhotoPath) {
+                                         String mPhotoPath, double frequencyQuotient) {
         Intent toConfigs = new Intent(this, Configurations.class);
         toConfigs.putExtra("label", label);
         toConfigs.putExtra("brand", brand);
@@ -190,6 +190,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         toConfigs.putExtra("uri", mPhotoPath);
         toConfigs.putExtra("id", mId);
         toConfigs.putExtra("countdownValue", mCountdownValue);
+        toConfigs.putExtra("frequencyQuotient", frequencyQuotient);
 
         return toConfigs;
     }

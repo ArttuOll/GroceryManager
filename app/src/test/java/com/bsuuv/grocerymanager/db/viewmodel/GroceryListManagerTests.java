@@ -59,15 +59,15 @@ public class GroceryListManagerTests {
 
         this.mFoodItems = new ArrayList<>();
         this.mFoodItem1 = new FoodItemEntity("Kalja", "Karjala", "Raikasta",
-                2, "Packets", 1, 1, "");
+                2, "Packets", 2, 1, "", 0.0);
         this.mFoodItem2 = new FoodItemEntity("Makkara", "Atria", "Lihaisaa",
-                3, "Bags", 2, 2, "");
+                3, "Bags", 3, 1, "", 0.0);
         this.mModifiedFoodItem = new FoodItemEntity("Parsakaali", "", "Tylsää",
-                5, "Bags", 1, 1, "");
+                5, "Bags", 1, 1, "", 0.0);
         this.mCheckedFoodItem = new FoodItemEntity("Kanaa", "Saarioinen", "Tylsää",
-                5, "Bags", 1, 1, "");
+                5, "Bags", 1, 1, "", 0.0);
         this.mModifiedCheckedFoodItem = new FoodItemEntity("Voi", "Valio", "Tylsää",
-                5, "Bags", 1, 1, "");
+                5, "Bags", 1, 1, "", 0.0);
 
 
         when(mMockSharedPrefsHelper.getGroceryDays()).thenReturn(mGroceryDays);
@@ -89,6 +89,11 @@ public class GroceryListManagerTests {
     public void clean() {
         mGroceryDays.clear();
         mFoodItems.clear();
+        mFoodItem1.setCountdownValue(0.0);
+        mFoodItem2.setCountdownValue(0.0);
+        mModifiedFoodItem.setCountdownValue(0.0);
+        mCheckedFoodItem.setCountdownValue(0.0);
+        mModifiedCheckedFoodItem.setCountdownValue(0.0);
     }
 
     @Test
@@ -110,10 +115,10 @@ public class GroceryListManagerTests {
 
     @Test
     public void getGroceryList_isGroceryDay_countdownValueOne() {
-        mFoodItems.add(mFoodItem1);
         mFoodItem1.setCountdownValue(1.0);
-        mFoodItems.add(mFoodItem2);
+        mFoodItems.add(mFoodItem1);
         mFoodItem2.setCountdownValue(1.0);
+        mFoodItems.add(mFoodItem2);
 
         mGroceryListManager = new GroceryListManager(mMockSharedPrefsHelper);
         List<FoodItemEntity> actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
@@ -151,8 +156,8 @@ public class GroceryListManagerTests {
 
     @Test
     public void getGroceryList_isGroceryDay_notAddedIfInModifiedList() {
-        mFoodItems.add(mModifiedFoodItem);
         mModifiedFoodItem.setCountdownValue(1.0);
+        mFoodItems.add(mModifiedFoodItem);
 
         mGroceryListManager = new GroceryListManager(mMockSharedPrefsHelper);
         List<FoodItemEntity> actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
@@ -184,10 +189,10 @@ public class GroceryListManagerTests {
 
     @Test
     public void getGroceryList_isGroceryDay_foodItemInCheckedAndModified() {
-        mFoodItems.add(mCheckedFoodItem);
-        mFoodItems.add(mModifiedCheckedFoodItem);
         mCheckedFoodItem.setCountdownValue(1.0);
         mModifiedCheckedFoodItem.setCountdownValue(1.0);
+        mFoodItems.add(mCheckedFoodItem);
+        mFoodItems.add(mModifiedCheckedFoodItem);
 
         mGroceryListManager = new GroceryListManager(mMockSharedPrefsHelper);
         List<FoodItemEntity> actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
@@ -201,6 +206,35 @@ public class GroceryListManagerTests {
 
         // The food-item was not added to grocery list
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getGroceryList_itemsAppearInCorrectFrequencies() {
+        mFoodItem1.setCountdownValue(0.5);
+        mFoodItem2.setCountdownValue(0.33);
+        mFoodItems.add(mFoodItem1);
+        mFoodItems.add(mFoodItem2);
+
+        mGroceryListManager = new GroceryListManager(mMockSharedPrefsHelper);
+        List<FoodItemEntity> actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+
+        // Neither should appear since countdown values are not one
+        Assert.assertTrue(!actual.contains(mFoodItem1) && !actual.contains(mFoodItem2));
+
+        actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+
+        // mFoodItem1 countdown value should be incremented to one
+        Assert.assertTrue(actual.contains(mFoodItem1) && !actual.contains(mFoodItem2));
+
+        actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+
+        // mFoodItem1 countdown value should be reset and mFoodItem2 should be 1
+        Assert.assertTrue(!actual.contains(mFoodItem1) && actual.contains(mFoodItem2));
+
+        actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+
+        // mFoodItem1 should reappear and mFoodItem2 should be reset
+        Assert.assertTrue(actual.contains(mFoodItem1) && !actual.contains(mFoodItem2));
     }
 
 

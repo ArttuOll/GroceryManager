@@ -52,8 +52,8 @@ public class FoodItemEntity implements FoodItem {
 
     @Ignore
     public FoodItemEntity(int id, @NotNull String label, String brand, String info, int amount,
-                          String unit, int timeFrame, int frequency, double countdownValue,
-                          String mImageUri) {
+                          String unit, int timeFrame, int frequency, String mImageUri,
+                          double countdownValue) {
         this.mId = id;
         this.mLabel = label;
         this.mBrand = brand;
@@ -67,7 +67,7 @@ public class FoodItemEntity implements FoodItem {
     }
 
     public FoodItemEntity(@NotNull String label, String brand, String info, int amount, String unit,
-                          int timeFrame, int frequency, String mImageUri) {
+                          int timeFrame, int frequency, String mImageUri, double countdownValue) {
         this.mLabel = label;
         this.mBrand = brand;
         this.mInfo = info;
@@ -76,7 +76,7 @@ public class FoodItemEntity implements FoodItem {
         this.mTimeFrame = timeFrame;
         this.mFrequency = frequency;
         this.mImageUri = mImageUri;
-        this.mCountdownValue = 0;
+        this.mCountdownValue = countdownValue;
     }
 
     public double getCountdownValue() {
@@ -126,7 +126,6 @@ public class FoodItemEntity implements FoodItem {
     public String getUnit() {
         return mUnit;
     }
-
 
     @Override
     public boolean equals(Object o) {

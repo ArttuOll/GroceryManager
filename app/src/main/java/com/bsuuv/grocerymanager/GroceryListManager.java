@@ -45,7 +45,7 @@ public class GroceryListManager {
                 if (countdownValue >= 1 && !mCheckedItems.contains(foodItem)) {
                     groceryItems.add(foodItem);
 
-                    foodItem.setCountdownValue(0);
+                    foodItem.setCountdownValue(frequencyQuotient);
                 } else {
 
                     // Increment the food-item countdown value by adding to
