@@ -22,8 +22,6 @@ import java.util.Set;
 public class SharedPreferencesHelper {
 
     private static final String GROCERY_DAYS_KEY = "grocerydays";
-    private static final String MODIFIED_LIST_KEY = "modifiedlist";
-    private static final String CHECKED_ITEMS_KEY = "checkeditems";
 
     private final SharedPreferences mSharedPreferences;
     private final Type listType = new TypeToken<List<FoodItemEntity>>() {
@@ -37,6 +35,7 @@ public class SharedPreferencesHelper {
         this.gson = builder.create();
     }
 
+
     /**
      * Returns a list of grocery days selected by the user in Settings.
      *
@@ -47,44 +46,23 @@ public class SharedPreferencesHelper {
         return mSharedPreferences.getStringSet(GROCERY_DAYS_KEY, new HashSet<>());
     }
 
-    public void saveModifiedList(List<FoodItemEntity> updateList) {
-        String json = gson.toJson(updateList, listType);
+    public void saveList(List<FoodItemEntity> foodItems, String key) {
+        String json = gson.toJson(foodItems, listType);
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(MODIFIED_LIST_KEY, json);
+        editor.putString(key, json);
         editor.apply();
     }
 
-    public void saveCheckedItems(List<FoodItemEntity> checkedItems) {
-        String json = gson.toJson(checkedItems, listType);
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(CHECKED_ITEMS_KEY, json);
-        editor.apply();
-    }
-
-    // TODO: muokkaa metodeja yleiskäyttöisemmiksi, esim. saveList(String key) jne...
-    public List<FoodItemEntity> getModifiedList() {
-        String json = mSharedPreferences.getString(MODIFIED_LIST_KEY, "");
+    public List<FoodItemEntity> getList(String key) {
+        String json = mSharedPreferences.getString(key, "");
         if (json.equals("")) { return new ArrayList<>(); } else {
             return gson.fromJson(json, listType);
         }
     }
 
-    public List<FoodItemEntity> getCheckedItems() {
-        String json = mSharedPreferences.getString(CHECKED_ITEMS_KEY, "");
-        if (json.equals("")) { return new ArrayList<>(); } else {
-            return gson.fromJson(json, listType);
-        }
-    }
-
-    public void clearUpdateList() {
+    public void clearList(String key) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.remove(MODIFIED_LIST_KEY);
-        editor.apply();
-    }
-
-    public void clearCheckedItems() {
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.remove(CHECKED_ITEMS_KEY);
+        editor.remove(key);
         editor.apply();
     }
 

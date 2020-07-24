@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Set;
 
 public class GroceryListManager {
+
+    public static final String MODIFIED_LIST_KEY = "modifiedlist";
+    public static final String CHECKED_ITEMS_KEY = "checkeditems";
     private final int mGroceryDaysAWeek;
     private List<FoodItemEntity> mModifiedList;
     private List<FoodItemEntity> mCheckedItems;
@@ -22,8 +25,8 @@ public class GroceryListManager {
         this.mGroceryDaysAWeek = mGroceryDays.size();
         this.mInspector = new GroceryDayInspector(sharedPreferencesHelper);
 
-        this.mModifiedList = mSharedPrefsHelper.getModifiedList();
-        this.mCheckedItems = mSharedPrefsHelper.getCheckedItems();
+        this.mModifiedList = mSharedPrefsHelper.getList(MODIFIED_LIST_KEY);
+        this.mCheckedItems = mSharedPrefsHelper.getList(CHECKED_ITEMS_KEY);
     }
 
     public List<FoodItemEntity> getGroceryItemsFromFoodItems(List<FoodItemEntity> foodItems) {
@@ -66,13 +69,13 @@ public class GroceryListManager {
 
     public void saveBuffers(List<FoodItemEntity> modifiedItems,
                             List<FoodItemEntity> checkedItems) {
-        mSharedPrefsHelper.saveModifiedList(modifiedItems);
-        mSharedPrefsHelper.saveCheckedItems(checkedItems);
+        mSharedPrefsHelper.saveList(modifiedItems, MODIFIED_LIST_KEY);
+        mSharedPrefsHelper.saveList(checkedItems, CHECKED_ITEMS_KEY);
     }
 
     public void clearBuffers() {
-        mSharedPrefsHelper.clearUpdateList();
-        mSharedPrefsHelper.clearCheckedItems();
+        mSharedPrefsHelper.clearList(MODIFIED_LIST_KEY);
+        mSharedPrefsHelper.clearList(CHECKED_ITEMS_KEY);
     }
 
     private double getFrequencyQuotient(FoodItemEntity foodItem) {
