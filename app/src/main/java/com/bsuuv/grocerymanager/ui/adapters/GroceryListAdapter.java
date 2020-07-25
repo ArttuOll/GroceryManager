@@ -1,7 +1,10 @@
 package com.bsuuv.grocerymanager.ui.adapters;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.FoodItemDetail;
+import com.bsuuv.grocerymanager.util.PluralsProvider;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -71,6 +75,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
         private final TextView mFoodItemBrand;
         private final TextView mFoodItemAmount;
         final GroceryListAdapter mAdapter;
+        private final PluralsProvider mPluralsProvider;
         private ImageView mFoodImage;
 
         GroceryViewHolder(View itemView, GroceryListAdapter adapter) {
@@ -81,6 +86,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             mFoodItemBrand = itemView.findViewById(R.id.grocery_item_brand);
             mFoodItemAmount = itemView.findViewById(R.id.grocery_item_amount);
             this.mAdapter = adapter;
+            this.mPluralsProvider = new PluralsProvider(mContext);
 
             itemView.setOnClickListener(this);
         }
@@ -93,7 +99,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
         void bindTo(FoodItemEntity currentFoodItem) {
             mFoodItemLabel.setText(currentFoodItem.getLabel());
             mFoodItemBrand.setText(currentFoodItem.getBrand());
-            mFoodItemAmount.setText(String.format("%s %s", currentFoodItem.getAmount(),
+            mFoodItemAmount.setText(mPluralsProvider.getAmountString(currentFoodItem.getAmount(),
                     currentFoodItem.getUnit()));
             Glide.with(mContext).load(currentFoodItem.getImageUri()).into(mFoodImage);
         }

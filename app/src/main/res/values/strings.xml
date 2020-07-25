@@ -67,4 +67,29 @@
         <item quantity="other">%1$d times in a month</item>
     </plurals>
 
+    <plurals name="Pieces">
+        <item quantity="one">%1$d piece</item>
+        <item quantity="other">%1$d pieces</item>
+    </plurals>
+
+    <plurals name="Packets">
+        <item quantity="one">%1$d packet</item>
+        <item quantity="other">%1$d packets</item>
+    </plurals>
+
+    <plurals name="Cans">
+        <item quantity="one">%1$d can</item>
+        <item quantity="other">%1$d cans</item>
+    </plurals>
+
+    <plurals name="Bags">
+        <item quantity="one">%1$d bag</item>
+        <item quantity="other">%1$d bags</item>
+    </plurals>
+
+    <plurals name="Bottles">
+        <item quantity="one">%1$d bottle</item>
+        <item quantity="other">%1$d bottles</item>
+    </plurals>
+
 </resources>

@@ -31,5 +31,6 @@
         <item>Packets</item>
         <item>Cans</item>
         <item>Bags</item>
+        <item>Bottles</item>
     </string-array>
 </resources>

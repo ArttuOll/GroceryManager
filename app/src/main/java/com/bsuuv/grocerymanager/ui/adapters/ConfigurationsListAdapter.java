@@ -1,8 +1,10 @@
 package com.bsuuv.grocerymanager.ui.adapters;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.Configurations;
 import com.bsuuv.grocerymanager.ui.NewFoodItem;
+import com.bsuuv.grocerymanager.util.PluralsProvider;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -76,7 +79,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
         private final TextView mFoodItemAmount;
         private final TextView mSchedule;
         private final ImageView mFoodImage;
-
+        private final PluralsProvider mPluralsProvider;
 
         ConfigsViewHolder(View itemView, ConfigurationsListAdapter adapter) {
             super(itemView);
@@ -88,6 +91,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
             mFoodItemAmount = itemView.findViewById(R.id.config_item_amount);
             mSchedule = itemView.findViewById(R.id.config_item_schedule);
             this.mAdapter = adapter;
+            this.mPluralsProvider = new PluralsProvider(mContext);
 
             itemView.setOnClickListener(this);
         }
@@ -100,9 +104,9 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
         void bindTo(FoodItemEntity currentFoodItem) {
             mFoodItemLabel.setText(currentFoodItem.getLabel());
             mFoodItemBrand.setText(currentFoodItem.getBrand());
-            mFoodItemAmount.setText(String.format("%s %s", currentFoodItem.getAmount(),
+            mFoodItemAmount.setText(mPluralsProvider.getAmountString(currentFoodItem.getAmount(),
                     currentFoodItem.getUnit()));
-            mSchedule.setText(getScheduleString(currentFoodItem.getFrequency(),
+            mSchedule.setText(mPluralsProvider.getScheduleString(currentFoodItem.getFrequency(),
                     currentFoodItem.getTimeFrame()));
             Glide.with(mContext).load(new File(String.valueOf(currentFoodItem.getImageUri())))
                     .into(mFoodImage);
@@ -131,22 +135,6 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
             Activity configurations = (Activity) mContext;
             configurations.startActivityForResult(toNewFoodItem,
                     Configurations.FOOD_ITEM_EDIT_REQUEST);
-        }
-
-        private String getScheduleString(int frequency, int timeFrame) {
-            switch (timeFrame) {
-                case 1:
-                    return mContext.getResources().getQuantityString(
-                            R.plurals.times_a_week, frequency, frequency);
-                case 2:
-                    return mContext.getResources().getQuantityString(
-                            R.plurals.times_in_two_weeks, frequency, frequency);
-                case 4:
-                    return mContext.getResources().getQuantityString(
-                            R.plurals.times_in_a_month, frequency, frequency);
-                default:
-                    return "";
-            }
         }
     }
 }
