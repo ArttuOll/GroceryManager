@@ -10,6 +10,7 @@
         style="@style/listitem_imageviews"
         android:layout_margin="16dp"
         android:contentDescription="@string/imageview_grocerylist_content_description"
+        android:transitionName="@string/transition_detail"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

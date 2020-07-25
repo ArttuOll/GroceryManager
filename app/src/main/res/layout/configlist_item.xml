@@ -11,6 +11,7 @@
         android:id="@+id/configlist_food_image"
         style="@style/listitem_imageviews"
         android:layout_marginHorizontal="16dp"
+        android:transitionName="@string/transition_detail"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/food_image_content_description" />
 

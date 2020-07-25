@@ -132,9 +132,12 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
                     currentFoodItem.getImageUri() : "";
             toNewFoodItem.putExtra("uri", uri);
 
+            Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext,
+                    mFoodImage, mFoodImage.getTransitionName()).toBundle();
+
             Activity configurations = (Activity) mContext;
             configurations.startActivityForResult(toNewFoodItem,
-                    Configurations.FOOD_ITEM_EDIT_REQUEST);
+                    Configurations.FOOD_ITEM_EDIT_REQUEST, bundle);
         }
     }
 }

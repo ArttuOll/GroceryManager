@@ -115,7 +115,9 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             foodItemDetail.putExtra("info", currentFoodItem.getInfo());
             foodItemDetail.putExtra("amount", currentFoodItem.getAmount());
             foodItemDetail.putExtra("unit", currentFoodItem.getUnit());
-            mContext.startActivity(foodItemDetail);
+            Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext,
+                    mFoodImage, mFoodImage.getTransitionName()).toBundle();
+            mContext.startActivity(foodItemDetail, bundle);
         }
     }
 }

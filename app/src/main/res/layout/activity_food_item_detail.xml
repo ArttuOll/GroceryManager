@@ -13,6 +13,7 @@
         <ImageView
             android:id="@+id/imageView_detail"
             style="@style/activity_imageviews"
+            android:transitionName="@string/transition_detail"
             android:contentDescription="@string/food_image_content_description" />
 
         <View
