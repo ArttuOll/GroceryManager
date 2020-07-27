@@ -118,13 +118,13 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         String unit = mUnitDropdown.getText().toString();
         String info = mInfoEditText.getText().toString();
         int timeFrame = getActiveToggleButton();
-        int frequency = Integer.parseInt(mFrequencyEditText.getText().toString());
+        int frequency = parseFrequency(mFrequencyEditText.getText().toString());
         int groceryDaysAWeek = mSharedPrefs.getStringSet(GROCERY_DAYS_KEY, new HashSet<>()).size();
 
         double frequencyQuotient = mFqCalc.getFrequencyQuotient(frequency, timeFrame,
                 groceryDaysAWeek);
 
-        if (constraintsFulfilled(groceryDaysAWeek, label, frequencyQuotient)) {
+        if (constraintsFulfilled(groceryDaysAWeek, label, timeFrame, frequency)) {
             Intent toConfigs = createIntentToConfigs(label, brand, amount, unit, info, timeFrame,
                     frequency, mPhotoPath, frequencyQuotient);
 
@@ -132,6 +132,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
             finish();
         }
     }
+
 
     /**
      * Called when the camera icon is clicked. Launches an implicit intent to a camera app for
@@ -196,22 +197,39 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     }
 
     private boolean constraintsFulfilled(int groceryDaysAWeek, String label,
-                                         double frequencyQuotient) {
+                                         int timeFrame, int frequency) {
+
+        double frequencyQuotient = mFqCalc.getFrequencyQuotient(frequency, timeFrame,
+                groceryDaysAWeek);
+
         if (groceryDaysAWeek == 0) {
             Snackbar.make(findViewById(R.id.fab_new_fooditem), R.string.snackbar_no_grocery_days,
                     Snackbar.LENGTH_LONG)
                     .setAnchorView(R.id.fab_new_fooditem).show();
             return false;
+
         } else if (label.isEmpty()) {
             Snackbar.make(findViewById(R.id.fab_new_fooditem), getString(R.string.label_empty),
                     Snackbar.LENGTH_LONG).setAnchorView(R.id.fab_new_fooditem).show();
             return false;
+
+        } else if (timeFrame == -1) {
+            Snackbar.make(findViewById(R.id.fab_new_fooditem), R.string.timeframe_not_chosen,
+                    Snackbar.LENGTH_LONG).setAnchorView(R.id.fab_new_fooditem).show();
+            return false;
+
+        } else if (frequency == 0) {
+            Snackbar.make(findViewById(R.id.fab_new_fooditem), R.string.frequency_not_set,
+                    Snackbar.LENGTH_LONG).setAnchorView(R.id.fab_new_fooditem).show();
+            return false;
+
         } else if (frequencyQuotient > 1.0) {
             Snackbar.make(findViewById(R.id.fab_new_fooditem),
                     R.string.snackbar_not_enough_grocery_days,
                     Snackbar.LENGTH_LONG)
                     .setAnchorView(R.id.fab_new_fooditem).show();
             return false;
+
         } else {
             return true;
         }
@@ -293,6 +311,14 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         mPhotoPath = Uri.parse(image.toURI().getPath()).getPath();
 
         return image;
+    }
+
+    private int parseFrequency(String frequencyString) {
+        if (!frequencyString.equals("")) {
+            return Integer.parseInt(frequencyString);
+        }
+
+        return 0;
     }
 
     private interface TimeFrame {

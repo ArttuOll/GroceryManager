@@ -9,7 +9,7 @@
     <string name="hint_item_label">Ruoan nimi</string>
     <string name="hint_brand">Merkki</string>
     <string name="hint_amount">Määrä</string>
-    <string name="textview_frequency_1">Toistuminen</string>
+    <string name="textview_frequency_1">Esiintymistiheys:</string>
     <string name="textview_frequency_2">kertaa</string>
     <string name="button_week">vk:ssa</string>
     <string name="button_twoweeks">kahdessa vk:ssa</string>
@@ -33,4 +33,6 @@
     <string name="fooditem_detail_more_info">Lisätietoja:</string>
     <string name="hint_freq_input">esiintymistiheyden syöttö</string>
     <string name="transition_detail">lisätietonäkymän siirtymäanimaatio</string>
+    <string name="timeframe_not_chosen">Aikaväliä ei valittuna!</string>
+    <string name="frequency_not_set">Esiintymistiheys ei voi olla nolla!</string>
 </resources>

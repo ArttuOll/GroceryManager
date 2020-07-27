@@ -49,5 +49,7 @@
     <string name="fooditem_detail_more_info">Info:</string>
     <string name="hint_freq_input">frequency input</string>
     <string name="transition_detail">transition detail</string>
+    <string name="timeframe_not_chosen">You must select a time frame!</string>
+    <string name="frequency_not_set">Frequency can\'t be zero!</string>
 
 </resources>
