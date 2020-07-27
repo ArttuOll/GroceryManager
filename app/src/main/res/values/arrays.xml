@@ -25,7 +25,18 @@
 
     </string-array>
 
-    <!-- NewFoodItem Unit Dropdown Menu -->
+    <!-- DateHelper -->
+    <string-array name="daysofweek_datehelper">
+        <item>sunday</item>
+        <item>monday</item>
+        <item>tuesday</item>
+        <item>wednesday</item>
+        <item>thursday</item>
+        <item>friday</item>
+        <item>saturday</item>
+    </string-array>
+
+    <!-- NewFoodItem Unit Dropdown Menu & PluralsProvider-->
     <string-array name="units_plural">
         <item>Pieces</item>
         <item>Packets</item>

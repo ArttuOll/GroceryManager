@@ -29,21 +29,22 @@ public class PluralsProvider {
     }
 
     public String getAmountString(int amount, String unit) {
-        switch (unit) {
-            case "Pieces":
-                return mContext.getResources().getQuantityString(R.plurals.Pieces, amount,
-                        amount);
-            case "Packets":
-                return mContext.getResources().getQuantityString(R.plurals.Packets, amount,
-                        amount);
-            case "Cans":
-                return mContext.getResources().getQuantityString(R.plurals.Cans, amount,
-                        amount);
-            case "Bags":
-                return mContext.getResources().getQuantityString(R.plurals.Bags, amount,
-                        amount);
-            default:
-                return "";
+        String[] units = mContext.getResources().getStringArray(R.array.units_plural);
+
+        if (units[0].equals(unit)) {
+            return mContext.getResources().getQuantityString(R.plurals.Pieces, amount,
+                    amount);
+        } else if (units[1].equals(unit)) {
+            return mContext.getResources().getQuantityString(R.plurals.Packets, amount,
+                    amount);
+        } else if (units[2].equals(unit)) {
+            return mContext.getResources().getQuantityString(R.plurals.Cans, amount,
+                    amount);
+        } else if (units[3].equals(unit)) {
+            return mContext.getResources().getQuantityString(R.plurals.Bags, amount,
+                    amount);
         }
+
+        return "";
     }
 }
