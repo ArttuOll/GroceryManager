@@ -38,8 +38,8 @@ public class FoodItemRepository {
         new UpdateAsyncTask(mFoodItemDao).execute(foodItem);
     }
 
-    public void deleteAll(FoodItemEntity foodItem) {
-        new DeleteAllAsyncTask(mFoodItemDao).execute(foodItem);
+    public void deleteAll() {
+        new DeleteAllAsyncTask(mFoodItemDao).execute();
     }
 
     private static class InsertAsyncTask extends AsyncTask<FoodItemEntity, Void, Void> {

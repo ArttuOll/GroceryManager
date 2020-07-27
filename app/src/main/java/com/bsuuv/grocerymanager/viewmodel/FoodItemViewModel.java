@@ -28,8 +28,8 @@ public class FoodItemViewModel extends AndroidViewModel {
       mRepository.delete(foodItem);
    }
 
-   public void deleteAll(FoodItemEntity foodItem) {
-      mRepository.deleteAll(foodItem);
+   public void deleteAll() {
+      mRepository.deleteAll();
    }
 
    public void update(FoodItemEntity foodItem) {
