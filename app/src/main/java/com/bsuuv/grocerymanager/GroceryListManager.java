@@ -1,5 +1,7 @@
 package com.bsuuv.grocerymanager;
 
+import android.content.Context;
+
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.DateHelper;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
@@ -19,9 +21,9 @@ public class GroceryListManager {
     private FrequencyQuotientCalculator mFqCalculator;
     private SharedPreferencesHelper mSharedPrefsHelper;
 
-    public GroceryListManager(SharedPreferencesHelper sharedPreferencesHelper) {
-        this.mSharedPrefsHelper = sharedPreferencesHelper;
-        this.mInspector = new DateHelper(mSharedPrefsHelper);
+    public GroceryListManager(Context context) {
+        this.mSharedPrefsHelper = new SharedPreferencesHelper(context);
+        this.mInspector = new DateHelper(context);
         this.mFqCalculator = new FrequencyQuotientCalculator(mSharedPrefsHelper);
 
         this.mModifiedList = mSharedPrefsHelper.getList(MODIFIED_LIST_KEY);

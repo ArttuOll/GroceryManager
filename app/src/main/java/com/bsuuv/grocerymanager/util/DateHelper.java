@@ -14,15 +14,13 @@ public class DateHelper {
     private Set<String> mGroceryDays;
 
     public DateHelper(Context context) {
-        init();
+        this.mCalendar = Calendar.getInstance();
+        mCalendar.setFirstDayOfWeek(Calendar.SUNDAY);
+        // When Date-object is instantiated without parameters, it is set to the current day.
+        mCalendar.setTime(new Date());
+
         SharedPreferencesHelper sharedPrefsHelper = new SharedPreferencesHelper(context);
         this.mGroceryDays = sharedPrefsHelper.getGroceryDays();
-
-    }
-
-    public DateHelper(SharedPreferencesHelper sharedPreferencesHelper) {
-        init();
-        this.mGroceryDays = sharedPreferencesHelper.getGroceryDays();
     }
 
     public boolean isGroceryDay() {
@@ -38,13 +36,6 @@ public class DateHelper {
     public String getCurrentDate() {
         DateFormat format = SimpleDateFormat.getDateInstance();
         return format.format(Calendar.getInstance().getTime());
-    }
-
-    private void init() {
-        this.mCalendar = Calendar.getInstance();
-        mCalendar.setFirstDayOfWeek(Calendar.SUNDAY);
-        // When Date-object is instantiated without parameters, it is set to the current day.
-        mCalendar.setTime(new Date());
     }
 
     private int stringWeekDayToInt(String groceryDay) {
