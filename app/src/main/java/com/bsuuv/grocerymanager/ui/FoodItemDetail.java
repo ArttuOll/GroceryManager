@@ -7,14 +7,20 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.util.PluralsProvider;
 import com.bumptech.glide.Glide;
 
+import java.util.Objects;
+
 public class FoodItemDetail extends AppCompatActivity {
+
+    private PluralsProvider mPluralsProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_item_detail);
+        this.mPluralsProvider = new PluralsProvider(this);
 
         setUpImageView();
 
@@ -38,7 +44,7 @@ public class FoodItemDetail extends AppCompatActivity {
 
         int amountValue = getIntent().getIntExtra("amount", 0);
         String unit = getIntent().getStringExtra("unit");
-        amount.setText(String.format("%s %s", amountValue, unit));
+        amount.setText(mPluralsProvider.getAmountString(amountValue, Objects.requireNonNull(unit)));
 
         brand.setText(getIntent().getStringExtra("brand"));
         info.setText(getIntent().getStringExtra("info"));
