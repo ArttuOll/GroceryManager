@@ -17,11 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter;
 import com.bsuuv.grocerymanager.util.DateHelper;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import com.bsuuv.grocerymanager.viewmodel.GroceryItemViewModel;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private int mNumberOfGroceryDays;
     private DateHelper mDateHelper;
     private boolean mTwoPane;
+    private List<FoodItemEntity> mGroceryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,27 +115,33 @@ public class MainActivity extends AppCompatActivity {
     private void setUpViewModel() {
         this.mGroceryViewModel = new ViewModelProvider(this).get(GroceryItemViewModel.class);
         mGroceryViewModel.getGroceryList().observe(this, groceryListItems -> {
+            this.mGroceryList = groceryListItems;
             setRecyclerViewVisibility();
-            mAdapter.setGroceryItems(groceryListItems);
+            mAdapter.setGroceryItems(mGroceryList);
         });
     }
 
     private void setRecyclerViewVisibility() {
-        if (mDateHelper.isGroceryDay()) {
-            mRecyclerView.setVisibility(View.VISIBLE);
+        if (mNumberOfGroceryDays == 0) {
+            setRecyclerViewAndPlaceholder(View.GONE,
+                    R.string.main_no_grocery_days_set);
+        } else if (!mDateHelper.isGroceryDay()) {
+            setRecyclerViewAndPlaceholder(View.GONE,
+                    R.string.main_not_grocery_day);
+        } else if (mDateHelper.isGroceryDay()) {
+            setRecyclerViewAndPlaceholder(View.VISIBLE, 0);
+        }
+    }
+
+    private void setRecyclerViewAndPlaceholder(int recyclerViewVisibility,
+                                               int placeholderTextResId) {
+        if (recyclerViewVisibility == View.VISIBLE) {
+            mRecyclerView.setVisibility(recyclerViewVisibility);
             mRecyclerViewPlaceHolder.setVisibility(View.GONE);
         } else {
             mRecyclerView.setVisibility(View.GONE);
             mRecyclerViewPlaceHolder.setVisibility(View.VISIBLE);
-            setPlaceholderText();
-        }
-    }
-
-    private void setPlaceholderText() {
-        if (mNumberOfGroceryDays == 0) {
-            mRecyclerViewPlaceHolder.setText(R.string.main_no_grocery_days_set);
-        } else {
-            mRecyclerViewPlaceHolder.setText(R.string.main_not_grocery_day);
+            mRecyclerViewPlaceHolder.setText(placeholderTextResId);
         }
     }
 
