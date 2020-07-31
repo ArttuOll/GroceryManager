@@ -35,11 +35,16 @@ public class GroceryItemViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<FoodItemEntity>> getGroceryList() {
-        return Transformations.map(mFoodItems, mGroceryListManager::getGroceryItemsFromFoodItems);
+        return Transformations.map(mFoodItems,
+                mGroceryListManager::getGroceryItemsFromFoodItems);
     }
 
     public void check(FoodItemEntity foodItem) {
         this.mCheckedItems.add(foodItem);
+    }
+
+    public FoodItemEntity get(int foodItemId) {
+        return mRepository.getFoodItem(foodItemId);
     }
 
     @Override
@@ -49,8 +54,10 @@ public class GroceryItemViewModel extends AndroidViewModel {
             mGroceryListManager.saveBuffers(mModifiedList, mCheckedItems);
         }
     }
+
     private void updateDatabase() {
-        for (FoodItemEntity foodItem : mModifiedList) mRepository.update(foodItem);
+        for (FoodItemEntity foodItem : mModifiedList)
+            mRepository.update(foodItem);
         mGroceryListManager.clearBuffers();
     }
 }

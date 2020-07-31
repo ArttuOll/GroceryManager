@@ -12,11 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.FoodItemDetail;
+import com.bsuuv.grocerymanager.ui.FoodItemDetailFragment;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
 import com.bumptech.glide.Glide;
 
@@ -30,12 +32,15 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
     private List<FoodItemEntity> mGroceryItems;
     private LayoutInflater mInflater;
-    // Represents the activity in which this the RecyclerView of this adapter resides.
+    // Represents the activity in which this the RecyclerView of this adapter
+    // resides.
     private Context mContext;
+    private boolean mTwoPane;
 
-    public GroceryListAdapter(Context context) {
+    public GroceryListAdapter(Context context, boolean twoPane) {
         this.mInflater = LayoutInflater.from(context);
         this.mContext = context;
+        this.mTwoPane = twoPane;
     }
 
     @NonNull
@@ -88,6 +93,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             this.mAdapter = adapter;
             this.mPluralsProvider = new PluralsProvider(mContext);
 
+
             itemView.setOnClickListener(this);
         }
 
@@ -106,18 +112,34 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
         @Override
         public void onClick(View v) {
-            FoodItemEntity currentFoodItem = mGroceryItems.get(getAdapterPosition());
+            FoodItemEntity currentFoodItem =
+                    mGroceryItems.get(getAdapterPosition());
 
-            Intent foodItemDetail = new Intent(mContext, FoodItemDetail.class);
-            foodItemDetail.putExtra("label", currentFoodItem.getLabel());
-            foodItemDetail.putExtra("image_resource", currentFoodItem.getImageUri());
-            foodItemDetail.putExtra("brand", currentFoodItem.getBrand());
-            foodItemDetail.putExtra("info", currentFoodItem.getInfo());
-            foodItemDetail.putExtra("amount", currentFoodItem.getAmount());
-            foodItemDetail.putExtra("unit", currentFoodItem.getUnit());
-            Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext,
-                    mFoodImage, mFoodImage.getTransitionName()).toBundle();
-            mContext.startActivity(foodItemDetail, bundle);
+            if (mTwoPane) {
+                FoodItemDetailFragment fragment = FoodItemDetailFragment
+                        .newInstance(currentFoodItem.getId());
+
+                ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container_food_item_detail, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            } else {
+                Intent toFoodItemDetail = new Intent(mContext,
+                        FoodItemDetail.class);
+                toFoodItemDetail.putExtra("label", currentFoodItem.getLabel());
+                toFoodItemDetail.putExtra("image_resource",
+                        currentFoodItem.getImageUri());
+                toFoodItemDetail.putExtra("brand", currentFoodItem.getBrand());
+                toFoodItemDetail.putExtra("info", currentFoodItem.getInfo());
+                toFoodItemDetail.putExtra("amount",
+                        currentFoodItem.getAmount());
+                toFoodItemDetail.putExtra("unit", currentFoodItem.getUnit());
+                toFoodItemDetail.putExtra(FoodItemDetailFragment.FOOD_ITEM_ID_KEY, currentFoodItem.getId());
+                Bundle bundle =
+                        ActivityOptions.makeSceneTransitionAnimation((Activity) mContext,
+                        mFoodImage, mFoodImage.getTransitionName()).toBundle();
+                mContext.startActivity(toFoodItemDetail, bundle);
+            }
         }
     }
 }

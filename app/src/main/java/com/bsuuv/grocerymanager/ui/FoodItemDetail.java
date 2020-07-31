@@ -22,9 +22,17 @@ public class FoodItemDetail extends AppCompatActivity {
         setContentView(R.layout.activity_food_item_detail);
         this.mPluralsProvider = new PluralsProvider(this);
 
-        setUpImageView();
 
-        setUpTextViews();
+        if (savedInstanceState == null) {
+            int selectedFoodItem =
+                    getIntent().getIntExtra(FoodItemDetailFragment.FOOD_ITEM_ID_KEY, 0);
+
+            FoodItemDetailFragment fragment =
+                    FoodItemDetailFragment.newInstance(selectedFoodItem);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container_food_item_detail, fragment)
+                    .commit();
+        }
     }
 
     private void setUpImageView() {

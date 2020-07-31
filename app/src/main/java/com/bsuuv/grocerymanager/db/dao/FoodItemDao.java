@@ -17,6 +17,9 @@ public interface FoodItemDao {
     @Insert
     void insert(FoodItemEntity foodItem);
 
+    @Query("SELECT * FROM FoodItemEntity WHERE id = :foodItemId")
+    FoodItemEntity get(int foodItemId);
+
     @Delete
     void delete(FoodItemEntity foodItem);
 

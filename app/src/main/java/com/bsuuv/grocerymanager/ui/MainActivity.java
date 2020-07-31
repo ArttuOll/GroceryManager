@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private GroceryItemViewModel mGroceryViewModel;
     private int mNumberOfGroceryDays;
     private DateHelper mDateHelper;
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +47,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.mDateHelper = new DateHelper(this);
-        this.mRecyclerViewPlaceHolder = findViewById(R.id.main_recyclerview_placeholder);
+        this.mRecyclerViewPlaceHolder =
+                findViewById(R.id.main_recyclerview_placeholder);
 
-        SharedPreferencesHelper sharedPrefsHelper = new SharedPreferencesHelper(this);
+        SharedPreferencesHelper sharedPrefsHelper =
+                new SharedPreferencesHelper(this);
         this.mNumberOfGroceryDays = sharedPrefsHelper.getGroceryDays().size();
 
         setUpToolbar();
+
+        // This layout is only available in w900dp/content_main, so it's
+        // availability tells us the device orientation/screen width
+        if (findViewById(R.id.container_food_item_detail) != null) {
+            mTwoPane = true;
+        }
 
         setUpRecyclerView();
 
@@ -133,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         this.mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        this.mAdapter = new GroceryListAdapter(this);
+        this.mAdapter = new GroceryListAdapter(this, mTwoPane);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setVisibility(View.GONE);
     }

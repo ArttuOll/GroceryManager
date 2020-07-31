@@ -10,6 +10,9 @@ import com.bsuuv.grocerymanager.db.dao.FoodItemDao;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class FoodItemRepository {
 
@@ -17,13 +20,28 @@ public class FoodItemRepository {
     private LiveData<List<FoodItemEntity>> mFoodItems;
 
     public FoodItemRepository(Application application) {
-        FoodItemRoomDatabase database = FoodItemRoomDatabase.getInstance(application);
+        FoodItemRoomDatabase database =
+                FoodItemRoomDatabase.getInstance(application);
         mFoodItemDao = database.foodItemDao();
         mFoodItems = mFoodItemDao.getAllFoodItems();
     }
 
     public LiveData<List<FoodItemEntity>> getFoodItems() {
         return mFoodItems;
+    }
+
+    public FoodItemEntity getFoodItem(int foodItemId) {
+        FoodItemEntity result = null;
+
+        try {
+            result =
+                    new GetAsyncTask(mFoodItemDao).execute(foodItemId).get(1000,
+                            TimeUnit.MILLISECONDS);
+        } catch (ExecutionException | InterruptedException | TimeoutException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     public void insert(FoodItemEntity foodItem) {
@@ -42,7 +60,30 @@ public class FoodItemRepository {
         new DeleteAllAsyncTask(mFoodItemDao).execute();
     }
 
-    private static class InsertAsyncTask extends AsyncTask<FoodItemEntity, Void, Void> {
+    // TODO: emigrate from AsyncTask, see here: https://codelabs.developers
+    //  .google.com/codelabs/android-room-with-a-view/#8
+    private static class GetAsyncTask extends AsyncTask<Integer, Void,
+            FoodItemEntity> {
+
+        private FoodItemDao mAsyncTaskFoodItemDao;
+
+        GetAsyncTask(FoodItemDao foodItemDao) {
+            this.mAsyncTaskFoodItemDao = foodItemDao;
+        }
+
+        @Override
+        protected FoodItemEntity doInBackground(Integer... foodItemIds) {
+            return mAsyncTaskFoodItemDao.get(foodItemIds[0]);
+        }
+
+        @Override
+        protected void onPostExecute(FoodItemEntity foodItemEntity) {
+            super.onPostExecute(foodItemEntity);
+        }
+    }
+
+    private static class InsertAsyncTask extends AsyncTask<FoodItemEntity,
+            Void, Void> {
 
         private FoodItemDao mAsyncTaskFoodItemDao;
 
