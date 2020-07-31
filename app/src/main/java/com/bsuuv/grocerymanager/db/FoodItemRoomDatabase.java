@@ -26,8 +26,9 @@ public abstract class FoodItemRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE =
                             Room.databaseBuilder(context.getApplicationContext(),
-                            FoodItemRoomDatabase.class, "fooditem_database")
-                            .fallbackToDestructiveMigration().build();
+                                    FoodItemRoomDatabase.class,
+                                    "fooditem_database")
+                                    .build();
                 }
             }
         }
