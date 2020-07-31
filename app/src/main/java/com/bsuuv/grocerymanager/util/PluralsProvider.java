@@ -41,8 +41,12 @@ public class PluralsProvider {
             return mContext.getResources().getQuantityString(R.plurals.Cans, amount,
                     amount);
         } else if (units[3].equals(unit)) {
-            return mContext.getResources().getQuantityString(R.plurals.Bags, amount,
+            return mContext.getResources().getQuantityString(R.plurals.Bags,
+                    amount,
                     amount);
+        } else if (units[4].equals(unit)) {
+            return mContext.getResources().getQuantityString(R.plurals.Bottles,
+                    amount, amount);
         }
 
         return "";
