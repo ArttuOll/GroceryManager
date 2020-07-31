@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
@@ -65,12 +66,64 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
         return mFoodItems.get(position);
     }
 
-    public void setFoodItems(List<FoodItemEntity> foodItemEntities) {
-        this.mFoodItems = foodItemEntities;
+    public void setFoodItems(List<FoodItemEntity> foodItems) {
+        if (this.mFoodItems == null) {
+            this.mFoodItems = foodItems;
+            notifyItemRangeInserted(0, foodItems.size());
+        } else {
+            // Calculate differences in the old and new list of food-items and
+            // define an optimal set of update-operations to migrate to the
+            // new list.
+            DiffUtil.DiffResult result =
+                    DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                @Override
+                public int getOldListSize() {
+                    return mFoodItems.size();
+                }
+
+                @Override
+                public int getNewListSize() {
+                    return foodItems.size();
+                }
+
+                @Override
+                public boolean areItemsTheSame(int oldItemPosition,
+                                               int newItemPosition) {
+                    return mFoodItems.get(oldItemPosition).getId() ==
+                            foodItems.get(newItemPosition).getId();
+                }
+
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition,
+                                                  int newItemPosition) {
+                    FoodItemEntity oldFoodItem =
+                            mFoodItems.get(oldItemPosition);
+                    FoodItemEntity newFoodItem = foodItems.get(newItemPosition);
+
+                    // Only comparing id and members that are visible in the
+                    // RecyclerView item. Note that countdownValue is not
+                    // compared.
+                    return oldFoodItem.getId() == newFoodItem.getId() &&
+                            oldFoodItem.getAmount() == newFoodItem.getAmount() &&
+                            oldFoodItem.getBrand().equals(newFoodItem.getBrand()) &&
+                            oldFoodItem.getFrequency() == newFoodItem.getFrequency() &&
+                            oldFoodItem.getImageUri().equals(newFoodItem.getImageUri()) &&
+                            oldFoodItem.getInfo().equals(newFoodItem.getInfo()) &&
+                            oldFoodItem.getLabel().equals(newFoodItem.getLabel()) &&
+                            oldFoodItem.getTimeFrame() == newFoodItem.getTimeFrame() &&
+                            oldFoodItem.getUnit().equals(newFoodItem.getUnit());
+
+                }
+            });
+            mFoodItems = foodItems;
+            // Apply defined update operations to this adapter.
+            result.dispatchUpdatesTo(this);
+        }
     }
 
     /**
-     * Contains a single item displayed in Configurations <code>RecyclerView</code>.
+     * Contains a single item displayed in Configurations
+     * <code>RecyclerView</code>.
      */
     class ConfigsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final ConfigurationsListAdapter mAdapter;

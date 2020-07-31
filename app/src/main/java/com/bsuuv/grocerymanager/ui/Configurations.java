@@ -144,7 +144,6 @@ public class Configurations extends AppCompatActivity {
                 foodItemEntities -> {
                     setRecyclerViewVisibility(foodItemEntities.size());
                     mAdapter.setFoodItems(foodItemEntities);
-                    mAdapter.notifyDataSetChanged();
                 });
     }
 

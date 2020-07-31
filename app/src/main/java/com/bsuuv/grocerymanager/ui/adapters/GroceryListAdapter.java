@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
@@ -65,7 +66,57 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     }
 
     public void setGroceryItems(List<FoodItemEntity> groceryListItems) {
-        this.mGroceryItems = groceryListItems;
+        if (this.mGroceryItems == null) {
+            this.mGroceryItems = groceryListItems;
+        } else {
+            // Calculate differences in the old and new list of food-items and
+            // define an optimal set of update-operations to migrate to the
+            // new list.
+            DiffUtil.DiffResult result =
+                    DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                @Override
+                public int getOldListSize() {
+                    return mGroceryItems.size();
+                }
+
+                @Override
+                public int getNewListSize() {
+                    return groceryListItems.size();
+                }
+
+                @Override
+                public boolean areItemsTheSame(int oldItemPosition,
+                                               int newItemPosition) {
+                    return mGroceryItems.get(oldItemPosition).getId() ==
+                            groceryListItems.get(newItemPosition).getId();
+                }
+
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition,
+                                                  int newItemPosition) {
+                    FoodItemEntity oldGroceryItem =
+                            mGroceryItems.get(oldItemPosition);
+                    FoodItemEntity newGroceryItem =
+                            groceryListItems.get(newItemPosition);
+
+                    // Only comparing id and members that are visible in the
+                    // RecyclerView item. Note that countdownValue is not
+                    // compared.
+                    return oldGroceryItem.getId() == newGroceryItem.getId() &&
+                            oldGroceryItem.getAmount() == newGroceryItem.getAmount() &&
+                            oldGroceryItem.getBrand().equals(newGroceryItem.getBrand()) &&
+                            oldGroceryItem.getFrequency() == newGroceryItem.getFrequency() &&
+                            oldGroceryItem.getImageUri().equals(newGroceryItem.getImageUri()) &&
+                            oldGroceryItem.getInfo().equals(newGroceryItem.getInfo()) &&
+                            oldGroceryItem.getLabel().equals(newGroceryItem.getLabel()) &&
+                            oldGroceryItem.getTimeFrame() == newGroceryItem.getTimeFrame() &&
+                            oldGroceryItem.getUnit().equals(newGroceryItem.getUnit());
+                }
+            });
+            mGroceryItems = groceryListItems;
+            // Apply defined update operations to this adapter.
+            result.dispatchUpdatesTo(this);
+        }
     }
 
     public FoodItemEntity getFoodItemAtPosition(int position) {

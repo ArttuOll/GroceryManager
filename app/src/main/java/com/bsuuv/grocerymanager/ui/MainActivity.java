@@ -114,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
         mGroceryViewModel.getGroceryList().observe(this, groceryListItems -> {
             setRecyclerViewVisibility();
             mAdapter.setGroceryItems(groceryListItems);
-            mAdapter.notifyDataSetChanged();
         });
     }
 
