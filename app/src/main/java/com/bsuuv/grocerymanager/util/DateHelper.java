@@ -42,9 +42,35 @@ public class DateHelper {
         return format.format(Calendar.getInstance().getTime());
     }
 
-    private int stringWeekDayToInt(String groceryDay) {
-        String[] daysOfWeek = mContext.getResources().getStringArray(R.array.daysofweek_datehelper);
+    // TODO: write unit tests
+    public int timeUntilNextGroceryDay() {
+        int today = mCalendar.get(Calendar.DAY_OF_WEEK);
 
+        // Out of all grocery days in a week, the closest one, relative to
+        // current weekday, is this many days away.
+        int smallestDistance = 0;
+
+        for (String groceryDayString : mGroceryDays) {
+            int groceryDay = stringWeekDayToInt(groceryDayString);
+
+            // If the weekday of the grocery day is already behind, put it to
+            // next week by adding 7 to it.
+            if (groceryDay < today) groceryDay += 7;
+
+            if (Math.abs(today - groceryDay) < Math.abs(today - smallestDistance)) {
+                smallestDistance = groceryDay;
+            }
+        }
+
+        return smallestDistance;
+    }
+
+    private int stringWeekDayToInt(String groceryDay) {
+        String[] daysOfWeek =
+                mContext.getResources().getStringArray(R.array.daysofweek_datehelper);
+
+        // Days of the week start from Sunday and are represented by integers
+        // 1..7
         if (daysOfWeek[0].equals(groceryDay)) {
             return 1;
         } else if (daysOfWeek[1].equals(groceryDay)) {

@@ -51,5 +51,9 @@
     <string name="transition_detail">transition detail</string>
     <string name="timeframe_not_chosen">You must select a time frame!</string>
     <string name="frequency_not_set">Frequency can\'t be zero!</string>
+    <string name="notifchan_primary_name">Grocery Day Notification</string>
+    <string name="notifchan_primary_description">A notification that reminds you to do your groceries</string>
+    <string name="notification_content_title">It\'s grocery day!</string>
+    <string name="notification_content_text">Time to feed your fridge!</string>
 
 </resources>

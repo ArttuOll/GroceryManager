@@ -35,4 +35,8 @@
     <string name="transition_detail">lisätietonäkymän siirtymäanimaatio</string>
     <string name="timeframe_not_chosen">Aikaväliä ei valittuna!</string>
     <string name="frequency_not_set">Esiintymistiheys ei voi olla nolla!</string>
+    <string name="notifchan_primary_name">Kauppapäiväilmoitus</string>
+    <string name="notifchan_primary_description">Muistutus ruokaostoksien tekemisestä</string>
+    <string name="notification_content_title">On kauppapäivä!</string>
+    <string name="notification_content_text">Aika hakea täytettä jääkaappiin!</string>
 </resources>

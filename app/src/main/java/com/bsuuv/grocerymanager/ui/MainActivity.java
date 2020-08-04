@@ -1,8 +1,16 @@
 package com.bsuuv.grocerymanager.ui;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.notifications.GroceryDayReceiver;
 import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter;
 import com.bsuuv.grocerymanager.util.DateHelper;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
@@ -27,12 +36,17 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Main activity of the app. Displays the grocery list and includes options menu to settings and
+ * Main activity of the app. Displays the grocery list and includes options
+ * menu to settings and
  * to configure groceries.
  */
 public class MainActivity extends AppCompatActivity {
 
-    private final static String MAIN_RECYCLERVIEW_STATE = "recyclerView_state";
+    public static final String PRIMARY_CHANNEL_ID =
+            "primary_notification_channel";
+    public static final int NOTIFICATION_ID = 0;
+
+    private static final String MAIN_RECYCLERVIEW_STATE = "recyclerView_state";
 
     private GroceryListAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -43,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private DateHelper mDateHelper;
     private boolean mTwoPane;
     private List<FoodItemEntity> mGroceryList;
+    private SharedPreferencesHelper mSharedPrefsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +68,10 @@ public class MainActivity extends AppCompatActivity {
         this.mRecyclerViewPlaceHolder =
                 findViewById(R.id.main_recyclerview_placeholder);
 
-        SharedPreferencesHelper sharedPrefsHelper =
+        this.mSharedPrefsHelper =
                 new SharedPreferencesHelper(this);
-        this.mNumberOfGroceryDays = sharedPrefsHelper.getGroceryDays().size();
+
+        this.mNumberOfGroceryDays = mSharedPrefsHelper.getGroceryDays().size();
 
         setUpToolbar();
 
@@ -74,9 +90,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Restore activity state after configuration change
         if (savedInstanceState != null) {
-            Parcelable state = savedInstanceState.getParcelable(MAIN_RECYCLERVIEW_STATE);
+            Parcelable state =
+                    savedInstanceState.getParcelable(MAIN_RECYCLERVIEW_STATE);
             mLayoutManager.onRestoreInstanceState(state);
         }
+
+        createNotificationChannel();
+
+        scheduleGroceryDayNotification();
     }
 
     @Override
@@ -112,8 +133,58 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void createNotificationChannel() {
+        NotificationManager mNotifManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel primaryChannel =
+                    new NotificationChannel(PRIMARY_CHANNEL_ID,
+                            getString(R.string.notifchan_primary_name),
+                            NotificationManager.IMPORTANCE_DEFAULT);
+
+            primaryChannel.enableLights(true);
+            primaryChannel.setLightColor(Color.GREEN);
+            primaryChannel.enableVibration(true);
+            primaryChannel.setDescription(getString(R.string.notifchan_primary_description));
+            Objects.requireNonNull(mNotifManager).createNotificationChannel(primaryChannel);
+        }
+    }
+
+    private void scheduleGroceryDayNotification() {
+        Intent notifIntent = new Intent(this, GroceryDayReceiver.class);
+        final PendingIntent notifPendingIntent =
+                PendingIntent.getBroadcast(this,
+                NOTIFICATION_ID, notifIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+        final AlarmManager alarmManager =
+                (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        SharedPreferences.OnSharedPreferenceChangeListener groceryDaysListener =
+                (sharedPreferences, key) -> {
+                    if (key.equals(SharedPreferencesHelper.GROCERY_DAYS_KEY)) {
+                        long repeatInterval =
+                                AlarmManager.INTERVAL_DAY * mDateHelper.timeUntilNextGroceryDay();
+                        long triggerTime =
+                                SystemClock.elapsedRealtime() + repeatInterval;
+
+                        if (alarmManager != null) {
+                            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                                    triggerTime, repeatInterval,
+                                    notifPendingIntent);
+                        }
+                    }
+                };
+
+        SharedPreferences sharedPreferences =
+                mSharedPrefsHelper.getSharedPreferences();
+        sharedPreferences.registerOnSharedPreferenceChangeListener(groceryDaysListener);
+    }
+
     private void setUpViewModel() {
-        this.mGroceryViewModel = new ViewModelProvider(this).get(GroceryItemViewModel.class);
+        this.mGroceryViewModel =
+                new ViewModelProvider(this).get(GroceryItemViewModel.class);
         mGroceryViewModel.getGroceryList().observe(this, groceryListItems -> {
             this.mGroceryList = groceryListItems;
             setRecyclerViewVisibility();
@@ -179,4 +250,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }

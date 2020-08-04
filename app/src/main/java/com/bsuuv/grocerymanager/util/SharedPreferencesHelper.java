@@ -21,7 +21,7 @@ import java.util.Set;
  */
 public class SharedPreferencesHelper {
 
-    private static final String GROCERY_DAYS_KEY = "grocerydays";
+    public static final String GROCERY_DAYS_KEY = "grocerydays";
 
     private final SharedPreferences mSharedPreferences;
     private final Type listType = new TypeToken<List<FoodItemEntity>>() {
@@ -73,5 +73,9 @@ public class SharedPreferencesHelper {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.clear();
         editor.apply();
+    }
+
+    public SharedPreferences getSharedPreferences() {
+        return mSharedPreferences;
     }
 }
