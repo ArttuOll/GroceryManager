@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.db.viewmodel;
+package com.bsuuv.grocerymanager;
 
 import android.content.Context;
 import android.content.res.Resources;

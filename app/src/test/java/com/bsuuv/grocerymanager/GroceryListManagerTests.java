@@ -1,6 +1,5 @@
-package com.bsuuv.grocerymanager.db.viewmodel;
+package com.bsuuv.grocerymanager;
 
-import com.bsuuv.grocerymanager.GroceryListManager;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.DateHelper;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
@@ -63,9 +62,11 @@ public class GroceryListManagerTests {
                 3, "Bags", 3, 1, "", 0.0);
         this.mModifiedFoodItem = new FoodItemEntity("Parsakaali", "", "Tylsää",
                 5, "Bags", 1, 1, "", 0.0);
-        this.mCheckedFoodItem = new FoodItemEntity("Kanaa", "Saarioinen", "Tylsää",
+        this.mCheckedFoodItem = new FoodItemEntity("Kanaa", "Saarioinen",
+                "Tylsää",
                 5, "Bags", 1, 1, "", 0.0);
-        this.mModifiedCheckedFoodItem = new FoodItemEntity("Voi", "Valio", "Tylsää",
+        this.mModifiedCheckedFoodItem = new FoodItemEntity("Voi", "Valio",
+                "Tylsää",
                 5, "Bags", 1, 1, "", 0.0);
 
 

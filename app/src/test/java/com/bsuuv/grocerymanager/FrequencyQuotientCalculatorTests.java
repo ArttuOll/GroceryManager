@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.db.viewmodel;
+package com.bsuuv.grocerymanager;
 
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
