@@ -1,7 +1,5 @@
 package com.bsuuv.grocerymanager;
 
-import android.content.Context;
-
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.DateHelper;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
@@ -17,14 +15,16 @@ public class GroceryListManager {
 
     private List<FoodItemEntity> mModifiedList;
     private List<FoodItemEntity> mCheckedItems;
-    private DateHelper mInspector;
+    private DateHelper mDateHelper;
     private FrequencyQuotientCalculator mFqCalculator;
     private SharedPreferencesHelper mSharedPrefsHelper;
 
-    public GroceryListManager(Context context) {
-        this.mSharedPrefsHelper = new SharedPreferencesHelper(context);
-        this.mInspector = new DateHelper(context);
-        this.mFqCalculator = new FrequencyQuotientCalculator(mSharedPrefsHelper);
+    public GroceryListManager(SharedPreferencesHelper sharedPreferencesHelper,
+                              DateHelper dateHelper,
+                              FrequencyQuotientCalculator fqCalculator) {
+        this.mSharedPrefsHelper = sharedPreferencesHelper;
+        this.mDateHelper = dateHelper;
+        this.mFqCalculator = fqCalculator;
 
         this.mModifiedList = mSharedPrefsHelper.getList(MODIFIED_LIST_KEY);
         this.mCheckedItems = mSharedPrefsHelper.getList(CHECKED_ITEMS_KEY);
@@ -32,17 +32,23 @@ public class GroceryListManager {
 
     public List<FoodItemEntity> getGroceryItemsFromFoodItems(List<FoodItemEntity> foodItems) {
         List<FoodItemEntity> groceryItems = new ArrayList<>();
-        if (mInspector.isGroceryDay()) {
+        if (mDateHelper.isGroceryDay()) {
             for (FoodItemEntity foodItem : foodItems) {
-                double frequencyQuotient = mFqCalculator.getFrequencyQuotient(foodItem);
-                // Each grocery day the countdown value is incremented by the value of frequency
+                double frequencyQuotient =
+                        mFqCalculator.getFrequencyQuotient(foodItem);
+                // Each grocery day the countdown value is incremented by the
+                // value of frequency
                 // quotient.
-                // When it reaches 1, it's time for the item to appear in the grocery list.
+                // When it reaches 1, it's time for the item to appear in the
+                // grocery list.
                 double countdownValue = foodItem.getCountdownValue();
 
-                // If the countdown value for a food-item has reached 1 and the user hasn't
-                // removed it from RecyclerView in MainActivity, put it to grocery list.
-                // The value can be greater than one if the number of grocery days decreases while
+                // If the countdown value for a food-item has reached 1 and
+                // the user hasn't
+                // removed it from RecyclerView in MainActivity, put it to
+                // grocery list.
+                // The value can be greater than one if the number of grocery
+                // days decreases while
                 // the countdownValue has already been assigned a value.
                 if (countdownValue >= 1 && !mCheckedItems.contains(foodItem)) {
                     groceryItems.add(foodItem);

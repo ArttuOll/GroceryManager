@@ -1,6 +1,7 @@
 package com.bsuuv.grocerymanager.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -10,6 +11,8 @@ import com.bsuuv.grocerymanager.FoodItemRepository;
 import com.bsuuv.grocerymanager.GroceryListManager;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.DateHelper;
+import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
+import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 
 import java.util.List;
 
@@ -25,8 +28,25 @@ public class GroceryItemViewModel extends AndroidViewModel {
         super(application);
         this.mRepository = new FoodItemRepository(application);
         this.mFoodItems = mRepository.getFoodItems();
-        this.mGroceryListManager = new GroceryListManager(application);
-        this.mInspector = new DateHelper(application);
+
+        // Dependencies for GroceryListManager
+        Context context = application.getApplicationContext();
+
+        SharedPreferencesHelper sharedPreferencesHelper =
+                new SharedPreferencesHelper(application);
+
+        DateHelper dateHelper = new DateHelper(context,
+                sharedPreferencesHelper);
+
+        FrequencyQuotientCalculator calculator =
+                new FrequencyQuotientCalculator(sharedPreferencesHelper);
+
+        this.mGroceryListManager =
+                new GroceryListManager(sharedPreferencesHelper, dateHelper,
+                        calculator
+                );
+
+        this.mInspector = new DateHelper(application, sharedPreferencesHelper);
 
         this.mCheckedItems = mGroceryListManager.getCheckedItems();
         this.mModifiedList = mGroceryListManager.getModifiedList();

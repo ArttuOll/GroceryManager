@@ -16,14 +16,15 @@ public class DateHelper {
     private Set<String> mGroceryDays;
     private Context mContext;
 
-    public DateHelper(Context context) {
+    public DateHelper(Context context,
+                      SharedPreferencesHelper sharedPrefsHelper) {
         this.mCalendar = Calendar.getInstance();
         mCalendar.setFirstDayOfWeek(Calendar.SUNDAY);
-        // When Date-object is instantiated without parameters, it is set to the current day.
+        // When Date-object is instantiated without parameters, it is set to
+        // the current day.
         mCalendar.setTime(new Date());
 
         this.mContext = context;
-        SharedPreferencesHelper sharedPrefsHelper = new SharedPreferencesHelper(context);
         this.mGroceryDays = sharedPrefsHelper.getGroceryDays();
     }
 

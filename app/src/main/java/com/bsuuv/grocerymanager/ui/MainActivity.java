@@ -64,12 +64,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.mDateHelper = new DateHelper(this);
-        this.mRecyclerViewPlaceHolder =
-                findViewById(R.id.main_recyclerview_placeholder);
-
         this.mSharedPrefsHelper =
                 new SharedPreferencesHelper(this);
+
+        this.mDateHelper = new DateHelper(this, mSharedPrefsHelper);
+        this.mRecyclerViewPlaceHolder =
+                findViewById(R.id.main_recyclerview_placeholder);
 
         this.mNumberOfGroceryDays = mSharedPrefsHelper.getGroceryDays().size();
 
