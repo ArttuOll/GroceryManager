@@ -43,13 +43,14 @@ public class DateHelper {
         return format.format(Calendar.getInstance().getTime());
     }
 
-    // TODO: write unit tests
     public int timeUntilNextGroceryDay() {
         int today = mCalendar.get(Calendar.DAY_OF_WEEK);
 
         // Out of all grocery days in a week, the closest one, relative to
         // current weekday, is this many days away.
-        int smallestDistance = 0;
+        // The starting value is 8, because any distance between two grocery
+        // days will be smaller than this.
+        int smallestDistance = 8;
 
         for (String groceryDayString : mGroceryDays) {
             int groceryDay = stringWeekDayToInt(groceryDayString);
@@ -58,8 +59,10 @@ public class DateHelper {
             // next week by adding 7 to it.
             if (groceryDay < today) groceryDay += 7;
 
-            if (Math.abs(today - groceryDay) < Math.abs(today - smallestDistance)) {
-                smallestDistance = groceryDay;
+            int distanceTodayToGroceryDay = Math.abs(today - groceryDay);
+
+            if (distanceTodayToGroceryDay < smallestDistance) {
+                smallestDistance = Math.abs(today - groceryDay);
             }
         }
 
@@ -84,7 +87,7 @@ public class DateHelper {
             return 5;
         } else if (daysOfWeek[5].equals(groceryDay)) {
             return 6;
-        } else if (daysOfWeek[6].equals(groceryDay)) return 7;
+        } else if (daysOfWeek[6].equals(groceryDay)) { return 7; }
 
         return 0;
     }
