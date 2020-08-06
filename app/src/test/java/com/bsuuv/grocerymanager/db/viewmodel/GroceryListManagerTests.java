@@ -2,6 +2,8 @@ package com.bsuuv.grocerymanager.db.viewmodel;
 
 import com.bsuuv.grocerymanager.GroceryListManager;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.util.DateHelper;
+import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 
 import org.junit.After;
@@ -15,11 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -30,7 +28,7 @@ import static org.mockito.Mockito.when;
 public class GroceryListManagerTests {
 
     @Mock
-    private SharedPreferencesHelper mMockSharedPrefsHelper;
+    private SharedPreferencesHelper mSharedPrefsHelper;
 
     @Mock
     private List<FoodItemEntity> mModifiedList;
@@ -38,11 +36,15 @@ public class GroceryListManagerTests {
     @Mock
     private List<FoodItemEntity> mCheckedItems;
 
+    @Mock
+    private DateHelper mDateHelper;
+
+    @Mock
+    private FrequencyQuotientCalculator mCalculator;
 
     @InjectMocks
     private GroceryListManager mGroceryListManager;
 
-    private Set<String> mGroceryDays;
     private List<FoodItemEntity> mFoodItems;
     private FoodItemEntity mFoodItem1;
     private FoodItemEntity mFoodItem2;
@@ -53,9 +55,6 @@ public class GroceryListManagerTests {
     @Before
     public void initialize() {
         MockitoAnnotations.initMocks(this);
-        this.mGroceryDays = new HashSet<>();
-        // Set today as grocery day
-        mGroceryDays.add(intWeekDayToString(getTodayInt()));
 
         this.mFoodItems = new ArrayList<>();
         this.mFoodItem1 = new FoodItemEntity("Kalja", "Karjala", "Raikasta",
@@ -70,10 +69,9 @@ public class GroceryListManagerTests {
                 5, "Bags", 1, 1, "", 0.0);
 
 
-        when(mMockSharedPrefsHelper.getGroceryDays()).thenReturn(mGroceryDays);
-        when(mMockSharedPrefsHelper.getList(GroceryListManager.MODIFIED_LIST_KEY))
+        when(mSharedPrefsHelper.getList(GroceryListManager.MODIFIED_LIST_KEY))
                 .thenReturn(mModifiedList);
-        when(mMockSharedPrefsHelper.getList(GroceryListManager.CHECKED_ITEMS_KEY))
+        when(mSharedPrefsHelper.getList(GroceryListManager.CHECKED_ITEMS_KEY))
                 .thenReturn(mCheckedItems);
 
         when(mModifiedList.contains(mFoodItem1)).thenReturn(false);
@@ -83,11 +81,12 @@ public class GroceryListManagerTests {
 
         when(mCheckedItems.contains(mCheckedFoodItem)).thenReturn(true);
         when(mCheckedItems.contains(mModifiedCheckedFoodItem)).thenReturn(true);
+
+        when(mDateHelper.isGroceryDay()).thenReturn(true);
     }
 
     @After
     public void clean() {
-        mGroceryDays.clear();
         mFoodItems.clear();
         mFoodItem1.setCountdownValue(0.0);
         mFoodItem2.setCountdownValue(0.0);
@@ -101,8 +100,10 @@ public class GroceryListManagerTests {
         mFoodItems.add(mFoodItem1);
         mFoodItems.add(mFoodItem2);
 
-        mGroceryListManager = new GroceryListManager(mMockSharedPrefsHelper);
-        List<FoodItemEntity> actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListManager = new GroceryListManager(mSharedPrefsHelper,
+                mDateHelper, mCalculator);
+        List<FoodItemEntity> actual =
+                mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
         List<FoodItemEntity> expected = new ArrayList<>();
 
         // Was added to list of modified food-items
@@ -120,8 +121,10 @@ public class GroceryListManagerTests {
         mFoodItem2.setCountdownValue(1.0);
         mFoodItems.add(mFoodItem2);
 
-        mGroceryListManager = new GroceryListManager(mMockSharedPrefsHelper);
-        List<FoodItemEntity> actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListManager = new GroceryListManager(mSharedPrefsHelper,
+                mDateHelper, mCalculator);
+        List<FoodItemEntity> actual =
+                mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
         List<FoodItemEntity> expected = new ArrayList<>();
         expected.add(mFoodItem1);
         expected.add(mFoodItem2);
@@ -136,15 +139,15 @@ public class GroceryListManagerTests {
 
     @Test
     public void getGroceryList_isNotGroceryDay() {
-        // Set tomorrow as grocery day
-        mGroceryDays.clear();
-        mGroceryDays.add(intWeekDayToString(getTodayInt() + 1));
+        when(mDateHelper.isGroceryDay()).thenReturn(false);
 
         mFoodItems.add(mFoodItem1);
         mFoodItem1.setCountdownValue(1.0);
 
-        mGroceryListManager = new GroceryListManager(mMockSharedPrefsHelper);
-        List<FoodItemEntity> actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListManager = new GroceryListManager(mSharedPrefsHelper,
+                mDateHelper, mCalculator);
+        List<FoodItemEntity> actual =
+                mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
         List<FoodItemEntity> expected = new ArrayList<>();
 
         // Nothing was added to list of modified items
@@ -159,8 +162,10 @@ public class GroceryListManagerTests {
         mModifiedFoodItem.setCountdownValue(1.0);
         mFoodItems.add(mModifiedFoodItem);
 
-        mGroceryListManager = new GroceryListManager(mMockSharedPrefsHelper);
-        List<FoodItemEntity> actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListManager = new GroceryListManager(mSharedPrefsHelper,
+                mDateHelper, mCalculator);
+        List<FoodItemEntity> actual =
+                mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
         List<FoodItemEntity> expected = new ArrayList<>();
         expected.add(mModifiedFoodItem);
 
@@ -176,8 +181,10 @@ public class GroceryListManagerTests {
         mFoodItems.add(mCheckedFoodItem);
         mCheckedFoodItem.setCountdownValue(1.0);
 
-        mGroceryListManager = new GroceryListManager(mMockSharedPrefsHelper);
-        List<FoodItemEntity> actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListManager = new GroceryListManager(mSharedPrefsHelper,
+                mDateHelper, mCalculator);
+        List<FoodItemEntity> actual =
+                mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
         List<FoodItemEntity> expected = new ArrayList<>();
 
         // Nothing was added to the list of modified food-items.
@@ -194,8 +201,10 @@ public class GroceryListManagerTests {
         mFoodItems.add(mCheckedFoodItem);
         mFoodItems.add(mModifiedCheckedFoodItem);
 
-        mGroceryListManager = new GroceryListManager(mMockSharedPrefsHelper);
-        List<FoodItemEntity> actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListManager = new GroceryListManager(mSharedPrefsHelper,
+                mDateHelper, mCalculator);
+        List<FoodItemEntity> actual =
+                mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
         List<FoodItemEntity> expected = new ArrayList<>();
 
         // Nothing was added to the list of modified food-items.
@@ -206,63 +215,5 @@ public class GroceryListManagerTests {
 
         // The food-item was not added to grocery list
         Assert.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void getGroceryList_itemsAppearInCorrectFrequencies() {
-        mFoodItem1.setCountdownValue(0.5);
-        mFoodItem2.setCountdownValue(0.33);
-        mFoodItems.add(mFoodItem1);
-        mFoodItems.add(mFoodItem2);
-
-        mGroceryListManager = new GroceryListManager(mMockSharedPrefsHelper);
-        List<FoodItemEntity> actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
-
-        // Neither should appear since countdown values are not one
-        Assert.assertTrue(!actual.contains(mFoodItem1) && !actual.contains(mFoodItem2));
-
-        actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
-
-        // mFoodItem1 countdown value should be incremented to one
-        Assert.assertTrue(actual.contains(mFoodItem1) && !actual.contains(mFoodItem2));
-
-        actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
-
-        // mFoodItem1 countdown value should be reset and mFoodItem2 should be 1
-        Assert.assertTrue(!actual.contains(mFoodItem1) && actual.contains(mFoodItem2));
-
-        actual = mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
-
-        // mFoodItem1 should reappear and mFoodItem2 should be reset
-        Assert.assertTrue(actual.contains(mFoodItem1) && !actual.contains(mFoodItem2));
-    }
-
-
-    private int getTodayInt() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        return calendar.get(Calendar.DAY_OF_WEEK);
-    }
-
-    private String intWeekDayToString(int groceryDay) {
-        if (groceryDay == 8) groceryDay = 1;
-        switch (groceryDay) {
-            case 1:
-                return "sunday";
-            case 2:
-                return "monday";
-            case 3:
-                return "tuesday";
-            case 4:
-                return "wednesday";
-            case 5:
-                return "thursday";
-            case 6:
-                return "friday";
-            case 7:
-                return "saturday";
-            default:
-                return "";
-        }
     }
 }
