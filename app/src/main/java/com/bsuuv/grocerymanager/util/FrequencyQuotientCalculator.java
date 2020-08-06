@@ -1,16 +1,10 @@
 package com.bsuuv.grocerymanager.util;
 
-import android.content.Context;
-
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 
 public class FrequencyQuotientCalculator {
 
     private SharedPreferencesHelper mSharedPrefsHelper;
-
-    public FrequencyQuotientCalculator(Context context) {
-        this.mSharedPrefsHelper = new SharedPreferencesHelper(context);
-    }
 
     public FrequencyQuotientCalculator(SharedPreferencesHelper sharedPreferencesHelper) {
         this.mSharedPrefsHelper = sharedPreferencesHelper;
