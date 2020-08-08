@@ -18,7 +18,6 @@ import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
@@ -31,19 +30,16 @@ public class MainActivityNavigationTest {
             new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void toConfigsAndBack() {
+    public void toConfigs() {
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation()
                 .getTargetContext());
-        onView(withText("Configure")).perform(click());
-        onView(withId(R.id.config_recyclerview)).check(matches(isDisplayed()));
-
-        onView(withContentDescription("Navigate up")).perform(click());
-        onView(withId(R.id.main_recyclerview)).check(matches(isDisplayed()));
+        onView(withText("Manage food-items")).perform(click());
+        onView(withId(R.id.config_recyclerview_placeholder)).check(matches(isDisplayed()));
     }
 
     @Test
     public void isInView() {
-        onView(withId(R.id.main_recyclerview)).check(matches(isDisplayed()));
+        onView(withId(R.id.main_recyclerview_placeholder)).check(matches(isDisplayed()));
     }
 
 }
