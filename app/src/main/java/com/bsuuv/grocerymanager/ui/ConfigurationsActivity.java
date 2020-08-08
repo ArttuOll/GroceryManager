@@ -25,7 +25,7 @@ import java.util.Objects;
  * to show in his grocery list on a certain time. Gives options to create
  * new food-items and edit existing ones.
  */
-public class Configurations extends AppCompatActivity {
+public class ConfigurationsActivity extends AppCompatActivity {
 
     public static final int FOOD_ITEM_EDIT_REQUEST = 2;
     private static final int FOOD_ITEM_CREATE_REQUEST = 1;
@@ -38,7 +38,7 @@ public class Configurations extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configurations);
-        setTitle("Configurations");
+        setTitle("ConfigurationsActivity");
 
         this.mRecyclerViewPlaceHolder = findViewById(R.id.config_recyclerview_placeholder);
         setUpRecyclerView();

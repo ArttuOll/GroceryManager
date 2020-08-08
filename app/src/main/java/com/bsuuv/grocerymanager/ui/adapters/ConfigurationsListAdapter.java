@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
-import com.bsuuv.grocerymanager.ui.Configurations;
+import com.bsuuv.grocerymanager.ui.ConfigurationsActivity;
 import com.bsuuv.grocerymanager.ui.NewFoodItem;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
 import com.bumptech.glide.Glide;
@@ -27,7 +27,7 @@ import java.util.List;
 
 /**
  * Connects food-item data (list of food-items created by the user) to <code>RecyclerView</code> in
- * Configurations.
+ * ConfigurationsActivity.
  */
 public class ConfigurationsListAdapter extends RecyclerView.Adapter<ConfigurationsListAdapter.ConfigsViewHolder> {
 
@@ -122,7 +122,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
     }
 
     /**
-     * Contains a single item displayed in Configurations
+     * Contains a single item displayed in ConfigurationsActivity
      * <code>RecyclerView</code>.
      */
     class ConfigsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -150,9 +150,10 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
         }
 
         /**
-         * Set values to all views inside a single item in Configurations RecyclerView.
+         * Set values to all views inside a single item in ConfigurationsActivity RecyclerView.
          *
-         * @param currentFoodItem The Configurations RecyclerView item that is to be displayed next.
+         * @param currentFoodItem The ConfigurationsActivity RecyclerView item that is to be
+         *                        displayed next.
          */
         void bindTo(FoodItemEntity currentFoodItem) {
             mFoodItemLabel.setText(currentFoodItem.getLabel());
@@ -190,7 +191,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
 
             Activity configurations = (Activity) mContext;
             configurations.startActivityForResult(toNewFoodItem,
-                    Configurations.FOOD_ITEM_EDIT_REQUEST, bundle);
+                    ConfigurationsActivity.FOOD_ITEM_EDIT_REQUEST, bundle);
         }
     }
 }

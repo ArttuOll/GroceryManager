@@ -103,7 +103,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     /**
      * Called when the floating action button with a check mark is pressed. Gathers all data from
      * the activity's views and puts them into intent extras to be sent back to
-     * <code>Configurations</code>.
+     * <code>ConfigurationsActivity</code>.
      *
      * @param view The view that has been clicked, in this case, the FAB.
      *             Default parameter required by the system.
@@ -177,7 +177,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     private Intent createIntentToConfigs(String label, String brand, int amount, String unit,
                                          String info, int timeFrame, int frequency,
                                          String mPhotoPath, double frequencyQuotient) {
-        Intent toConfigs = new Intent(this, Configurations.class);
+        Intent toConfigs = new Intent(this, ConfigurationsActivity.class);
         toConfigs.putExtra("label", label);
         toConfigs.putExtra("brand", brand);
         toConfigs.putExtra("amount", amount);

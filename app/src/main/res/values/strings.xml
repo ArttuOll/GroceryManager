@@ -21,7 +21,7 @@
     <string name="button_month">A Month</string>
     <string name="hint_more_information">More information:</string>
 
-    <!-- Configurations Activity -->
+    <!-- ConfigurationsActivity Activity -->
     <string name="comma" translatable="false">%1$s,</string>
     <string name="hint_unit">Unit</string>
 
