@@ -173,9 +173,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void scheduleNotification() {
-        GroceryDayNotifier mNotifier = new GroceryDayNotifier(this, mDateHelper,
-                mSharedPrefsHelper);
-        mNotifier.scheduleGroceryDayNotification();
+        GroceryDayNotifier mNotifier = new GroceryDayNotifier(this, mSharedPrefsHelper);
+        mNotifier.scheduleGroceryDayNotification(mDateHelper.timeUntilNextGroceryDay());
     }
 
     private void recoverSavedInstanceState(Bundle savedInstanceState) {
