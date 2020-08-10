@@ -25,97 +25,45 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-/**
- * Connects food-item data (list of food-items created by the user) to <code>RecyclerView</code> in
- * MainActivity.
- */
 public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.GroceryViewHolder> {
 
     private List<FoodItemEntity> mGroceryItems;
     private LayoutInflater mInflater;
-    // Represents the activity in which this the RecyclerView of this adapter
-    // resides.
     private Context mContext;
-    private boolean mTwoPane;
+    private boolean mIsWideScreen;
 
-    public GroceryListAdapter(Context context, boolean twoPane) {
+    public GroceryListAdapter(Context context, boolean wideScreen) {
         this.mInflater = LayoutInflater.from(context);
         this.mContext = context;
-        this.mTwoPane = twoPane;
+        this.mIsWideScreen = wideScreen;
     }
 
     @NonNull
     @Override
     public GroceryListAdapter.GroceryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = mInflater.inflate(R.layout.grocerylist_item, parent, false);
-
         return new GroceryViewHolder(itemView, this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull GroceryListAdapter.GroceryViewHolder holder, int position) {
         FoodItemEntity currentFoodItem = mGroceryItems.get(position);
-
         holder.bindTo(currentFoodItem);
     }
 
     @Override
     public int getItemCount() {
-        if (mGroceryItems == null) return 0;
-        return mGroceryItems.size();
+        return mGroceryItems == null ? 0 : mGroceryItems.size();
     }
 
-    public void setGroceryItems(List<FoodItemEntity> groceryListItems) {
+    public void setGroceryItems(List<FoodItemEntity> newGroceryItems) {
         if (this.mGroceryItems == null) {
-            this.mGroceryItems = groceryListItems;
+            this.mGroceryItems = newGroceryItems;
         } else {
-            // Calculate differences in the old and new list of food-items and
-            // define an optimal set of update-operations to migrate to the
-            // new list.
-            DiffUtil.DiffResult result =
-                    DiffUtil.calculateDiff(new DiffUtil.Callback() {
-                @Override
-                public int getOldListSize() {
-                    return mGroceryItems.size();
-                }
-
-                @Override
-                public int getNewListSize() {
-                    return groceryListItems.size();
-                }
-
-                @Override
-                public boolean areItemsTheSame(int oldItemPosition,
-                                               int newItemPosition) {
-                    return mGroceryItems.get(oldItemPosition).getId() ==
-                            groceryListItems.get(newItemPosition).getId();
-                }
-
-                @Override
-                public boolean areContentsTheSame(int oldItemPosition,
-                                                  int newItemPosition) {
-                    FoodItemEntity oldGroceryItem =
-                            mGroceryItems.get(oldItemPosition);
-                    FoodItemEntity newGroceryItem =
-                            groceryListItems.get(newItemPosition);
-
-                    // Only comparing id and members that are visible in the
-                    // RecyclerView item. Note that countdownValue is not
-                    // compared.
-                    return oldGroceryItem.getId() == newGroceryItem.getId() &&
-                            oldGroceryItem.getAmount() == newGroceryItem.getAmount() &&
-                            oldGroceryItem.getBrand().equals(newGroceryItem.getBrand()) &&
-                            oldGroceryItem.getFrequency() == newGroceryItem.getFrequency() &&
-                            oldGroceryItem.getImageUri().equals(newGroceryItem.getImageUri()) &&
-                            oldGroceryItem.getInfo().equals(newGroceryItem.getInfo()) &&
-                            oldGroceryItem.getLabel().equals(newGroceryItem.getLabel()) &&
-                            oldGroceryItem.getTimeFrame() == newGroceryItem.getTimeFrame() &&
-                            oldGroceryItem.getUnit().equals(newGroceryItem.getUnit());
-                }
-            });
-            mGroceryItems = groceryListItems;
-            // Apply defined update operations to this adapter.
-            result.dispatchUpdatesTo(this);
+            DiffUtil.DiffResult migrationOperations = FoodItemListDifferenceCalculator
+                    .calculateMigrationOperations(mGroceryItems, newGroceryItems);
+            mGroceryItems = newGroceryItems;
+            migrationOperations.dispatchUpdatesTo(this);
         }
     }
 
@@ -123,13 +71,8 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
         return mGroceryItems.get(position);
     }
 
-    /**
-     * Contains a single item displayed in MainActivity <code>RecyclerView</code>.
-     */
     class GroceryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView mFoodItemLabel;
-        private final TextView mFoodItemBrand;
-        private final TextView mFoodItemAmount;
+        private final TextView mFoodItemLabel, mFoodItemBrand, mFoodItemAmount;
         final GroceryListAdapter mAdapter;
         private final PluralsProvider mPluralsProvider;
         private ImageView mFoodImage;
@@ -143,16 +86,9 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             mFoodItemAmount = itemView.findViewById(R.id.grocery_item_amount);
             this.mAdapter = adapter;
             this.mPluralsProvider = new PluralsProvider(mContext);
-
-
             itemView.setOnClickListener(this);
         }
 
-        /**
-         * Set values to all views inside a single item in MainActivity RecyclerView.
-         *
-         * @param currentFoodItem The MainActivity RecyclerView item that is to be displayed next.
-         */
         void bindTo(FoodItemEntity currentFoodItem) {
             mFoodItemLabel.setText(currentFoodItem.getLabel());
             mFoodItemBrand.setText(currentFoodItem.getBrand());
@@ -163,34 +99,41 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
         @Override
         public void onClick(View v) {
-            FoodItemEntity currentFoodItem =
-                    mGroceryItems.get(getAdapterPosition());
-
-            if (mTwoPane) {
-                FoodItemDetailFragment fragment = FoodItemDetailFragment
-                        .newInstance(currentFoodItem.getId());
-
-                ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container_food_item_detail, fragment)
-                        .addToBackStack(null)
-                        .commit();
+            FoodItemEntity currentFoodItem = mGroceryItems.get(getAdapterPosition());
+            if (mIsWideScreen) {
+                showInFragment(currentFoodItem);
             } else {
-                Intent toFoodItemDetail = new Intent(mContext,
-                        FoodItemDetail.class);
-                toFoodItemDetail.putExtra("label", currentFoodItem.getLabel());
-                toFoodItemDetail.putExtra("image_resource",
-                        currentFoodItem.getImageUri());
-                toFoodItemDetail.putExtra("brand", currentFoodItem.getBrand());
-                toFoodItemDetail.putExtra("info", currentFoodItem.getInfo());
-                toFoodItemDetail.putExtra("amount",
-                        currentFoodItem.getAmount());
-                toFoodItemDetail.putExtra("unit", currentFoodItem.getUnit());
-                toFoodItemDetail.putExtra(FoodItemDetailFragment.FOOD_ITEM_ID_KEY, currentFoodItem.getId());
-                Bundle bundle =
-                        ActivityOptions.makeSceneTransitionAnimation((Activity) mContext,
-                        mFoodImage, mFoodImage.getTransitionName()).toBundle();
-                mContext.startActivity(toFoodItemDetail, bundle);
+                showInFoodItemDetailActivity(currentFoodItem);
             }
+        }
+
+        private void showInFragment(FoodItemEntity currentFoodItem) {
+            FoodItemDetailFragment fragment = FoodItemDetailFragment
+                    .newInstance(currentFoodItem.getId());
+
+            ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container_food_item_detail, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+
+        private void showInFoodItemDetailActivity(FoodItemEntity currentFoodItem) {
+            Intent toFoodItemDetail = createIntentToFoodItemDetail(currentFoodItem);
+            Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext,
+                    mFoodImage, mFoodImage.getTransitionName()).toBundle();
+            mContext.startActivity(toFoodItemDetail, bundle);
+        }
+
+        private Intent createIntentToFoodItemDetail(FoodItemEntity foodItem) {
+            Intent toFoodItemDetail = new Intent(mContext, FoodItemDetail.class);
+            toFoodItemDetail.putExtra("label", foodItem.getLabel());
+            toFoodItemDetail.putExtra("image_resource", foodItem.getImageUri());
+            toFoodItemDetail.putExtra("brand", foodItem.getBrand());
+            toFoodItemDetail.putExtra("info", foodItem.getInfo());
+            toFoodItemDetail.putExtra("amount", foodItem.getAmount());
+            toFoodItemDetail.putExtra("unit", foodItem.getUnit());
+            toFoodItemDetail.putExtra(FoodItemDetailFragment.FOOD_ITEM_ID_KEY, foodItem.getId());
+            return toFoodItemDetail;
         }
     }
 }
