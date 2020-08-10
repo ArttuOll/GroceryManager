@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.adapters.ConfigurationsListAdapter;
+import com.bsuuv.grocerymanager.util.RecyclerViewUtil;
 import com.bsuuv.grocerymanager.viewmodel.FoodItemViewModel;
 
 import java.util.Objects;
@@ -91,20 +92,11 @@ public class ConfigurationsActivity extends AppCompatActivity {
 
     private void setRecyclerViewVisibility(int size) {
         if (size > 0) {
-            toggleRecyclerViewVisibility(View.VISIBLE, 0);
+            RecyclerViewUtil.toggleRecyclerViewVisibility(mRecyclerView, mRecyclerViewPlaceHolder
+                    , View.VISIBLE, 0);
         } else {
-            toggleRecyclerViewVisibility(View.GONE, R.string.no_grocery_items);
-        }
-    }
-
-    private void toggleRecyclerViewVisibility(int visibility, int placeholderStrResourceId) {
-        if (visibility == View.VISIBLE) {
-            mRecyclerView.setVisibility(visibility);
-            mRecyclerViewPlaceHolder.setVisibility(View.GONE);
-        } else {
-            mRecyclerView.setVisibility(View.GONE);
-            mRecyclerViewPlaceHolder.setVisibility(View.VISIBLE);
-            mRecyclerViewPlaceHolder.setText(placeholderStrResourceId);
+            RecyclerViewUtil.toggleRecyclerViewVisibility(mRecyclerView, mRecyclerViewPlaceHolder
+                    , View.GONE, R.string.no_grocery_items);
         }
     }
 

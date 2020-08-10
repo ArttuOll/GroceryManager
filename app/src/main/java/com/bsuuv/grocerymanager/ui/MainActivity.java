@@ -21,6 +21,7 @@ import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.notifications.GroceryDayNotifier;
 import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter;
 import com.bsuuv.grocerymanager.util.DateHelper;
+import com.bsuuv.grocerymanager.util.RecyclerViewUtil;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import com.bsuuv.grocerymanager.viewmodel.GroceryItemViewModel;
 
@@ -125,22 +126,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void setRecyclerViewVisibility() {
         if (mNumberOfGroceryDays == 0) {
-            toggleRecyclerViewVisibility(View.GONE, R.string.main_no_grocery_days_set);
+            RecyclerViewUtil.toggleRecyclerViewVisibility(mRecyclerView, mRecyclerViewPlaceHolder
+                    , View.GONE, R.string.main_no_grocery_days_set);
         } else if (!mDateHelper.isGroceryDay()) {
-            toggleRecyclerViewVisibility(View.GONE, R.string.main_not_grocery_day);
+            RecyclerViewUtil.toggleRecyclerViewVisibility(mRecyclerView, mRecyclerViewPlaceHolder
+                    , View.GONE, R.string.main_not_grocery_day);
         } else if (mDateHelper.isGroceryDay()) {
-            toggleRecyclerViewVisibility(View.VISIBLE, 0);
-        }
-    }
-
-    private void toggleRecyclerViewVisibility(int visibility, int placeholderStrResourceId) {
-        if (visibility == View.VISIBLE) {
-            mRecyclerView.setVisibility(visibility);
-            mRecyclerViewPlaceHolder.setVisibility(View.GONE);
-        } else {
-            mRecyclerView.setVisibility(View.GONE);
-            mRecyclerViewPlaceHolder.setVisibility(View.VISIBLE);
-            mRecyclerViewPlaceHolder.setText(placeholderStrResourceId);
+            RecyclerViewUtil.toggleRecyclerViewVisibility(mRecyclerView, mRecyclerViewPlaceHolder
+                    , View.VISIBLE, 0);
         }
     }
 
