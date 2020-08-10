@@ -51,35 +51,7 @@ public class MainActivity extends AppCompatActivity {
         setUpViewModel();
         scheduleNotification();
 
-        if (savedInstanceState != null) {
-            recoverSavedInstanceState(savedInstanceState);
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        saveRecyclerViewState(outState);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_configure:
-                launchConfigurationsActivity();
-                return true;
-            case R.id.action_settings:
-                launchSettingsActivity();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        if (savedInstanceState != null) recoverSavedInstanceState(savedInstanceState);
     }
 
     private void initMembers() {
@@ -174,7 +146,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void scheduleNotification() {
         GroceryDayNotifier mNotifier = new GroceryDayNotifier(this, mSharedPrefsHelper);
-        mNotifier.scheduleGroceryDayNotification(mDateHelper.timeUntilNextGroceryDay());
+        int timeUntilGroceryDay = mDateHelper.timeUntilNextGroceryDay();
+        if (timeUntilGroceryDay < 8) {
+            mNotifier.scheduleGroceryDayNotification(timeUntilGroceryDay);
+        }
     }
 
     private void recoverSavedInstanceState(Bundle savedInstanceState) {
@@ -182,10 +157,36 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager.onRestoreInstanceState(state);
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        saveRecyclerViewState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
     private void saveRecyclerViewState(Bundle outState) {
         Parcelable state = Objects.requireNonNull(mRecyclerView.getLayoutManager())
                 .onSaveInstanceState();
         outState.putParcelable(MAIN_RECYCLERVIEW_STATE, state);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_configure:
+                launchConfigurationsActivity();
+                return true;
+            case R.id.action_settings:
+                launchSettingsActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void launchConfigurationsActivity() {
