@@ -3,9 +3,6 @@ package com.bsuuv.grocerymanager.util;
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.bsuuv.grocerymanager.util.DateHelper;
-import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,7 +14,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,9 +22,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DateHelperTests {
-
-    @Mock
-    private Calendar mMockCalendar;
 
     @Mock
     private Context mContext;
@@ -66,7 +59,7 @@ public class DateHelperTests {
         MockitoAnnotations.initMocks(this);
 
         // Current day is Monday
-        when(mMockCalendar.get(anyInt())).thenReturn(2);
+        mDateHelper.setToday(2);
         when(mContext.getResources()).thenReturn(mResources);
         when(mResources.getStringArray(anyInt())).thenReturn(getDaysOfWeek());
     }
@@ -93,7 +86,7 @@ public class DateHelperTests {
     @Test
     public void timeUntilNextGroceryDay_groceryWeekDayInPast() {
         // Current day is Wednesday
-        when(mMockCalendar.get(anyInt())).thenReturn(4);
+        mDateHelper.setToday(4);
         mGroceryDays.add("monday");
 
         Assert.assertEquals(5, mDateHelper.timeUntilNextGroceryDay());

@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
     private void scheduleNotification() {
         GroceryDayNotifier mNotifier = new GroceryDayNotifier(this, mSharedPrefsHelper);
         int timeUntilGroceryDay = mDateHelper.timeUntilNextGroceryDay();
-        if (timeUntilGroceryDay < 8) {
+        if (timeUntilGroceryDay < DateHelper.NO_GROCERY_DAYS_SET) {
             mNotifier.scheduleGroceryDayNotification(timeUntilGroceryDay);
         }
     }
