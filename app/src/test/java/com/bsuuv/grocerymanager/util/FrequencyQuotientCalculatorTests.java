@@ -1,8 +1,6 @@
-package com.bsuuv.grocerymanager;
+package com.bsuuv.grocerymanager.util;
 
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
-import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
-import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 
 import org.junit.Assert;
 import org.junit.Before;
