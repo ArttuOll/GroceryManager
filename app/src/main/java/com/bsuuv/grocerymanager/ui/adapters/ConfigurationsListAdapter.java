@@ -25,15 +25,10 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 import java.util.List;
 
-/**
- * Connects food-item data (list of food-items created by the user) to <code>RecyclerView</code> in
- * ConfigurationsActivity.
- */
 public class ConfigurationsListAdapter extends RecyclerView.Adapter<ConfigurationsListAdapter.ConfigsViewHolder> {
 
     private List<FoodItemEntity> mFoodItems;
     private LayoutInflater mInflater;
-    // Represents the activity in which this the RecyclerView of this adapter resides.
     private Context mContext;
 
     public ConfigurationsListAdapter(Context context) {
@@ -45,7 +40,6 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
     @Override
     public ConfigurationsListAdapter.ConfigsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = mInflater.inflate(R.layout.configlist_item, parent, false);
-
         return new ConfigurationsListAdapter.ConfigsViewHolder(itemView, this);
     }
 
@@ -53,90 +47,38 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
     public void onBindViewHolder(@NonNull ConfigurationsListAdapter.ConfigsViewHolder holder,
                                  int position) {
         FoodItemEntity currentFoodItem = mFoodItems.get(position);
-
         holder.bindTo(currentFoodItem);
     }
 
     @Override
     public int getItemCount() {
-        if (mFoodItems == null) { return 0; } else return mFoodItems.size();
+        return mFoodItems == null ? 0 : mFoodItems.size();
     }
 
     public FoodItemEntity getFoodItemAtPosition(int position) {
         return mFoodItems.get(position);
     }
 
-    public void setFoodItems(List<FoodItemEntity> foodItems) {
+    public void setFoodItems(List<FoodItemEntity> newFoodItems) {
         if (this.mFoodItems == null) {
-            this.mFoodItems = foodItems;
-            notifyItemRangeInserted(0, foodItems.size());
+            this.mFoodItems = newFoodItems;
+            notifyItemRangeInserted(0, newFoodItems.size());
         } else {
-            // Calculate differences in the old and new list of food-items and
-            // define an optimal set of update-operations to migrate to the
-            // new list.
-            DiffUtil.DiffResult result =
-                    DiffUtil.calculateDiff(new DiffUtil.Callback() {
-                @Override
-                public int getOldListSize() {
-                    return mFoodItems.size();
-                }
-
-                @Override
-                public int getNewListSize() {
-                    return foodItems.size();
-                }
-
-                @Override
-                public boolean areItemsTheSame(int oldItemPosition,
-                                               int newItemPosition) {
-                    return mFoodItems.get(oldItemPosition).getId() ==
-                            foodItems.get(newItemPosition).getId();
-                }
-
-                @Override
-                public boolean areContentsTheSame(int oldItemPosition,
-                                                  int newItemPosition) {
-                    FoodItemEntity oldFoodItem =
-                            mFoodItems.get(oldItemPosition);
-                    FoodItemEntity newFoodItem = foodItems.get(newItemPosition);
-
-                    // Only comparing id and members that are visible in the
-                    // RecyclerView item. Note that countdownValue is not
-                    // compared.
-                    return oldFoodItem.getId() == newFoodItem.getId() &&
-                            oldFoodItem.getAmount() == newFoodItem.getAmount() &&
-                            oldFoodItem.getBrand().equals(newFoodItem.getBrand()) &&
-                            oldFoodItem.getFrequency() == newFoodItem.getFrequency() &&
-                            oldFoodItem.getImageUri().equals(newFoodItem.getImageUri()) &&
-                            oldFoodItem.getInfo().equals(newFoodItem.getInfo()) &&
-                            oldFoodItem.getLabel().equals(newFoodItem.getLabel()) &&
-                            oldFoodItem.getTimeFrame() == newFoodItem.getTimeFrame() &&
-                            oldFoodItem.getUnit().equals(newFoodItem.getUnit());
-
-                }
-            });
-            mFoodItems = foodItems;
-            // Apply defined update operations to this adapter.
-            result.dispatchUpdatesTo(this);
+            DiffUtil.DiffResult migrationOperations = FoodItemListDifferenceCalculator
+                    .calculateMigrationOperations(mFoodItems, newFoodItems);
+            mFoodItems = newFoodItems;
+            migrationOperations.dispatchUpdatesTo(this);
         }
     }
 
-    /**
-     * Contains a single item displayed in ConfigurationsActivity
-     * <code>RecyclerView</code>.
-     */
     class ConfigsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final ConfigurationsListAdapter mAdapter;
-        private final TextView mFoodItemLabel;
-        private final TextView mFoodItemBrand;
-        private final TextView mFoodItemAmount;
-        private final TextView mSchedule;
+        private final TextView mFoodItemLabel, mFoodItemBrand, mFoodItemAmount, mSchedule;
         private final ImageView mFoodImage;
         private final PluralsProvider mPluralsProvider;
 
         ConfigsViewHolder(View itemView, ConfigurationsListAdapter adapter) {
             super(itemView);
-
             mFoodImage = itemView.findViewById(R.id.configlist_food_image);
             mFoodImage.setClipToOutline(true);
             mFoodItemLabel = itemView.findViewById(R.id.config_item_label);
@@ -145,16 +87,9 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
             mSchedule = itemView.findViewById(R.id.config_item_schedule);
             this.mAdapter = adapter;
             this.mPluralsProvider = new PluralsProvider(mContext);
-
             itemView.setOnClickListener(this);
         }
 
-        /**
-         * Set values to all views inside a single item in ConfigurationsActivity RecyclerView.
-         *
-         * @param currentFoodItem The ConfigurationsActivity RecyclerView item that is to be
-         *                        displayed next.
-         */
         void bindTo(FoodItemEntity currentFoodItem) {
             mFoodItemLabel.setText(currentFoodItem.getLabel());
             mFoodItemBrand.setText(currentFoodItem.getBrand());
@@ -169,29 +104,32 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
         @Override
         public void onClick(View v) {
             FoodItemEntity currentFoodItem = mFoodItems.get(getAdapterPosition());
-
-            Intent toNewFoodItem = new Intent(mContext, NewFoodItem.class);
-            toNewFoodItem.putExtra("label", currentFoodItem.getLabel());
-            toNewFoodItem.putExtra("brand", currentFoodItem.getBrand());
-            toNewFoodItem.putExtra("info", currentFoodItem.getInfo());
-            toNewFoodItem.putExtra("amount", currentFoodItem.getAmount());
-            toNewFoodItem.putExtra("unit", currentFoodItem.getUnit());
-            toNewFoodItem.putExtra("time_frame", currentFoodItem.getTimeFrame());
-            toNewFoodItem.putExtra("frequency", currentFoodItem.getFrequency());
-            toNewFoodItem.putExtra("id", currentFoodItem.getId());
-            toNewFoodItem.putExtra("editPosition", getAdapterPosition());
-            toNewFoodItem.putExtra("countdownValue", currentFoodItem.getCountdownValue());
-
-            String uri = (currentFoodItem.getImageUri() != null) ?
-                    currentFoodItem.getImageUri() : "";
-            toNewFoodItem.putExtra("uri", uri);
-
+            Intent toNewFoodItem = createIntentToNewFoodItem(currentFoodItem);
             Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext,
                     mFoodImage, mFoodImage.getTransitionName()).toBundle();
 
             Activity configurations = (Activity) mContext;
             configurations.startActivityForResult(toNewFoodItem,
                     ConfigurationsActivity.FOOD_ITEM_EDIT_REQUEST, bundle);
+        }
+
+        private Intent createIntentToNewFoodItem(FoodItemEntity foodItem) {
+            Intent toNewFoodItem = new Intent(mContext, NewFoodItem.class);
+            toNewFoodItem.putExtra("label", foodItem.getLabel());
+            toNewFoodItem.putExtra("brand", foodItem.getBrand());
+            toNewFoodItem.putExtra("info", foodItem.getInfo());
+            toNewFoodItem.putExtra("amount", foodItem.getAmount());
+            toNewFoodItem.putExtra("unit", foodItem.getUnit());
+            toNewFoodItem.putExtra("time_frame", foodItem.getTimeFrame());
+            toNewFoodItem.putExtra("frequency", foodItem.getFrequency());
+            toNewFoodItem.putExtra("id", foodItem.getId());
+            toNewFoodItem.putExtra("editPosition", getAdapterPosition());
+            toNewFoodItem.putExtra("countdownValue", foodItem.getCountdownValue());
+
+            String uri = (foodItem.getImageUri() != null) ? foodItem.getImageUri() : "";
+            toNewFoodItem.putExtra("uri", uri);
+
+            return toNewFoodItem;
         }
     }
 }
