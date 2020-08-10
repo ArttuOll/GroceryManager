@@ -59,6 +59,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     public void setGroceryItems(List<FoodItemEntity> newGroceryItems) {
         if (this.mGroceryItems == null) {
             this.mGroceryItems = newGroceryItems;
+            notifyItemRangeInserted(0, newGroceryItems.size());
         } else {
             DiffUtil.DiffResult migrationOperations = FoodItemListDifferenceCalculator
                     .calculateMigrationOperations(mGroceryItems, newGroceryItems);
