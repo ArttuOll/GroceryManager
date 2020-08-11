@@ -43,14 +43,15 @@
     <string name="snackbar_no_grocery_days">You must set grocery days in settings before you can configure your grocerylist!</string>
     <string name="snackbar_not_enough_grocery_days">You don\'t have enough grocery days per week
         to have this food-item this often!</string>
-    <string name="label_empty">The label field cannot be empty!</string>
+    <string name="snackbar_time_frame_not_chosen">You must select a time frame!</string>
+    <string name="snackbar_frequency_not_set">Frequency can\'t be zero!</string>
+    <string name="snackbar_amount_empty">Amount field can\'t be empty!</string>
+    <string name="snackbar_label_empty">The label field cannot be empty!</string>
 
     <string name="imageview_grocerylist_content_description">Grocery Item</string>
     <string name="fooditem_detail_more_info">Info:</string>
     <string name="hint_freq_input">frequency input</string>
     <string name="transition_detail">transition detail</string>
-    <string name="timeframe_not_chosen">You must select a time frame!</string>
-    <string name="frequency_not_set">Frequency can\'t be zero!</string>
     <string name="notifchan_primary_name">Grocery Day Notification</string>
     <string name="notifchan_primary_description">A notification that reminds you to do your groceries</string>
     <string name="notification_content_title">It\'s grocery day!</string>

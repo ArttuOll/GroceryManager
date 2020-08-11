@@ -17,20 +17,12 @@ import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.adapters.ConfigurationsListAdapter;
 import com.bsuuv.grocerymanager.util.RecyclerViewUtil;
+import com.bsuuv.grocerymanager.util.RequestValidator;
 import com.bsuuv.grocerymanager.viewmodel.FoodItemViewModel;
 
 import java.util.Objects;
 
-/**
- * An activity containing a list of all food-items the user has configured
- * to show in his grocery list on a certain time. Gives options to create
- * new food-items and edit existing ones.
- */
 public class ConfigurationsActivity extends AppCompatActivity {
-
-    public static final int FOOD_ITEM_EDIT_REQUEST = 2;
-
-    private static final int FOOD_ITEM_CREATE_REQUEST = 1;
 
     private ConfigurationsListAdapter mAdapter;
     private FoodItemViewModel mFoodItemViewModel;
@@ -105,20 +97,14 @@ public class ConfigurationsActivity extends AppCompatActivity {
                                     @Nullable Intent fromNewFoodItem) {
         super.onActivityResult(requestCode, resultCode, fromNewFoodItem);
 
-        if (foodItemCreationSuccesful(requestCode, resultCode, fromNewFoodItem)) {
+        if (RequestValidator.foodItemCreationSuccesful(requestCode, resultCode, fromNewFoodItem)) {
             FoodItemEntity result = createFoodItemFromIntent(fromNewFoodItem);
             mFoodItemViewModel.insert(result);
-        } else if (foodItemEditSuccesful(requestCode, resultCode, fromNewFoodItem)) {
+        } else if (RequestValidator.foodItemEditSuccesful(requestCode, resultCode,
+                fromNewFoodItem)) {
             FoodItemEntity result = updateFoodItemByIntent(fromNewFoodItem);
             mFoodItemViewModel.update(result);
         }
-    }
-
-    private boolean foodItemCreationSuccesful(int requestCode, int resultCode,
-                                              Intent fromNewFoodItem) {
-        return requestCode == FOOD_ITEM_CREATE_REQUEST &&
-                resultCode == RESULT_OK &&
-                fromNewFoodItem != null;
     }
 
     private FoodItemEntity createFoodItemFromIntent(Intent fromNewFoodItem) {
@@ -134,12 +120,6 @@ public class ConfigurationsActivity extends AppCompatActivity {
 
         return new FoodItemEntity(label, brand, info, amount, unit, timeFrame, frequency, imageUri,
                 initCountdownValue);
-    }
-
-    private boolean foodItemEditSuccesful(int requestCode, int resultCode, Intent fromNewFoodItem) {
-        return requestCode == FOOD_ITEM_EDIT_REQUEST &&
-                resultCode == RESULT_OK &&
-                fromNewFoodItem != null;
     }
 
     private FoodItemEntity updateFoodItemByIntent(Intent fromNewFoodItem) {
@@ -167,6 +147,6 @@ public class ConfigurationsActivity extends AppCompatActivity {
      */
     public void onFabClick(View view) {
         Intent toNewFoodItem = new Intent(this, NewFoodItem.class);
-        startActivityForResult(toNewFoodItem, FOOD_ITEM_CREATE_REQUEST);
+        startActivityForResult(toNewFoodItem, RequestValidator.FOOD_ITEM_CREATE_REQUEST);
     }
 }

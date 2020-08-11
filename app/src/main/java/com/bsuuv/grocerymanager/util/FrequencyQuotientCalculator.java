@@ -2,6 +2,7 @@ package com.bsuuv.grocerymanager.util;
 
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 
+//TODO: muokkaa staattiseksi
 public class FrequencyQuotientCalculator {
 
     private SharedPreferencesHelper mSharedPrefsHelper;

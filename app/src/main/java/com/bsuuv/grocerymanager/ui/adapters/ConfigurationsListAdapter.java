@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
-import com.bsuuv.grocerymanager.ui.ConfigurationsActivity;
 import com.bsuuv.grocerymanager.ui.NewFoodItem;
 import com.bsuuv.grocerymanager.util.FoodItemListDifferenceCalculator;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
+import com.bsuuv.grocerymanager.util.RequestValidator;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -111,7 +111,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
 
             Activity configurations = (Activity) mContext;
             configurations.startActivityForResult(toNewFoodItem,
-                    ConfigurationsActivity.FOOD_ITEM_EDIT_REQUEST, bundle);
+                    RequestValidator.FOOD_ITEM_EDIT_REQUEST, bundle);
         }
 
         private Intent createIntentToNewFoodItem(FoodItemEntity foodItem) {
