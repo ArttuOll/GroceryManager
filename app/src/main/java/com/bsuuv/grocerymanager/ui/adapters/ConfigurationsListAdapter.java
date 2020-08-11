@@ -19,6 +19,7 @@ import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.ConfigurationsActivity;
 import com.bsuuv.grocerymanager.ui.NewFoodItem;
+import com.bsuuv.grocerymanager.util.FoodItemListDifferenceCalculator;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
 import com.bumptech.glide.Glide;
 

@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.ui.adapters;
+package com.bsuuv.grocerymanager.util;
 
 import androidx.recyclerview.widget.DiffUtil;
 
@@ -6,7 +6,7 @@ import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 
 import java.util.List;
 
-class FoodItemListDifferenceCalculator {
+public class FoodItemListDifferenceCalculator {
 
     public static DiffUtil.DiffResult calculateMigrationOperations(List<FoodItemEntity> oldFoodItems
             , List<FoodItemEntity> newFoodItems) {
