@@ -147,6 +147,8 @@ public class ConfigurationsActivity extends AppCompatActivity {
      */
     public void onFabClick(View view) {
         Intent toNewFoodItem = new Intent(this, NewFoodItem.class);
-        startActivityForResult(toNewFoodItem, RequestValidator.FOOD_ITEM_CREATE_REQUEST);
+        int requestCode = RequestValidator.FOOD_ITEM_CREATE_REQUEST;
+        toNewFoodItem.putExtra("requestCode", requestCode);
+        startActivityForResult(toNewFoodItem, requestCode);
     }
 }

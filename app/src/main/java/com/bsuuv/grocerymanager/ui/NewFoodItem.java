@@ -111,11 +111,18 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
 
     private void manageIntent() {
         Intent fromConfigs = Objects.requireNonNull(getIntent());
-        setInputFieldValuesFromIntent(fromConfigs);
-        setImageFromIntent(fromConfigs);
-        setToggleButtonStatesFromIntent(fromConfigs);
-        this.mId = fromConfigs.getIntExtra("id", 0);
-        this.mCountdownValue = fromConfigs.getDoubleExtra("countdownValue", 0.0);
+        if (intentsToEditFoodItem(fromConfigs)) {
+            setInputFieldValuesFromIntent(fromConfigs);
+            setImageFromIntent(fromConfigs);
+            setToggleButtonStatesFromIntent(fromConfigs);
+            this.mId = fromConfigs.getIntExtra("id", 0);
+            this.mCountdownValue = fromConfigs.getDoubleExtra("countdownValue", 0.0);
+        }
+    }
+
+    private boolean intentsToEditFoodItem(Intent intent) {
+        return intent.getIntExtra("requestCode", RequestValidator.NONE) ==
+                RequestValidator.FOOD_ITEM_EDIT_REQUEST;
     }
 
     private void setInputFieldValuesFromIntent(Intent intent) {
@@ -185,7 +192,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         if (foodItemCreationRequirementsMet(label, amount, timeFrame, frequency,
                 frequencyQuotient)) {
             launchConfigurationsActivity(label, brand, amount, unit, info, timeFrame, frequency,
-                    mImagePath, frequencyQuotient);
+                    frequencyQuotient);
         }
     }
 

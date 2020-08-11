@@ -126,6 +126,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
             toNewFoodItem.putExtra("id", foodItem.getId());
             toNewFoodItem.putExtra("editPosition", getAdapterPosition());
             toNewFoodItem.putExtra("countdownValue", foodItem.getCountdownValue());
+            toNewFoodItem.putExtra("requestCode", RequestValidator.FOOD_ITEM_EDIT_REQUEST);
 
             String uri = (foodItem.getImageUri() != null) ? foodItem.getImageUri() : "";
             toNewFoodItem.putExtra("uri", uri);
