@@ -19,12 +19,12 @@ public class FrequencyQuotientCalculator {
         // once every two weeks, then the frequency quotient is
         // 1 per week / (1 grocery day * 2 weeks) = 1/2.
         double frequencyQuotient = ((double) foodItem.getFrequency()) /
-                (foodItem.getTimeFrame() * groceryDaysAWeek);
+                (foodItem.getTimeFrame().value() * groceryDaysAWeek);
         // Round to nearest 0.05
         return Math.round(frequencyQuotient * 20) / 20.0;
     }
 
-    public double getFrequencyQuotient(int frequency, int timeFrame, int groceryDaysAWeek) {
+    public double getFrequencyQuotient(int frequency, TimeFrame timeFrame, int groceryDaysAWeek) {
         // A double representing the frequency in which a food-item should
         // appear in
         // grocery list. If there's one grocery day a week and a food-item is
@@ -32,7 +32,7 @@ public class FrequencyQuotientCalculator {
         // once every two weeks, then the frequency quotient is
         // 1 per week / (1 grocery day * 2 weeks) = 1/2.
         double frequencyQuotient =
-                ((double) frequency) / (timeFrame * groceryDaysAWeek);
+                ((double) frequency) / (timeFrame.value() * groceryDaysAWeek);
         // Round to nearest 0.05
         return Math.round(frequencyQuotient * 20) / 20.0;
     }

@@ -6,6 +6,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class RequestValidator {
 
+    public static final int NONE = 0;
     public static final int FOOD_ITEM_CREATE_REQUEST = 1;
     public static final int FOOD_ITEM_EDIT_REQUEST = 2;
     public static final int REQUEST_IMAGE_CAPTURE = 3;

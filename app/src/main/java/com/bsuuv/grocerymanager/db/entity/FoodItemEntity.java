@@ -5,8 +5,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import com.bsuuv.grocerymanager.model.FoodItem;
+import com.bsuuv.grocerymanager.util.TimeFrame;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -41,8 +43,9 @@ public class FoodItemEntity implements FoodItem {
     @ColumnInfo(name = "unit")
     private String mUnit;
 
+    @TypeConverters(TimeFrameConverter.class)
     @ColumnInfo(name = "time_frame")
-    private int mTimeFrame;
+    private TimeFrame mTimeFrame;
 
     @ColumnInfo(name = "frequency")
     private int mFrequency;
@@ -52,7 +55,7 @@ public class FoodItemEntity implements FoodItem {
 
     @Ignore
     public FoodItemEntity(int id, @NotNull String label, String brand, String info, int amount,
-                          String unit, int timeFrame, int frequency, String mImageUri,
+                          String unit, TimeFrame timeFrame, int frequency, String mImageUri,
                           double countdownValue) {
         this.mId = id;
         this.mLabel = label;
@@ -67,7 +70,8 @@ public class FoodItemEntity implements FoodItem {
     }
 
     public FoodItemEntity(@NotNull String label, String brand, String info, int amount, String unit,
-                          int timeFrame, int frequency, String mImageUri, double countdownValue) {
+                          TimeFrame timeFrame, int frequency, String mImageUri,
+                          double countdownValue) {
         this.mLabel = label;
         this.mBrand = brand;
         this.mInfo = info;
@@ -95,7 +99,7 @@ public class FoodItemEntity implements FoodItem {
         this.mId = mId;
     }
 
-    public int getTimeFrame() {
+    public TimeFrame getTimeFrame() {
         return mTimeFrame;
     }
 

@@ -97,7 +97,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
             mFoodItemAmount.setText(mPluralsProvider.getAmountString(currentFoodItem.getAmount(),
                     currentFoodItem.getUnit()));
             mSchedule.setText(mPluralsProvider.getScheduleString(currentFoodItem.getFrequency(),
-                    currentFoodItem.getTimeFrame()));
+                    currentFoodItem.getTimeFrame().value()));
             Glide.with(mContext).load(new File(String.valueOf(currentFoodItem.getImageUri())))
                     .into(mFoodImage);
         }

@@ -1,5 +1,7 @@
 package com.bsuuv.grocerymanager.model;
 
+import com.bsuuv.grocerymanager.util.TimeFrame;
+
 public interface FoodItem {
 
     int getId();
@@ -16,7 +18,7 @@ public interface FoodItem {
 
     String getUnit();
 
-    int getTimeFrame();
+    TimeFrame getTimeFrame();
 
     int getFrequency();
 

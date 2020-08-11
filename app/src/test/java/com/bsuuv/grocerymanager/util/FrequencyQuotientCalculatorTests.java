@@ -41,13 +41,13 @@ public class FrequencyQuotientCalculatorTests {
         when(mSharedPrefsHelper.getGroceryDays()).thenReturn(mGroceryDays);
 
         FoodItemEntity foodItem = new FoodItemEntity("Olut", "Karjala",
-                "Raikasta", 2, "Packets", 2, 1,
+                "Raikasta", 2, "Packets", TimeFrame.TWO_WEEKS, 1,
                 "", 0.0);
 
         Assert.assertEquals(0.5, mFqCalculator.getFrequencyQuotient(foodItem)
                 , 0.001);
 
-        Assert.assertEquals(0.5, mFqCalculator.getFrequencyQuotient(1, 2, 1),
+        Assert.assertEquals(0.5, mFqCalculator.getFrequencyQuotient(1, TimeFrame.TWO_WEEKS, 1),
                 0.001);
     }
 
@@ -60,13 +60,13 @@ public class FrequencyQuotientCalculatorTests {
         when(mSharedPrefsHelper.getGroceryDays()).thenReturn(mGroceryDays);
 
         FoodItemEntity foodItem = new FoodItemEntity("Olut", "Karjala",
-                "Raikasta", 2, "Packets", 2, 1,
+                "Raikasta", 2, "Packets", TimeFrame.TWO_WEEKS, 1,
                 "", 0.0);
 
         Assert.assertEquals(0.15, mFqCalculator.getFrequencyQuotient(foodItem)
                 , 0.001);
 
-        Assert.assertEquals(0.15, mFqCalculator.getFrequencyQuotient(1, 2, 3),
+        Assert.assertEquals(0.15, mFqCalculator.getFrequencyQuotient(1, TimeFrame.TWO_WEEKS, 3),
                 0.001);
     }
 }

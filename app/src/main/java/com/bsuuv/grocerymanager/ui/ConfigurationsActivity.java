@@ -18,6 +18,7 @@ import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.adapters.ConfigurationsListAdapter;
 import com.bsuuv.grocerymanager.util.RecyclerViewUtil;
 import com.bsuuv.grocerymanager.util.RequestValidator;
+import com.bsuuv.grocerymanager.util.TimeFrame;
 import com.bsuuv.grocerymanager.viewmodel.FoodItemViewModel;
 
 import java.util.Objects;
@@ -113,7 +114,7 @@ public class ConfigurationsActivity extends AppCompatActivity {
         int amount = fromNewFoodItem.getIntExtra("amount", 0);
         String unit = fromNewFoodItem.getStringExtra("unit");
         String info = fromNewFoodItem.getStringExtra("info");
-        int timeFrame = fromNewFoodItem.getIntExtra("time_frame", 0);
+        TimeFrame timeFrame = (TimeFrame) fromNewFoodItem.getSerializableExtra("time_frame");
         int frequency = fromNewFoodItem.getIntExtra("frequency", 0);
         String imageUri = fromNewFoodItem.getStringExtra("uri");
         double initCountdownValue = fromNewFoodItem.getDoubleExtra("frequencyQuotient", 0.0);
@@ -128,7 +129,7 @@ public class ConfigurationsActivity extends AppCompatActivity {
         int amount = fromNewFoodItem.getIntExtra("amount", 0);
         String unit = fromNewFoodItem.getStringExtra("unit");
         String info = fromNewFoodItem.getStringExtra("info");
-        int timeFrame = fromNewFoodItem.getIntExtra("time_frame", 0);
+        TimeFrame timeFrame = (TimeFrame) fromNewFoodItem.getSerializableExtra("time_frame");
         int frequency = fromNewFoodItem.getIntExtra("frequency", 0);
         String imageUri = fromNewFoodItem.getStringExtra("uri");
         int id = fromNewFoodItem.getIntExtra("id", 0);

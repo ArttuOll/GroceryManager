@@ -76,8 +76,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
     }
 
     private void updateDatabase() {
-        for (FoodItemEntity foodItem : mModifiedList)
-            mRepository.update(foodItem);
+        for (FoodItemEntity foodItem : mModifiedList) mRepository.update(foodItem);
         mGroceryListManager.clearBuffers();
     }
 }

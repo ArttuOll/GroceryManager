@@ -4,6 +4,7 @@ import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.DateHelper;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
+import com.bsuuv.grocerymanager.util.TimeFrame;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -57,17 +58,17 @@ public class GroceryListManagerTests {
 
         this.mFoodItems = new ArrayList<>();
         this.mFoodItem1 = new FoodItemEntity("Kalja", "Karjala", "Raikasta",
-                2, "Packets", 2, 1, "", 0.0);
+                2, "Packets", TimeFrame.TWO_WEEKS, 1, "", 0.0);
         this.mFoodItem2 = new FoodItemEntity("Makkara", "Atria", "Lihaisaa",
-                3, "Bags", 3, 1, "", 0.0);
+                3, "Bags", TimeFrame.MONTH, 1, "", 0.0);
         this.mModifiedFoodItem = new FoodItemEntity("Parsakaali", "", "Tylsää",
-                5, "Bags", 1, 1, "", 0.0);
+                5, "Bags", TimeFrame.WEEK, 1, "", 0.0);
         this.mCheckedFoodItem = new FoodItemEntity("Kanaa", "Saarioinen",
                 "Tylsää",
-                5, "Bags", 1, 1, "", 0.0);
+                5, "Bags", TimeFrame.WEEK, 1, "", 0.0);
         this.mModifiedCheckedFoodItem = new FoodItemEntity("Voi", "Valio",
                 "Tylsää",
-                5, "Bags", 1, 1, "", 0.0);
+                5, "Bags", TimeFrame.WEEK, 1, "", 0.0);
 
 
         when(mSharedPrefsHelper.getList(GroceryListManager.MODIFIED_LIST_KEY))

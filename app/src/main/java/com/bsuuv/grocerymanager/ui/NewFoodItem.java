@@ -38,7 +38,6 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     private static final String IMAGE_PATH_KEY = "imagePath";
     private static final int FREQUENCY_NOT_SET = 0;
     private static final int AMOUNT_FIELD_EMPTY = 0;
-    private static final int TIMEFRAME_NOT_CHOSEN = -2;
     private static final double IMPOSSIBLE_FREQUENCY_QUOTIENT = 1.0;
 
     private MaterialButtonToggleGroup mToggleGroup;
@@ -68,12 +67,18 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         this.mBrandEditText = findViewById(R.id.editText_brand);
         this.mAmountEditText = findViewById(R.id.editText_amount);
         this.mInfoEditText = findViewById(R.id.editText_info);
-        this.mFrequencyEditText = findViewById(R.id.editText_freq);
+        this.mFrequencyEditText = initFrequencyEditText();
         this.mFoodImageView = findViewById(R.id.imageView_new_fooditem);
         this.mSharedPrefsHelper = new SharedPreferencesHelper(this);
         this.mFqCalc = new FrequencyQuotientCalculator(mSharedPrefsHelper);
         this.mUnitDropdown = initUnitDropdown();
         this.mToggleGroup = findViewById(R.id.freq_selection_togglegroup);
+    }
+
+    private EditText initFrequencyEditText() {
+        EditText editText = findViewById(R.id.editText_freq);
+        editText.setText("0");
+        return editText;
     }
 
     private AutoCompleteTextView initUnitDropdown() {
@@ -141,14 +146,16 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     }
 
     private void setToggleButtonStatesFromIntent(Intent fromConfigs) {
-        switch (fromConfigs.getIntExtra("time_frame", 0)) {
-            case TimeFrame.WEEK:
+        TimeFrame timeFrame =
+                (TimeFrame) Objects.requireNonNull(fromConfigs.getSerializableExtra("time_frame"));
+        switch (timeFrame) {
+            case WEEK:
                 mToggleGroup.check(R.id.togglebutton_week);
                 break;
-            case TimeFrame.TWO_WEEKS:
+            case TWO_WEEKS:
                 mToggleGroup.check(R.id.togglebutton_two_weeks);
                 break;
-            case TimeFrame.MONTH:
+            case MONTH:
                 mToggleGroup.check(R.id.togglebutton_month);
                 break;
         }
@@ -183,7 +190,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         int amount = getAmount();
         String unit = mUnitDropdown.getText().toString();
         String info = mInfoEditText.getText().toString();
-        int timeFrame = getActiveToggleButton();
+        TimeFrame timeFrame = getActiveToggleButton();
         int frequency = getFrequency();
         int groceryDaysAWeek = mSharedPrefsHelper.getGroceryDays().size();
         double frequencyQuotient = mFqCalc.getFrequencyQuotient(frequency, timeFrame,
@@ -196,7 +203,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private boolean foodItemCreationRequirementsMet(String label, int amount, int timeFrame,
+    private boolean foodItemCreationRequirementsMet(String label, int amount, TimeFrame timeFrame,
                                                     int frequency, double frequencyQuotient) {
         return groceryDaysSet() &&
                 inputFieldsValid(label, amount, timeFrame, frequency) &&
@@ -212,10 +219,10 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     }
 
     private void launchConfigurationsActivity(String label, String brand, int amount, String unit,
-                                              String info, int timeFrame, int frequency,
-                                              String mImagePath, double frequencyQuotient) {
+                                              String info, TimeFrame timeFrame, int frequency,
+                                              double frequencyQuotient) {
         Intent toConfigs = createIntentToConfigs(label, brand, amount, unit, info, timeFrame,
-                frequency, mImagePath, frequencyQuotient);
+                frequency, frequencyQuotient);
         setResult(RESULT_OK, toConfigs);
         finish();
     }
@@ -240,7 +247,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         return true;
     }
 
-    private boolean inputFieldsValid(String label, int amount, int timeFrame, int frequency) {
+    private boolean inputFieldsValid(String label, int amount, TimeFrame timeFrame, int frequency) {
         return labelFieldValid(label) &&
                 amountFieldValid(amount) &&
                 timeFrameSelected(timeFrame) &&
@@ -255,8 +262,8 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         return true;
     }
 
-    private boolean timeFrameSelected(int timeFrame) {
-        if (timeFrame == TIMEFRAME_NOT_CHOSEN) {
+    private boolean timeFrameSelected(TimeFrame timeFrame) {
+        if (timeFrame == TimeFrame.NULL) {
             showSnackbar(R.string.snackbar_time_frame_not_chosen);
             return false;
         }
@@ -285,8 +292,8 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     }
 
     private Intent createIntentToConfigs(String label, String brand, int amount, String unit,
-                                         String info, int timeFrame, int frequency,
-                                         String mImagePath, double frequencyQuotient) {
+                                         String info, TimeFrame timeFrame, int frequency,
+                                         double frequencyQuotient) {
         Intent toConfigs = new Intent(this, ConfigurationsActivity.class);
         toConfigs.putExtra("label", label);
         toConfigs.putExtra("brand", brand);
@@ -316,8 +323,8 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
 
     private void launchCameraApp(Intent captureImageIntent) {
         File imageFile = Objects.requireNonNull(getImageFile());
-        Uri imageUri = FileProvider.getUriForFile(this,
-                "com.bsuuv.android.fileprovider", imageFile);
+        Uri imageUri = FileProvider.getUriForFile(this, "com.bsuuv.android.fileprovider",
+                imageFile);
         captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(captureImageIntent, RequestValidator.REQUEST_IMAGE_CAPTURE);
     }
@@ -330,6 +337,20 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
             e.getMessage();
         }
         return imageFile;
+    }
+
+    private File createImageFile() throws IOException {
+        String imageFileName = getImageFileName();
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        mImagePath = Uri.parse(image.toURI().getPath()).getPath();
+        return image;
+    }
+
+    private String getImageFileName() {
+        @SuppressLint("SimpleDateFormat")
+        String timestamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+        return "JPEG_" + timestamp + "_";
     }
 
     private boolean cameraAppExists(Intent takePictureIntent) {
@@ -351,7 +372,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private int getActiveToggleButton() {
+    private TimeFrame getActiveToggleButton() {
         switch (mToggleGroup.getCheckedButtonId()) {
             case R.id.togglebutton_week:
                 return TimeFrame.WEEK;
@@ -360,27 +381,7 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
             case R.id.togglebutton_month:
                 return TimeFrame.MONTH;
             default:
-                return TIMEFRAME_NOT_CHOSEN;
+                return TimeFrame.NULL;
         }
-    }
-
-    private File createImageFile() throws IOException {
-        String imageFileName = getImageFileName();
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-        mImagePath = Uri.parse(image.toURI().getPath()).getPath();
-        return image;
-    }
-
-    private String getImageFileName() {
-        @SuppressLint("SimpleDateFormat")
-        String timestamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
-        return "JPEG_" + timestamp + "_";
-    }
-
-    private interface TimeFrame {
-        int WEEK = 1;
-        int TWO_WEEKS = 2;
-        int MONTH = 4;
     }
 }
