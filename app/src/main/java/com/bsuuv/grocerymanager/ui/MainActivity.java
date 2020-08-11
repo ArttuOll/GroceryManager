@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     private DateHelper mDateHelper;
     private List<FoodItemEntity> mGroceryList;
     private int mNumberOfGroceryDays;
-    private boolean mIsWideScreen;
     private SharedPreferencesHelper mSharedPrefsHelper;
 
     @Override
@@ -60,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         this.mDateHelper = new DateHelper(this, mSharedPrefsHelper);
         this.mRecyclerView = findViewById(R.id.main_recyclerview);
         this.mLayoutManager = new LinearLayoutManager(this);
-        this.mAdapter = new GroceryListAdapter(this, mIsWideScreen);
+        this.mAdapter = initAdapter();
         this.mRecyclerViewPlaceHolder =
                 findViewById(R.id.main_recyclerview_placeholder);
         this.mNumberOfGroceryDays = mSharedPrefsHelper.getGroceryDays().size();
@@ -68,9 +67,19 @@ public class MainActivity extends AppCompatActivity {
                 new ViewModelProvider(this).get(GroceryItemViewModel.class);
     }
 
+    private GroceryListAdapter initAdapter() {
+        boolean mIsWideScreen = defineScreenSize();
+        return new GroceryListAdapter(this, mIsWideScreen);
+    }
+
+    private boolean defineScreenSize() {
+        // This layout is only available in w900dp/content_main, so it's
+        // availability reveals the screen width
+        return findViewById(R.id.container_food_item_detail) != null;
+    }
+
     private void configureUi() {
         setUpToolbar();
-        defineLayoutForScreenSize();
         setUpRecyclerView();
     }
 
@@ -79,12 +88,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle(getString(R.string.mainActivity_actionbar_label) + " "
                 + mDateHelper.getCurrentDate());
-    }
-
-    private void defineLayoutForScreenSize() {
-        // This layout is only available in w900dp/content_main, so it's
-        // availability reveals the screen width
-        if (findViewById(R.id.container_food_item_detail) != null) mIsWideScreen = true;
     }
 
     private void setUpRecyclerView() {
