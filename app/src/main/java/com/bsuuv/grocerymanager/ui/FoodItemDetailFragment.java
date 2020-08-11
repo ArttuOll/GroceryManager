@@ -1,5 +1,6 @@
 package com.bsuuv.grocerymanager.ui;
 
+import android.app.Application;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,78 +18,88 @@ import com.bsuuv.grocerymanager.util.PluralsProvider;
 import com.bsuuv.grocerymanager.viewmodel.GroceryItemViewModel;
 import com.bumptech.glide.Glide;
 
-import java.util.Objects;
-
 public class FoodItemDetailFragment extends Fragment {
 
-    public static String FOOD_ITEM_ID_KEY = "foodItemId";
+    public static final String FOOD_ITEM_ID_KEY = "foodItemId";
+
     private PluralsProvider mPluralsProvider;
     private FoodItemEntity mFoodItem;
 
-    public FoodItemDetailFragment() {}
+    public FoodItemDetailFragment() {} // Required
 
     public static FoodItemDetailFragment newInstance(int foodItemId) {
-        FoodItemDetailFragment foodItemDetailFragment =
-                new FoodItemDetailFragment();
-
-        Bundle arguments = new Bundle();
-        arguments.putInt(FOOD_ITEM_ID_KEY, foodItemId);
-
-        foodItemDetailFragment.setArguments(arguments);
-
-        return foodItemDetailFragment;
+        FoodItemDetailFragment fragment = new FoodItemDetailFragment();
+        Bundle args = new Bundle();
+        args.putInt(FOOD_ITEM_ID_KEY, foodItemId);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.mPluralsProvider = new PluralsProvider(getActivity());
+        initMembers();
+    }
 
-        GroceryItemViewModel viewModel =
-                new GroceryItemViewModel(requireActivity().getApplication());
-        Bundle arguments = requireArguments();
-        if (arguments.containsKey(FOOD_ITEM_ID_KEY)) {
-            int foodItemId = arguments.getInt(FOOD_ITEM_ID_KEY);
-            mFoodItem = viewModel.get(foodItemId);
-        }
+    private void initMembers() {
+        this.mPluralsProvider = new PluralsProvider(getActivity());
+        this.mFoodItem = getFoodItem();
+    }
+
+    private FoodItemEntity getFoodItem() {
+        GroceryItemViewModel viewModel = getViewModel();
+        Bundle fragmentArgs = requireArguments();
+        int foodItemId = fragmentArgs.getInt(FOOD_ITEM_ID_KEY);
+        return viewModel.get(foodItemId);
+    }
+
+    private GroceryItemViewModel getViewModel() {
+        Application parentActivityOwner = requireActivity().getApplication();
+        return new GroceryItemViewModel(parentActivityOwner);
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.food_item_detail, container
-                , false);
-
+        View rootView = inflater.inflate(R.layout.food_item_detail, container, false);
         setUpImageView(rootView);
-
         setUpTextViews(rootView);
-
         return rootView;
     }
 
     private void setUpImageView(View rootView) {
         ImageView foodImage = rootView.findViewById(R.id.imageView_detail);
-
         String imageUri = mFoodItem.getImageUri();
         Glide.with(this).load(imageUri).into(foodImage);
     }
 
     private void setUpTextViews(View rootView) {
+        setUpLabelTextView(rootView);
+        setUpAmountTextView(rootView);
+        setUpBrandTextView(rootView);
+        setUpInfoTextView(rootView);
+    }
+
+    private void setUpLabelTextView(View rootView) {
         TextView label = rootView.findViewById(R.id.textview_title);
-        TextView amount = rootView.findViewById(R.id.textview_amount);
-        TextView brand = rootView.findViewById(R.id.textview_brand);
-        TextView info = rootView.findViewById(R.id.textview_info);
-
         label.setText(mFoodItem.getLabel());
+    }
 
-        int amountValue = mFoodItem.getAmount();
+    private void setUpAmountTextView(View rootView) {
+        TextView amountView = rootView.findViewById(R.id.textview_amount);
+        int amount = mFoodItem.getAmount();
         String unit = mFoodItem.getUnit();
-        amount.setText(mPluralsProvider.getAmountString(amountValue,
-                Objects.requireNonNull(unit)));
+        amountView.setText(mPluralsProvider.getAmountString(amount, unit));
+    }
 
+    private void setUpBrandTextView(View rootView) {
+        TextView brand = rootView.findViewById(R.id.textview_brand);
         brand.setText(mFoodItem.getBrand());
+    }
+
+    private void setUpInfoTextView(View rootView) {
+        TextView info = rootView.findViewById(R.id.textview_info);
         info.setText(mFoodItem.getInfo());
     }
 }

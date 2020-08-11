@@ -128,12 +128,6 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
         private Intent createIntentToFoodItemDetail(FoodItemEntity foodItem) {
             Intent toFoodItemDetail = new Intent(mContext, FoodItemDetail.class);
-            toFoodItemDetail.putExtra("label", foodItem.getLabel());
-            toFoodItemDetail.putExtra("image_resource", foodItem.getImageUri());
-            toFoodItemDetail.putExtra("brand", foodItem.getBrand());
-            toFoodItemDetail.putExtra("info", foodItem.getInfo());
-            toFoodItemDetail.putExtra("amount", foodItem.getAmount());
-            toFoodItemDetail.putExtra("unit", foodItem.getUnit());
             toFoodItemDetail.putExtra(FoodItemDetailFragment.FOOD_ITEM_ID_KEY, foodItem.getId());
             return toFoodItemDetail;
         }
