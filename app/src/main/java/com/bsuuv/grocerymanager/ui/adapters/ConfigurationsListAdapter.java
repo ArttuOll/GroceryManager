@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
-import com.bsuuv.grocerymanager.ui.NewFoodItem;
+import com.bsuuv.grocerymanager.ui.NewFoodItemActivity;
 import com.bsuuv.grocerymanager.util.FoodItemListDifferenceCalculator;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
 import com.bsuuv.grocerymanager.util.RequestValidator;
@@ -115,7 +115,7 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
         }
 
         private Intent createIntentToNewFoodItem(FoodItemEntity foodItem) {
-            Intent toNewFoodItem = new Intent(mContext, NewFoodItem.class);
+            Intent toNewFoodItem = new Intent(mContext, NewFoodItemActivity.class);
             toNewFoodItem.putExtra("label", foodItem.getLabel());
             toNewFoodItem.putExtra("brand", foodItem.getBrand());
             toNewFoodItem.putExtra("info", foodItem.getInfo());

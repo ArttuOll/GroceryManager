@@ -34,7 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-public class NewFoodItem extends AppCompatActivity implements View.OnClickListener {
+public class NewFoodItemActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String IMAGE_PATH_KEY = "imagePath";
     private static final int FREQUENCY_NOT_SET = 0;

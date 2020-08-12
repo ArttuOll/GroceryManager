@@ -6,7 +6,7 @@ import androidx.test.filters.SmallTest;
 import androidx.test.rule.ActivityTestRule;
 
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.ui.NewFoodItem;
+import com.bsuuv.grocerymanager.ui.NewFoodItemActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,11 +19,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 @SmallTest
 @RunWith(AndroidJUnit4.class)
-public class NewFoodItemNavigationTest {
+public class NewFoodItemActivityNavigationTest {
 
     @Rule
-    public ActivityTestRule<NewFoodItem> mNewFoodItemTestRule =
-            new ActivityTestRule<>(NewFoodItem.class);
+    public ActivityTestRule<NewFoodItemActivity> mNewFoodItemTestRule =
+            new ActivityTestRule<>(NewFoodItemActivity.class);
 
     @Test
     public void allElementsInView() {

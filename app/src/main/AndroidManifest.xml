@@ -27,7 +27,7 @@
             android:label="@string/title_activity_settings"
             android:parentActivityName=".ui.MainActivity" />
         <activity
-            android:name=".ui.NewFoodItem"
+            android:name=".ui.NewFoodItemActivity"
             android:parentActivityName=".ui.ConfigurationsActivity" />
         <activity
             android:name=".ui.ConfigurationsActivity"

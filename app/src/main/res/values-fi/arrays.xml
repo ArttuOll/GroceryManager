@@ -36,7 +36,7 @@
         <item>lauantai</item>
     </string-array>
 
-    <!-- NewFoodItem Unit Dropdown Menu & PluralsProvider-->
+    <!-- NewFoodItemActivity Unit Dropdown Menu & PluralsProvider-->
     <string-array name="units_plural">
         <item>kpl</item>
         <item>pkt</item>

@@ -7,7 +7,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         MainActivityNavigationTest.class,
         ConfigurationsNavigationTest.class,
-        NewFoodItemNavigationTest.class})
+        NewFoodItemActivityNavigationTest.class})
 public class ActivityNavigationTestSuite {
 
 }
