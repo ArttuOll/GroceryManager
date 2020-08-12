@@ -33,13 +33,13 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
     private static final int FREQUENCY_NOT_SET = 0;
     private static final int AMOUNT_FIELD_EMPTY = 0;
 
-    private MaterialButtonToggleGroup mToggleGroup;
-    private EditText mLabelEditText, mBrandEditText, mAmountEditText, mInfoEditText,
-            mFrequencyEditText;
-    private ImageView mFoodImageView;
+    private MaterialButtonToggleGroup mTimeFrameButtons;
+    private EditText mLabelField, mBrandField, mAmountField, mInfoField,
+            mFrequencyField;
+    private ImageView mFoodImage;
     private AutoCompleteTextView mUnitDropdown;
     private SharedPreferencesHelper mSharedPrefsHelper;
-    private String mImagePath;
+    private String mImageUri;
     private int mEditedFoodItemId;
     private double mEditedFoodItemCountdownValue;
 
@@ -55,15 +55,15 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void initMembers() {
-        this.mLabelEditText = findViewById(R.id.editText_label);
-        this.mBrandEditText = findViewById(R.id.editText_brand);
-        this.mAmountEditText = findViewById(R.id.editText_amount);
-        this.mInfoEditText = findViewById(R.id.editText_info);
-        this.mFrequencyEditText = initFrequencyEditText();
-        this.mFoodImageView = findViewById(R.id.imageView_new_fooditem);
+        this.mLabelField = findViewById(R.id.editText_label);
+        this.mBrandField = findViewById(R.id.editText_brand);
+        this.mAmountField = findViewById(R.id.editText_amount);
+        this.mInfoField = findViewById(R.id.editText_info);
+        this.mFrequencyField = initFrequencyEditText();
+        this.mFoodImage = findViewById(R.id.imageView_new_fooditem);
         this.mSharedPrefsHelper = new SharedPreferencesHelper(this);
         this.mUnitDropdown = initUnitDropdown();
-        this.mToggleGroup = findViewById(R.id.freq_selection_togglegroup);
+        this.mTimeFrameButtons = findViewById(R.id.freq_selection_togglegroup);
     }
 
     private EditText initFrequencyEditText() {
@@ -122,18 +122,18 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void setInputFieldValuesFromIntent(Intent intent) {
-        this.mLabelEditText.setText(intent.getStringExtra("label"));
-        this.mBrandEditText.setText(intent.getStringExtra("brand"));
-        this.mAmountEditText.setText(String.valueOf(intent.getIntExtra("amount", 0)));
+        this.mLabelField.setText(intent.getStringExtra("label"));
+        this.mBrandField.setText(intent.getStringExtra("brand"));
+        this.mAmountField.setText(String.valueOf(intent.getIntExtra("amount", 0)));
         this.mUnitDropdown.setText(intent.getStringExtra("unit"));
-        this.mInfoEditText.setText(intent.getStringExtra("info"));
-        this.mFrequencyEditText.setText(String.valueOf(intent.getIntExtra("frequency",
+        this.mInfoField.setText(intent.getStringExtra("info"));
+        this.mFrequencyField.setText(String.valueOf(intent.getIntExtra("frequency",
                 FREQUENCY_NOT_SET)));
     }
 
     private void setImageFromIntent(Intent intent) {
-        this.mImagePath = intent.getStringExtra("uri");
-        if (mImagePath != null) Glide.with(this).load(new File(mImagePath)).into(mFoodImageView);
+        this.mImageUri = intent.getStringExtra("uri");
+        if (mImageUri != null) Glide.with(this).load(new File(mImageUri)).into(mFoodImage);
     }
 
     private void setToggleButtonStatesFromIntent(Intent fromConfigs) {
@@ -141,20 +141,20 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
                 (TimeFrame) Objects.requireNonNull(fromConfigs.getSerializableExtra("time_frame"));
         switch (timeFrame) {
             case WEEK:
-                mToggleGroup.check(R.id.togglebutton_week);
+                mTimeFrameButtons.check(R.id.togglebutton_week);
                 break;
             case TWO_WEEKS:
-                mToggleGroup.check(R.id.togglebutton_two_weeks);
+                mTimeFrameButtons.check(R.id.togglebutton_two_weeks);
                 break;
             case MONTH:
-                mToggleGroup.check(R.id.togglebutton_month);
+                mTimeFrameButtons.check(R.id.togglebutton_month);
                 break;
         }
     }
 
     private void recoverFoodImage(Bundle savedInstanceState) {
-        mImagePath = savedInstanceState.getString(IMAGE_PATH_KEY);
-        Glide.with(this).load(new File(mImagePath)).into(mFoodImageView);
+        mImageUri = savedInstanceState.getString(IMAGE_PATH_KEY);
+        Glide.with(this).load(new File(mImageUri)).into(mFoodImage);
     }
 
     @Override
@@ -166,22 +166,22 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void populateImageView() {
-        Glide.with(this).load(new File(mImagePath)).into(mFoodImageView);
+        Glide.with(this).load(new File(mImageUri)).into(mFoodImage);
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putString(IMAGE_PATH_KEY, mImagePath);
+        outState.putString(IMAGE_PATH_KEY, mImageUri);
         super.onSaveInstanceState(outState);
     }
 
     public void onFabClick(View view) {
-        String label = mLabelEditText.getText().toString();
-        String brand = mBrandEditText.getText().toString();
-        int amount = getAmount();
+        String label = mLabelField.getText().toString();
+        String brand = mBrandField.getText().toString();
         String unit = mUnitDropdown.getText().toString();
-        String info = mInfoEditText.getText().toString();
+        String info = mInfoField.getText().toString();
         TimeFrame timeFrame = getActiveToggleButton();
+        int amount = getAmount();
         int frequency = getFrequency();
         int groceryDaysAWeek = mSharedPrefsHelper.getGroceryDays().size();
         double frequencyQuotient = calculateFreqQuotient(frequency, timeFrame, groceryDaysAWeek);
@@ -193,14 +193,8 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private double calculateFreqQuotient(int frequency, TimeFrame timeFrame, int groceryDaysAWeek) {
-        FrequencyQuotientCalculator calculator =
-                new FrequencyQuotientCalculator(mSharedPrefsHelper);
-        return calculator.getFrequencyQuotient(frequency, timeFrame, groceryDaysAWeek);
-    }
-
     private TimeFrame getActiveToggleButton() {
-        switch (mToggleGroup.getCheckedButtonId()) {
+        switch (mTimeFrameButtons.getCheckedButtonId()) {
             case R.id.togglebutton_week:
                 return TimeFrame.WEEK;
             case R.id.togglebutton_two_weeks:
@@ -213,14 +207,20 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
     }
 
     private int getAmount() {
-        String amountString = mAmountEditText.getText().toString();
+        String amountString = mAmountField.getText().toString();
         return amountString.equals("") ? AMOUNT_FIELD_EMPTY : Integer.parseInt(amountString);
     }
 
     private int getFrequency() {
-        String frequencyString = mFrequencyEditText.getText().toString();
+        String frequencyString = mFrequencyField.getText().toString();
         return frequencyString.equals("") ? FREQUENCY_NOT_SET :
                 Integer.parseInt(frequencyString);
+    }
+
+    private double calculateFreqQuotient(int frequency, TimeFrame timeFrame, int groceryDaysAWeek) {
+        FrequencyQuotientCalculator calculator =
+                new FrequencyQuotientCalculator(mSharedPrefsHelper);
+        return calculator.getFrequencyQuotient(frequency, timeFrame, groceryDaysAWeek);
     }
 
     private boolean foodItemCreationRequirementsMet(String label, int amount, TimeFrame timeFrame,
@@ -235,6 +235,11 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    private void showSnackbar(int messageResourceId) {
+        Snackbar.make(findViewById(R.id.fab_new_fooditem), messageResourceId, Snackbar.LENGTH_LONG)
+                .setAnchorView(R.id.fab_new_fooditem).show();
+    }
+
     private void launchConfigurationsActivity(String label, String brand, int amount, String unit,
                                               String info, TimeFrame timeFrame, int frequency,
                                               double frequencyQuotient) {
@@ -242,11 +247,6 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
                 frequency, frequencyQuotient);
         setResult(RESULT_OK, toConfigs);
         finish();
-    }
-
-    private void showSnackbar(int messageResourceId) {
-        Snackbar.make(findViewById(R.id.fab_new_fooditem), messageResourceId, Snackbar.LENGTH_LONG)
-                .setAnchorView(R.id.fab_new_fooditem).show();
     }
 
     private Intent createIntentToConfigs(String label, String brand, int amount, String unit,
@@ -260,16 +260,16 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
         toConfigs.putExtra("info", info);
         toConfigs.putExtra("time_frame", timeFrame);
         toConfigs.putExtra("frequency", frequency);
-        toConfigs.putExtra("uri", mImagePath);
+        toConfigs.putExtra("uri", mImageUri);
         toConfigs.putExtra("id", mEditedFoodItemId);
         toConfigs.putExtra("countdownValue", mEditedFoodItemCountdownValue);
         toConfigs.putExtra("frequencyQuotient", frequencyQuotient);
         return toConfigs;
     }
 
-    public void onFoodImageClick(View view) {
+    public void onImageClick(View view) {
         CameraUtil cameraUtil = new CameraUtil(this);
-        this.mImagePath = cameraUtil.getImagePath();
+        this.mImageUri = cameraUtil.getImagePath();
         Intent toCaptureImage = cameraUtil.getIntentToCaptureImage();
         if (cameraUtil.cameraAppExists(toCaptureImage)) launchCameraApp(toCaptureImage);
     }
@@ -282,13 +282,13 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.togglebutton_week:
-                mToggleGroup.check(R.id.togglebutton_week);
+                mTimeFrameButtons.check(R.id.togglebutton_week);
                 break;
             case R.id.togglebutton_two_weeks:
-                mToggleGroup.check(R.id.togglebutton_two_weeks);
+                mTimeFrameButtons.check(R.id.togglebutton_two_weeks);
                 break;
             case R.id.togglebutton_month:
-                mToggleGroup.check(R.id.togglebutton_month);
+                mTimeFrameButtons.check(R.id.togglebutton_month);
                 break;
         }
     }

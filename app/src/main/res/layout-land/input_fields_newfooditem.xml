@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:layout_marginEnd="16dp"
         android:contentDescription="@string/food_image_content_description"
-        android:onClick="onFoodImageClick"
+        android:onClick="onImageClick"
         android:scaleType="center"
         android:src="@drawable/ic_camera" />
 

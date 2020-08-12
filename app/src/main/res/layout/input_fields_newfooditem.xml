@@ -12,7 +12,7 @@
         android:layout_marginVertical="8dp"
         android:contentDescription="@string/food_image_content_description"
         android:transitionName="@string/transition_detail"
-        android:onClick="onFoodImageClick"
+        android:onClick="onImageClick"
         android:scaleType="centerInside"
         android:src="@drawable/ic_camera" />
 
