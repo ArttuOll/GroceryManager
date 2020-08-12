@@ -1,11 +1,7 @@
 package com.bsuuv.grocerymanager.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -16,9 +12,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.util.CameraUtil;
 import com.bsuuv.grocerymanager.util.FoodItemCreationRequirementChecker;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
 import com.bsuuv.grocerymanager.util.RequestValidator;
@@ -29,9 +25,6 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Objects;
 
 public class NewFoodItemActivity extends AppCompatActivity implements View.OnClickListener {
@@ -45,11 +38,10 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
             mFrequencyEditText;
     private ImageView mFoodImageView;
     private AutoCompleteTextView mUnitDropdown;
-    private String mImagePath;
     private SharedPreferencesHelper mSharedPrefsHelper;
-    private FrequencyQuotientCalculator mFqCalc;
-    private int mId;
-    private double mCountdownValue;
+    private String mImagePath;
+    private int mEditedFoodItemId;
+    private double mEditedFoodItemCountdownValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +62,6 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
         this.mFrequencyEditText = initFrequencyEditText();
         this.mFoodImageView = findViewById(R.id.imageView_new_fooditem);
         this.mSharedPrefsHelper = new SharedPreferencesHelper(this);
-        this.mFqCalc = new FrequencyQuotientCalculator(mSharedPrefsHelper);
         this.mUnitDropdown = initUnitDropdown();
         this.mToggleGroup = findViewById(R.id.freq_selection_togglegroup);
     }
@@ -120,8 +111,8 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
             setInputFieldValuesFromIntent(fromConfigs);
             setImageFromIntent(fromConfigs);
             setToggleButtonStatesFromIntent(fromConfigs);
-            this.mId = fromConfigs.getIntExtra("id", 0);
-            this.mCountdownValue = fromConfigs.getDoubleExtra("countdownValue", 0.0);
+            this.mEditedFoodItemId = fromConfigs.getIntExtra("id", 0);
+            this.mEditedFoodItemCountdownValue = fromConfigs.getDoubleExtra("countdownValue", 0.0);
         }
     }
 
@@ -193,13 +184,31 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
         TimeFrame timeFrame = getActiveToggleButton();
         int frequency = getFrequency();
         int groceryDaysAWeek = mSharedPrefsHelper.getGroceryDays().size();
-        double frequencyQuotient = mFqCalc.getFrequencyQuotient(frequency, timeFrame,
-                groceryDaysAWeek);
+        double frequencyQuotient = calculateFreqQuotient(frequency, timeFrame, groceryDaysAWeek);
 
         if (foodItemCreationRequirementsMet(label, amount, timeFrame, frequency,
                 frequencyQuotient)) {
             launchConfigurationsActivity(label, brand, amount, unit, info, timeFrame, frequency,
                     frequencyQuotient);
+        }
+    }
+
+    private double calculateFreqQuotient(int frequency, TimeFrame timeFrame, int groceryDaysAWeek) {
+        FrequencyQuotientCalculator calculator =
+                new FrequencyQuotientCalculator(mSharedPrefsHelper);
+        return calculator.getFrequencyQuotient(frequency, timeFrame, groceryDaysAWeek);
+    }
+
+    private TimeFrame getActiveToggleButton() {
+        switch (mToggleGroup.getCheckedButtonId()) {
+            case R.id.togglebutton_week:
+                return TimeFrame.WEEK;
+            case R.id.togglebutton_two_weeks:
+                return TimeFrame.TWO_WEEKS;
+            case R.id.togglebutton_month:
+                return TimeFrame.MONTH;
+            default:
+                return TimeFrame.NULL;
         }
     }
 
@@ -252,58 +261,21 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
         toConfigs.putExtra("time_frame", timeFrame);
         toConfigs.putExtra("frequency", frequency);
         toConfigs.putExtra("uri", mImagePath);
-        toConfigs.putExtra("id", mId);
-        toConfigs.putExtra("countdownValue", mCountdownValue);
+        toConfigs.putExtra("id", mEditedFoodItemId);
+        toConfigs.putExtra("countdownValue", mEditedFoodItemCountdownValue);
         toConfigs.putExtra("frequencyQuotient", frequencyQuotient);
         return toConfigs;
     }
 
-    /**
-     * Called when the camera icon is clicked. Launches an implicit intent to a camera app for
-     * taking a picture of a food-item.
-     *
-     * @param view The view that has been clicked, in this case, the FAB.
-     *             Default parameter required by the system.
-     */
     public void onFoodImageClick(View view) {
-        Intent captureImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraAppExists(captureImageIntent)) launchCameraApp(captureImageIntent);
+        CameraUtil cameraUtil = new CameraUtil(this);
+        this.mImagePath = cameraUtil.getImagePath();
+        Intent toCaptureImage = cameraUtil.getIntentToCaptureImage();
+        if (cameraUtil.cameraAppExists(toCaptureImage)) launchCameraApp(toCaptureImage);
     }
 
-    private void launchCameraApp(Intent captureImageIntent) {
-        File imageFile = Objects.requireNonNull(getImageFile());
-        Uri imageUri = FileProvider.getUriForFile(this, "com.bsuuv.android.fileprovider",
-                imageFile);
-        captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        startActivityForResult(captureImageIntent, RequestValidator.REQUEST_IMAGE_CAPTURE);
-    }
-
-    private File getImageFile() {
-        File imageFile = null;
-        try {
-            imageFile = createImageFile();
-        } catch (IOException e) {
-            e.getMessage();
-        }
-        return imageFile;
-    }
-
-    private File createImageFile() throws IOException {
-        String imageFileName = getImageFileName();
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-        mImagePath = Uri.parse(image.toURI().getPath()).getPath();
-        return image;
-    }
-
-    private String getImageFileName() {
-        @SuppressLint("SimpleDateFormat")
-        String timestamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
-        return "JPEG_" + timestamp + "_";
-    }
-
-    private boolean cameraAppExists(Intent takePictureIntent) {
-        return takePictureIntent.resolveActivity(getPackageManager()) != null;
+    private void launchCameraApp(Intent toCaptureImage) {
+        startActivityForResult(toCaptureImage, RequestValidator.REQUEST_IMAGE_CAPTURE);
     }
 
     @Override
@@ -318,19 +290,6 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
             case R.id.togglebutton_month:
                 mToggleGroup.check(R.id.togglebutton_month);
                 break;
-        }
-    }
-
-    private TimeFrame getActiveToggleButton() {
-        switch (mToggleGroup.getCheckedButtonId()) {
-            case R.id.togglebutton_week:
-                return TimeFrame.WEEK;
-            case R.id.togglebutton_two_weeks:
-                return TimeFrame.TWO_WEEKS;
-            case R.id.togglebutton_month:
-                return TimeFrame.MONTH;
-            default:
-                return TimeFrame.NULL;
         }
     }
 }
