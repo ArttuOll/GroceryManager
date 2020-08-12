@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.util.FoodItemCreationRequirementChecker;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
 import com.bsuuv.grocerymanager.util.RequestValidator;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
@@ -38,7 +39,6 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
     private static final String IMAGE_PATH_KEY = "imagePath";
     private static final int FREQUENCY_NOT_SET = 0;
     private static final int AMOUNT_FIELD_EMPTY = 0;
-    private static final double IMPOSSIBLE_FREQUENCY_QUOTIENT = 1.0;
 
     private MaterialButtonToggleGroup mToggleGroup;
     private EditText mLabelEditText, mBrandEditText, mAmountEditText, mInfoEditText,
@@ -203,30 +203,6 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private boolean foodItemCreationRequirementsMet(String label, int amount, TimeFrame timeFrame,
-                                                    int frequency, double frequencyQuotient) {
-        return groceryDaysSet() &&
-                inputFieldsValid(label, amount, timeFrame, frequency) &&
-                frequencyQuotientValid(frequencyQuotient);
-    }
-
-    private boolean frequencyQuotientValid(double frequencyQuotient) {
-        if (frequencyQuotient > IMPOSSIBLE_FREQUENCY_QUOTIENT) {
-            showSnackbar(R.string.snackbar_not_enough_grocery_days);
-            return false;
-        }
-        return true;
-    }
-
-    private void launchConfigurationsActivity(String label, String brand, int amount, String unit,
-                                              String info, TimeFrame timeFrame, int frequency,
-                                              double frequencyQuotient) {
-        Intent toConfigs = createIntentToConfigs(label, brand, amount, unit, info, timeFrame,
-                frequency, frequencyQuotient);
-        setResult(RESULT_OK, toConfigs);
-        finish();
-    }
-
     private int getAmount() {
         String amountString = mAmountEditText.getText().toString();
         return amountString.equals("") ? AMOUNT_FIELD_EMPTY : Integer.parseInt(amountString);
@@ -238,52 +214,25 @@ public class NewFoodItem extends AppCompatActivity implements View.OnClickListen
                 Integer.parseInt(frequencyString);
     }
 
-    private boolean groceryDaysSet() {
-        int groceryDaysAWeek = mSharedPrefsHelper.getGroceryDays().size();
-        if (groceryDaysAWeek == 0) {
-            showSnackbar(R.string.snackbar_no_grocery_days);
+    private boolean foodItemCreationRequirementsMet(String label, int amount, TimeFrame timeFrame,
+                                                    int frequency, double frequencyQuotient) {
+        FoodItemCreationRequirementChecker checker =
+                new FoodItemCreationRequirementChecker(mSharedPrefsHelper);
+        try {
+            return checker.requirementsMet(label, amount, timeFrame, frequency, frequencyQuotient);
+        } catch (FoodItemCreationRequirementChecker.RequirementNotMetException e) {
+            showSnackbar(e.getMessageResId());
             return false;
         }
-        return true;
     }
 
-    private boolean inputFieldsValid(String label, int amount, TimeFrame timeFrame, int frequency) {
-        return labelFieldValid(label) &&
-                amountFieldValid(amount) &&
-                timeFrameSelected(timeFrame) &&
-                frequencyFieldSet(frequency);
-    }
-
-    private boolean frequencyFieldSet(int frequency) {
-        if (frequency == FREQUENCY_NOT_SET) {
-            showSnackbar(R.string.snackbar_frequency_not_set);
-            return false;
-        }
-        return true;
-    }
-
-    private boolean timeFrameSelected(TimeFrame timeFrame) {
-        if (timeFrame == TimeFrame.NULL) {
-            showSnackbar(R.string.snackbar_time_frame_not_chosen);
-            return false;
-        }
-        return true;
-    }
-
-    private boolean amountFieldValid(int amount) {
-        if (amount == AMOUNT_FIELD_EMPTY) {
-            showSnackbar(R.string.snackbar_amount_empty);
-            return false;
-        }
-        return true;
-    }
-
-    private boolean labelFieldValid(String label) {
-        if (label.isEmpty()) {
-            showSnackbar(R.string.snackbar_label_empty);
-            return false;
-        }
-        return true;
+    private void launchConfigurationsActivity(String label, String brand, int amount, String unit,
+                                              String info, TimeFrame timeFrame, int frequency,
+                                              double frequencyQuotient) {
+        Intent toConfigs = createIntentToConfigs(label, brand, amount, unit, info, timeFrame,
+                frequency, frequencyQuotient);
+        setResult(RESULT_OK, toConfigs);
+        finish();
     }
 
     private void showSnackbar(int messageResourceId) {
