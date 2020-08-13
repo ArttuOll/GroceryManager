@@ -11,10 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.viewmodel.GroceryItemViewModel;
 import com.bsuuv.grocerymanager.util.ImageViewPopulater;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
-import com.bsuuv.grocerymanager.viewmodel.GroceryItemViewModel;
 
 public class FoodItemDetailFragment extends Fragment {
 

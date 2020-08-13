@@ -1,6 +1,6 @@
-package com.bsuuv.grocerymanager;
+package com.bsuuv.grocerymanager.data;
 
-import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
 import java.util.ArrayList;
 import java.util.List;

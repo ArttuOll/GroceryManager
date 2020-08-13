@@ -1,10 +1,10 @@
-package com.bsuuv.grocerymanager;
+package com.bsuuv.grocerymanager.data;
 
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
 import com.bsuuv.grocerymanager.util.TimeFrame;
 import java.util.ArrayList;

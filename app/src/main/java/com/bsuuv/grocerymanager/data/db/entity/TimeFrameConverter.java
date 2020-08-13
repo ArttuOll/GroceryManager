@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.db.entity;
+package com.bsuuv.grocerymanager.data.db.entity;
 
 import androidx.room.TypeConverter;
 import com.bsuuv.grocerymanager.util.TimeFrame;

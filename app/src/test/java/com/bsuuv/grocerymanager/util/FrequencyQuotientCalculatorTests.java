@@ -2,7 +2,7 @@ package com.bsuuv.grocerymanager.util;
 
 import static org.mockito.Mockito.when;
 
-import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Assert;

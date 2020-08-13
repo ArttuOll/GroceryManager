@@ -15,13 +15,13 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.viewmodel.GroceryItemViewModel;
 import com.bsuuv.grocerymanager.notifications.GroceryDayNotifier;
 import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter;
 import com.bsuuv.grocerymanager.util.DateHelper;
 import com.bsuuv.grocerymanager.util.RecyclerViewUtil;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
-import com.bsuuv.grocerymanager.viewmodel.GroceryItemViewModel;
 import java.util.List;
 import java.util.Objects;
 

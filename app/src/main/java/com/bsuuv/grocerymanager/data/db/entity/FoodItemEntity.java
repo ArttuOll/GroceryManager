@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.db.entity;
+package com.bsuuv.grocerymanager.data.db.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
-import com.bsuuv.grocerymanager.model.FoodItem;
+import com.bsuuv.grocerymanager.data.model.FoodItem;
 import com.bsuuv.grocerymanager.util.TimeFrame;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;

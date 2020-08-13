@@ -1,11 +1,11 @@
-package com.bsuuv.grocerymanager.db;
+package com.bsuuv.grocerymanager.data.db;
 
 import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import com.bsuuv.grocerymanager.db.dao.FoodItemDao;
-import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.db.dao.FoodItemDao;
+import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

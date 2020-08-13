@@ -1,10 +1,10 @@
-package com.bsuuv.grocerymanager.viewmodel;
+package com.bsuuv.grocerymanager.data.viewmodel;
 
 import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import com.bsuuv.grocerymanager.FoodItemRepository;
-import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.FoodItemRepository;
+import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import java.util.List;
 
 public class FoodItemViewModel extends AndroidViewModel {

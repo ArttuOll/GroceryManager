@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.NewFoodItemActivity;
 import com.bsuuv.grocerymanager.util.FoodItemListDifferenceCalculator;
 import com.bsuuv.grocerymanager.util.ImageViewPopulater;

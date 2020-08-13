@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.model;
+package com.bsuuv.grocerymanager.data.model;
 
 import com.bsuuv.grocerymanager.util.TimeFrame;
 

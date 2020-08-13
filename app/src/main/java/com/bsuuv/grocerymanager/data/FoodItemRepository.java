@@ -1,10 +1,10 @@
-package com.bsuuv.grocerymanager;
+package com.bsuuv.grocerymanager.data;
 
 import android.app.Application;
 import androidx.lifecycle.LiveData;
-import com.bsuuv.grocerymanager.db.FoodItemRoomDatabase;
-import com.bsuuv.grocerymanager.db.dao.FoodItemDao;
-import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.db.FoodItemRoomDatabase;
+import com.bsuuv.grocerymanager.data.db.dao.FoodItemDao;
+import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 

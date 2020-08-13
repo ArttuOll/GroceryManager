@@ -1,13 +1,13 @@
-package com.bsuuv.grocerymanager.viewmodel;
+package com.bsuuv.grocerymanager.data.viewmodel;
 
 import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
-import com.bsuuv.grocerymanager.FoodItemRepository;
-import com.bsuuv.grocerymanager.GroceryListExtractor;
-import com.bsuuv.grocerymanager.GroceryListState;
-import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.FoodItemRepository;
+import com.bsuuv.grocerymanager.data.GroceryListExtractor;
+import com.bsuuv.grocerymanager.data.GroceryListState;
+import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.DateHelper;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;

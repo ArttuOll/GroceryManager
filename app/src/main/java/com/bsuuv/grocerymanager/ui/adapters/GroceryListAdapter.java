@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.FoodItemDetail;
 import com.bsuuv.grocerymanager.ui.FoodItemDetailFragment;
 import com.bsuuv.grocerymanager.util.FoodItemListDifferenceCalculator;
