@@ -17,6 +17,7 @@ import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.util.CameraUtil;
 import com.bsuuv.grocerymanager.util.FoodItemCreationRequirementChecker;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
+import com.bsuuv.grocerymanager.util.ImageViewPopulater;
 import com.bsuuv.grocerymanager.util.RequestValidator;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import com.bsuuv.grocerymanager.util.TimeFrame;
@@ -161,12 +162,8 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (RequestValidator.imageCaptureSuccesful(requestCode, resultCode, data)) {
-            populateImageView();
+            ImageViewPopulater.populateFromUri(this, mImageUri, mFoodImage);
         }
-    }
-
-    private void populateImageView() {
-        Glide.with(this).load(new File(mImageUri)).into(mFoodImage);
     }
 
     @Override

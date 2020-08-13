@@ -19,9 +19,9 @@ import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.NewFoodItemActivity;
 import com.bsuuv.grocerymanager.util.FoodItemListDifferenceCalculator;
+import com.bsuuv.grocerymanager.util.ImageViewPopulater;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
 import com.bsuuv.grocerymanager.util.RequestValidator;
-import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.util.List;
@@ -97,14 +97,18 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
         }
 
         void bindTo(FoodItemEntity currentFoodItem) {
+            setInputFieldValues(currentFoodItem);
+            ImageViewPopulater.populateFromUri(mContext, currentFoodItem.getImageUri(), mFoodImage);
+        }
+
+        private void setInputFieldValues(FoodItemEntity currentFoodItem) {
             mFoodItemLabel.setText(currentFoodItem.getLabel());
             mFoodItemBrand.setText(currentFoodItem.getBrand());
             mFoodItemAmount.setText(mPluralsProvider.getAmountString(currentFoodItem.getAmount(),
-                    currentFoodItem.getUnit()));
+                                                                     currentFoodItem.getUnit()));
             mSchedule.setText(mPluralsProvider.getScheduleString(currentFoodItem.getFrequency(),
-                    currentFoodItem.getTimeFrame().value()));
-            Glide.with(mContext).load(new File(String.valueOf(currentFoodItem.getImageUri())))
-                    .into(mFoodImage);
+                                                                 currentFoodItem.getTimeFrame()
+                                                                                .value()));
         }
 
         @Override

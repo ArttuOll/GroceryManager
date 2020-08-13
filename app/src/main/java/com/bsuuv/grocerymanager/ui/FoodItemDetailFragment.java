@@ -14,9 +14,9 @@ import androidx.fragment.app.Fragment;
 
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.util.ImageViewPopulater;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
 import com.bsuuv.grocerymanager.viewmodel.GroceryItemViewModel;
-import com.bumptech.glide.Glide;
 
 public class FoodItemDetailFragment extends Fragment {
 
@@ -71,7 +71,7 @@ public class FoodItemDetailFragment extends Fragment {
     private void setUpImageView(View rootView) {
         ImageView foodImage = rootView.findViewById(R.id.imageView_detail);
         String imageUri = mFoodItem.getImageUri();
-        Glide.with(this).load(imageUri).into(foodImage);
+        ImageViewPopulater.populateFromUri(getContext(), imageUri, foodImage);
     }
 
     private void setUpTextViews(View rootView) {

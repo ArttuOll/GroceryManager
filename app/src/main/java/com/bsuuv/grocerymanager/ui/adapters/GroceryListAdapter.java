@@ -21,8 +21,8 @@ import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.FoodItemDetail;
 import com.bsuuv.grocerymanager.ui.FoodItemDetailFragment;
 import com.bsuuv.grocerymanager.util.FoodItemListDifferenceCalculator;
+import com.bsuuv.grocerymanager.util.ImageViewPopulater;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -100,8 +100,8 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             mFoodItemLabel.setText(currentFoodItem.getLabel());
             mFoodItemBrand.setText(currentFoodItem.getBrand());
             mFoodItemAmount.setText(mPluralsProvider.getAmountString(currentFoodItem.getAmount(),
-                    currentFoodItem.getUnit()));
-            Glide.with(mContext).load(currentFoodItem.getImageUri()).into(mFoodImage);
+                                                                     currentFoodItem.getUnit()));
+            ImageViewPopulater.populateFromUri(mContext, currentFoodItem.getImageUri(), mFoodImage);
         }
 
         @Override
