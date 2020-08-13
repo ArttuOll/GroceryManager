@@ -9,80 +9,76 @@ import java.util.List;
 
 public class GroceryListExtractor {
 
-  public static final String MODIFIED_LIST_KEY = "modifiedlist";
+  public static final String MODIFIED_ITEMS_KEY = "modifiedlist";
   public static final String CHECKED_ITEMS_KEY = "checkeditems";
 
-  private List<FoodItemEntity> mModifiedList;
+  private List<FoodItemEntity> mModifiedItems;
   private List<FoodItemEntity> mCheckedItems;
   private DateHelper mDateHelper;
   private FrequencyQuotientCalculator mFqCalculator;
   private SharedPreferencesHelper mSharedPrefsHelper;
 
   public GroceryListExtractor(SharedPreferencesHelper sharedPreferencesHelper,
-      DateHelper dateHelper,
-      FrequencyQuotientCalculator fqCalculator) {
+      DateHelper dateHelper, FrequencyQuotientCalculator fqCalculator) {
     this.mSharedPrefsHelper = sharedPreferencesHelper;
     this.mDateHelper = dateHelper;
     this.mFqCalculator = fqCalculator;
-
-    this.mModifiedList = mSharedPrefsHelper.getList(MODIFIED_LIST_KEY);
+    this.mModifiedItems = mSharedPrefsHelper.getList(MODIFIED_ITEMS_KEY);
     this.mCheckedItems = mSharedPrefsHelper.getList(CHECKED_ITEMS_KEY);
   }
 
-  public List<FoodItemEntity> getGroceryItemsFromFoodItems(List<FoodItemEntity> foodItems) {
-    List<FoodItemEntity> groceryItems = new ArrayList<>();
+  public List<FoodItemEntity> extractGroceryListFromFoodItems(List<FoodItemEntity> foodItems) {
+    List<FoodItemEntity> groceries = new ArrayList<>();
     if (mDateHelper.isGroceryDay()) {
       for (FoodItemEntity foodItem : foodItems) {
-        double frequencyQuotient =
-            mFqCalculator.getFrequencyQuotient(foodItem);
-        // Each grocery day the countdown value is incremented by the
-        // value of frequency
-        // quotient.
-        // When it reaches 1, it's time for the item to appear in the
-        // grocery list.
-        double countdownValue = foodItem.getCountdownValue();
-
-        // If the countdown value for a food-item has reached 1 and
-        // the user hasn't
-        // removed it from RecyclerView in MainActivity, put it to
-        // grocery list.
-        // The value can be greater than one if the number of grocery
-        // days decreases while
-        // the countdownValue has already been assigned a value.
-        if (countdownValue >= 1 && !mCheckedItems.contains(foodItem)) {
-          groceryItems.add(foodItem);
-
-          foodItem.setCountdownValue(frequencyQuotient);
+        if (shouldAppearInGroceryList(foodItem)) {
+          groceries.add(foodItem);
+          resetCountdownValue(foodItem);
         } else {
-
-          // Increment the food-item countdown value by adding to
-          // it the original value.
-          foodItem.setCountdownValue(countdownValue + frequencyQuotient);
+          incrementCountdownValue(foodItem);
         }
-        if (!mModifiedList.contains(foodItem)) {
-          mModifiedList.add(foodItem);
+        if (notModified(foodItem)) {
+          mModifiedItems.add(foodItem);
         }
       }
     }
-    return groceryItems;
+    return groceries;
   }
 
-  public List<FoodItemEntity> getModifiedList() {
-    return mModifiedList;
+  private boolean shouldAppearInGroceryList(FoodItemEntity foodItem) {
+    return foodItem.getCountdownValue() >= 1 && !mCheckedItems.contains(foodItem);
+  }
+
+  private void resetCountdownValue(FoodItemEntity foodItem) {
+    double frequencyQuotient = mFqCalculator.getFrequencyQuotient(foodItem);
+    foodItem.setCountdownValue(frequencyQuotient);
+  }
+
+  private void incrementCountdownValue(FoodItemEntity foodItem) {
+    double frequencyQuotient = mFqCalculator.getFrequencyQuotient(foodItem);
+    foodItem.setCountdownValue(foodItem.getCountdownValue() + frequencyQuotient);
+  }
+
+  private boolean notModified(FoodItemEntity foodItem) {
+    return !mModifiedItems.contains(foodItem);
+  }
+
+  public List<FoodItemEntity> getModifiedItems() {
+    return mModifiedItems;
   }
 
   public List<FoodItemEntity> getCheckedItems() {
     return mCheckedItems;
   }
 
-  public void saveBuffers(List<FoodItemEntity> modifiedItems,
+  public void saveState(List<FoodItemEntity> modifiedItems,
       List<FoodItemEntity> checkedItems) {
-    mSharedPrefsHelper.saveList(modifiedItems, MODIFIED_LIST_KEY);
+    mSharedPrefsHelper.saveList(modifiedItems, MODIFIED_ITEMS_KEY);
     mSharedPrefsHelper.saveList(checkedItems, CHECKED_ITEMS_KEY);
   }
 
-  public void clearBuffers() {
-    mSharedPrefsHelper.clearList(MODIFIED_LIST_KEY);
+  public void clearState() {
+    mSharedPrefsHelper.clearList(MODIFIED_ITEMS_KEY);
     mSharedPrefsHelper.clearList(CHECKED_ITEMS_KEY);
   }
 

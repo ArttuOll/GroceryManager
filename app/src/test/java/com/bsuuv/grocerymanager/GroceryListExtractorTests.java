@@ -68,7 +68,7 @@ public class GroceryListExtractorTests {
         "Tylsää",
         5, "Bags", TimeFrame.WEEK, 1, "", 0.0);
 
-    when(mSharedPrefsHelper.getList(GroceryListExtractor.MODIFIED_LIST_KEY))
+    when(mSharedPrefsHelper.getList(GroceryListExtractor.MODIFIED_ITEMS_KEY))
         .thenReturn(mModifiedList);
     when(mSharedPrefsHelper.getList(GroceryListExtractor.CHECKED_ITEMS_KEY))
         .thenReturn(mCheckedItems);
@@ -102,7 +102,7 @@ public class GroceryListExtractorTests {
     mGroceryListExtractor = new GroceryListExtractor(mSharedPrefsHelper,
         mDateHelper, mCalculator);
     List<FoodItemEntity> actual =
-        mGroceryListExtractor.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListExtractor.extractGroceryListFromFoodItems(mFoodItems);
     List<FoodItemEntity> expected = new ArrayList<>();
 
     // Was added to list of modified food-items
@@ -123,7 +123,7 @@ public class GroceryListExtractorTests {
     mGroceryListExtractor = new GroceryListExtractor(mSharedPrefsHelper,
         mDateHelper, mCalculator);
     List<FoodItemEntity> actual =
-        mGroceryListExtractor.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListExtractor.extractGroceryListFromFoodItems(mFoodItems);
     List<FoodItemEntity> expected = new ArrayList<>();
     expected.add(mFoodItem1);
     expected.add(mFoodItem2);
@@ -146,7 +146,7 @@ public class GroceryListExtractorTests {
     mGroceryListExtractor = new GroceryListExtractor(mSharedPrefsHelper,
         mDateHelper, mCalculator);
     List<FoodItemEntity> actual =
-        mGroceryListExtractor.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListExtractor.extractGroceryListFromFoodItems(mFoodItems);
     List<FoodItemEntity> expected = new ArrayList<>();
 
     // Nothing was added to list of modified items
@@ -164,7 +164,7 @@ public class GroceryListExtractorTests {
     mGroceryListExtractor = new GroceryListExtractor(mSharedPrefsHelper,
         mDateHelper, mCalculator);
     List<FoodItemEntity> actual =
-        mGroceryListExtractor.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListExtractor.extractGroceryListFromFoodItems(mFoodItems);
     List<FoodItemEntity> expected = new ArrayList<>();
     expected.add(mModifiedFoodItem);
 
@@ -183,7 +183,7 @@ public class GroceryListExtractorTests {
     mGroceryListExtractor = new GroceryListExtractor(mSharedPrefsHelper,
         mDateHelper, mCalculator);
     List<FoodItemEntity> actual =
-        mGroceryListExtractor.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListExtractor.extractGroceryListFromFoodItems(mFoodItems);
     List<FoodItemEntity> expected = new ArrayList<>();
 
     // Nothing was added to the list of modified food-items.
@@ -203,7 +203,7 @@ public class GroceryListExtractorTests {
     mGroceryListExtractor = new GroceryListExtractor(mSharedPrefsHelper,
         mDateHelper, mCalculator);
     List<FoodItemEntity> actual =
-        mGroceryListExtractor.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListExtractor.extractGroceryListFromFoodItems(mFoodItems);
     List<FoodItemEntity> expected = new ArrayList<>();
 
     // Nothing was added to the list of modified food-items.
