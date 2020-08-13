@@ -119,11 +119,13 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void setUpViewModel() {
-    mGroceryViewModel.getGroceryList().observe(this, groceryListItems -> {
-      this.mGroceryList = groceryListItems;
-      setRecyclerViewVisibility();
-      mAdapter.setGroceryItems(mGroceryList);
-    });
+    if (mDateHelper.isGroceryDay()) {
+      mGroceryViewModel.getGroceryList().observe(this, groceryListItems -> {
+        this.mGroceryList = groceryListItems;
+        setRecyclerViewVisibility();
+        mAdapter.setGroceryItems(mGroceryList);
+      });
+    }
   }
 
   private void setRecyclerViewVisibility() {
