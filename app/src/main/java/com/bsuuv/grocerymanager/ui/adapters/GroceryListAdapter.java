@@ -58,15 +58,20 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     }
 
     public void setGroceryItems(List<FoodItemEntity> newGroceryItems) {
-        if (this.mGroceryItems == null) {
-            this.mGroceryItems = newGroceryItems;
-            notifyItemRangeInserted(0, newGroceryItems.size());
-        } else {
-            DiffUtil.DiffResult migrationOperations = FoodItemListDifferenceCalculator
-                    .calculateMigrationOperations(mGroceryItems, newGroceryItems);
-            mGroceryItems = newGroceryItems;
-            migrationOperations.dispatchUpdatesTo(this);
-        }
+        if (this.mGroceryItems == null) initGroceryItems(newGroceryItems);
+        else updateGroceryItems(newGroceryItems);
+    }
+
+    private void initGroceryItems(List<FoodItemEntity> newGroceryItems) {
+        this.mGroceryItems = newGroceryItems;
+        notifyItemRangeInserted(0, newGroceryItems.size());
+    }
+
+    private void updateGroceryItems(List<FoodItemEntity> newGroceryItems) {
+        DiffUtil.DiffResult migrationOperations = FoodItemListDifferenceCalculator
+                .calculateMigrationOperations(mGroceryItems, newGroceryItems);
+        mGroceryItems = newGroceryItems;
+        migrationOperations.dispatchUpdatesTo(this);
     }
 
     public FoodItemEntity getFoodItemAtPosition(int position) {

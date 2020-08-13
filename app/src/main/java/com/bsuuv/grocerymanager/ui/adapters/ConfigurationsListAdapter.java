@@ -61,15 +61,20 @@ public class ConfigurationsListAdapter extends RecyclerView.Adapter<Configuratio
     }
 
     public void setFoodItems(List<FoodItemEntity> newFoodItems) {
-        if (this.mFoodItems == null) {
-            this.mFoodItems = newFoodItems;
-            notifyItemRangeInserted(0, newFoodItems.size());
-        } else {
-            DiffUtil.DiffResult migrationOperations = FoodItemListDifferenceCalculator
-                    .calculateMigrationOperations(mFoodItems, newFoodItems);
-            mFoodItems = newFoodItems;
-            migrationOperations.dispatchUpdatesTo(this);
-        }
+        if (this.mFoodItems == null) initFoodItems(newFoodItems);
+        else updateFoodItems(newFoodItems);
+    }
+
+    private void initFoodItems(List<FoodItemEntity> newFoodItems) {
+        this.mFoodItems = newFoodItems;
+        notifyItemRangeInserted(0, newFoodItems.size());
+    }
+
+    private void updateFoodItems(List<FoodItemEntity> newFoodItems) {
+        DiffUtil.DiffResult migrationOperations = FoodItemListDifferenceCalculator
+                .calculateMigrationOperations(mFoodItems, newFoodItems);
+        mFoodItems = newFoodItems;
+        migrationOperations.dispatchUpdatesTo(this);
     }
 
     class ConfigsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
