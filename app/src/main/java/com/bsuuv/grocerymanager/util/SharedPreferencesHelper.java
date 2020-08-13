@@ -37,7 +37,7 @@ public class SharedPreferencesHelper {
 
 
     /**
-     * Returns a list of grocery days selected by the user in Settings.
+     * Returns a list of grocery days selected by the user in SettingsActivity.
      *
      * @return A <code>Set</code> containing the grocery days as lowercase strings. If none are
      * selected, an empty <code>Set</code> is returned.

@@ -4,7 +4,7 @@
     <!-- Multiple Activities -->
     <string name="food_image_content_description">Food-item image</string>
 
-    <!-- Settings Activity -->
+    <!-- SettingsActivity Activity -->
     <string name="title_activity_settings">Settings</string>
     <string name="grocery_settings_label_text">Food-items</string>
     <string name="grocery_day_title">Grocery days</string>

@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchSettingsActivity() {
         Intent toSettingsActivity = new Intent(this,
-                Settings.class);
+                SettingsActivity.class);
         this.startActivity(toSettingsActivity);
     }
 }
