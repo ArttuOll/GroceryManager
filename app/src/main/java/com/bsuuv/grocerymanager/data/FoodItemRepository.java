@@ -10,13 +10,13 @@ import java.util.concurrent.ExecutionException;
 
 public class FoodItemRepository {
 
-  private FoodItemDao mFoodItemDao;
+  private FoodItemDao mDao;
   private LiveData<List<FoodItemEntity>> mFoodItems;
 
   public FoodItemRepository(Application application) {
     FoodItemRoomDatabase database = FoodItemRoomDatabase.getInstance(application);
-    mFoodItemDao = database.foodItemDao();
-    mFoodItems = mFoodItemDao.getAllFoodItems();
+    mDao = database.foodItemDao();
+    mFoodItems = mDao.getAllFoodItems();
   }
 
   public LiveData<List<FoodItemEntity>> getFoodItems() {
@@ -26,7 +26,7 @@ public class FoodItemRepository {
   public FoodItemEntity getFoodItem(int foodItemId) {
     FoodItemEntity result = null;
     try {
-      result = FoodItemRoomDatabase.dbExecService.submit(() -> mFoodItemDao.get(foodItemId)).get();
+      result = FoodItemRoomDatabase.dbExecService.submit(() -> mDao.get(foodItemId)).get();
     } catch (ExecutionException | InterruptedException e) {
       e.printStackTrace();
     }
@@ -34,18 +34,18 @@ public class FoodItemRepository {
   }
 
   public void insert(FoodItemEntity foodItem) {
-    FoodItemRoomDatabase.dbExecService.execute(() -> mFoodItemDao.insert(foodItem));
+    FoodItemRoomDatabase.dbExecService.execute(() -> mDao.insert(foodItem));
   }
 
   public void delete(FoodItemEntity foodItem) {
-    FoodItemRoomDatabase.dbExecService.execute(() -> mFoodItemDao.delete(foodItem));
+    FoodItemRoomDatabase.dbExecService.execute(() -> mDao.delete(foodItem));
   }
 
   public void update(FoodItemEntity foodItem) {
-    FoodItemRoomDatabase.dbExecService.execute(() -> mFoodItemDao.update(foodItem));
+    FoodItemRoomDatabase.dbExecService.execute(() -> mDao.update(foodItem));
   }
 
   public void deleteAll() {
-    FoodItemRoomDatabase.dbExecService.execute(() -> mFoodItemDao.deleteAll());
+    FoodItemRoomDatabase.dbExecService.execute(() -> mDao.deleteAll());
   }
 }
