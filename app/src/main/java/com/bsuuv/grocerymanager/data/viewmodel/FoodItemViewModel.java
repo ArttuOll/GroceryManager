@@ -26,10 +26,6 @@ public class FoodItemViewModel extends AndroidViewModel {
     mRepository.delete(foodItem);
   }
 
-  public void deleteAll() {
-    mRepository.deleteAll();
-  }
-
   public void update(FoodItemEntity foodItem) {
     mRepository.update(foodItem);
   }
