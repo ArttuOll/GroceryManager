@@ -13,21 +13,16 @@ import java.util.concurrent.Executors;
 public abstract class FoodItemRoomDatabase extends RoomDatabase {
 
   private static final int NUMBER_OF_THREADS = 2;
-  public static final ExecutorService dbExecService =
-      Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+  public static final ExecutorService dbExecService = Executors
+      .newFixedThreadPool(NUMBER_OF_THREADS);
   private static FoodItemRoomDatabase INSTANCE;
 
   public static FoodItemRoomDatabase getInstance(final Context context) {
     if (INSTANCE == null) {
       synchronized (FoodItemRoomDatabase.class) {
-        if (INSTANCE == null) {
-          INSTANCE =
-              Room.databaseBuilder(context.getApplicationContext(),
-                  FoodItemRoomDatabase.class,
-                  "fooditem_database")
-                  .fallbackToDestructiveMigration()
-                  .build();
-        }
+        INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+            FoodItemRoomDatabase.class, "fooditem_database")
+            .build();
       }
     }
     return INSTANCE;
