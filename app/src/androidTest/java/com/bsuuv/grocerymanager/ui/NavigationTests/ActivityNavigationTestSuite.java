@@ -5,9 +5,9 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        MainActivityNavigationTest.class,
-        ConfigurationsNavigationTest.class,
-        NewFoodItemActivityNavigationTest.class})
+    MainActivityNavigationTest.class,
+    ConfigurationsNavigationTest.class,
+    NewFoodItemActivityNavigationTest.class})
 public class ActivityNavigationTestSuite {
 
 }

@@ -19,7 +19,7 @@ public class FrequencyQuotientCalculator {
         // once every two weeks, then the frequency quotient is
         // 1 per week / (1 grocery day * 2 weeks) = 1/2.
         double frequencyQuotient = ((double) foodItem.getFrequency()) /
-                (foodItem.getTimeFrame().value() * groceryDaysAWeek);
+            (foodItem.getTimeFrame().value() * groceryDaysAWeek);
         // Round to nearest 0.05
         return Math.round(frequencyQuotient * 20) / 20.0;
     }
@@ -32,7 +32,7 @@ public class FrequencyQuotientCalculator {
         // once every two weeks, then the frequency quotient is
         // 1 per week / (1 grocery day * 2 weeks) = 1/2.
         double frequencyQuotient =
-                ((double) frequency) / (timeFrame.value() * groceryDaysAWeek);
+            ((double) frequency) / (timeFrame.value() * groceryDaysAWeek);
         // Round to nearest 0.05
         return Math.round(frequencyQuotient * 20) / 20.0;
     }

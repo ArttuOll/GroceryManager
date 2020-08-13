@@ -1,42 +1,40 @@
 package com.bsuuv.grocerymanager.viewmodel;
 
 import android.app.Application;
-
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-
 import com.bsuuv.grocerymanager.FoodItemRepository;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
-
 import java.util.List;
 
 public class FoodItemViewModel extends AndroidViewModel {
-   private FoodItemRepository mRepository;
-   private LiveData<List<FoodItemEntity>> mFoodItems;
 
-   public FoodItemViewModel(Application application) {
-      super(application);
-      this.mRepository = new FoodItemRepository(application);
-      this.mFoodItems = mRepository.getFoodItems();
-   }
+  private FoodItemRepository mRepository;
+  private LiveData<List<FoodItemEntity>> mFoodItems;
 
-   public void insert(FoodItemEntity foodItem) {
-      mRepository.insert(foodItem);
-   }
+  public FoodItemViewModel(Application application) {
+    super(application);
+    this.mRepository = new FoodItemRepository(application);
+    this.mFoodItems = mRepository.getFoodItems();
+  }
 
-   public void delete(FoodItemEntity foodItem) {
-      mRepository.delete(foodItem);
-   }
+  public void insert(FoodItemEntity foodItem) {
+    mRepository.insert(foodItem);
+  }
 
-   public void deleteAll() {
-      mRepository.deleteAll();
-   }
+  public void delete(FoodItemEntity foodItem) {
+    mRepository.delete(foodItem);
+  }
 
-   public void update(FoodItemEntity foodItem) {
-      mRepository.update(foodItem);
-   }
+  public void deleteAll() {
+    mRepository.deleteAll();
+  }
 
-   public LiveData<List<FoodItemEntity>> getFoodItems() {
-      return mFoodItems;
-   }
+  public void update(FoodItemEntity foodItem) {
+    mRepository.update(foodItem);
+  }
+
+  public LiveData<List<FoodItemEntity>> getFoodItems() {
+    return mFoodItems;
+  }
 }

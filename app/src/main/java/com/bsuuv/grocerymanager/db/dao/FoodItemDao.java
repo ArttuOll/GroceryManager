@@ -6,29 +6,27 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
-
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
-
 import java.util.List;
 
 @Dao
 public interface FoodItemDao {
 
-    @Insert
-    void insert(FoodItemEntity foodItem);
+  @Insert
+  void insert(FoodItemEntity foodItem);
 
-    @Query("SELECT * FROM FoodItemEntity WHERE id = :foodItemId")
-    FoodItemEntity get(int foodItemId);
+  @Query("SELECT * FROM FoodItemEntity WHERE id = :foodItemId")
+  FoodItemEntity get(int foodItemId);
 
-    @Delete
-    void delete(FoodItemEntity foodItem);
+  @Delete
+  void delete(FoodItemEntity foodItem);
 
-    @Query("SELECT * FROM FoodItemEntity ORDER BY label ASC")
-    LiveData<List<FoodItemEntity>> getAllFoodItems();
+  @Query("SELECT * FROM FoodItemEntity ORDER BY label ASC")
+  LiveData<List<FoodItemEntity>> getAllFoodItems();
 
-    @Update
-    void update(FoodItemEntity foodItem);
+  @Update
+  void update(FoodItemEntity foodItem);
 
-    @Query("DELETE FROM FoodItemEntity")
-    void deleteAll();
+  @Query("DELETE FROM FoodItemEntity")
+  void deleteAll();
 }

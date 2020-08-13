@@ -8,11 +8,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.util.CameraUtil;
 import com.bsuuv.grocerymanager.util.FoodItemCreationRequirementChecker;
@@ -24,7 +22,6 @@ import com.bsuuv.grocerymanager.util.TimeFrame;
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.snackbar.Snackbar;
-
 import java.io.File;
 import java.util.Objects;
 
@@ -52,7 +49,9 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
         initMembers();
         setUpToggleButtons();
         manageIntent();
-        if (savedInstanceState != null) recoverFoodImage(savedInstanceState);
+        if (savedInstanceState != null) {
+            recoverFoodImage(savedInstanceState);
+        }
     }
 
     private void initMembers() {
@@ -134,7 +133,9 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
 
     private void setImageFromIntent(Intent intent) {
         this.mImageUri = intent.getStringExtra("uri");
-        if (mImageUri != null) Glide.with(this).load(new File(mImageUri)).into(mFoodImage);
+        if (mImageUri != null) {
+            Glide.with(this).load(new File(mImageUri)).into(mFoodImage);
+        }
     }
 
     private void setToggleButtonStatesFromIntent(Intent fromConfigs) {
@@ -221,7 +222,7 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
     }
 
     private boolean foodItemCreationRequirementsMet(String label, int amount, TimeFrame timeFrame,
-                                                    int frequency, double frequencyQuotient) {
+            int frequency, double frequencyQuotient) {
         FoodItemCreationRequirementChecker checker =
                 new FoodItemCreationRequirementChecker(mSharedPrefsHelper);
         try {
@@ -238,8 +239,8 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void launchConfigurationsActivity(String label, String brand, int amount, String unit,
-                                              String info, TimeFrame timeFrame, int frequency,
-                                              double frequencyQuotient) {
+            String info, TimeFrame timeFrame, int frequency,
+            double frequencyQuotient) {
         Intent toConfigs = createIntentToConfigs(label, brand, amount, unit, info, timeFrame,
                 frequency, frequencyQuotient);
         setResult(RESULT_OK, toConfigs);
@@ -247,8 +248,8 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
     }
 
     private Intent createIntentToConfigs(String label, String brand, int amount, String unit,
-                                         String info, TimeFrame timeFrame, int frequency,
-                                         double frequencyQuotient) {
+            String info, TimeFrame timeFrame, int frequency,
+            double frequencyQuotient) {
         Intent toConfigs = new Intent(this, ConfigurationsActivity.class);
         toConfigs.putExtra("label", label);
         toConfigs.putExtra("brand", brand);
@@ -268,7 +269,9 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
         CameraUtil cameraUtil = new CameraUtil(this);
         this.mImageUri = cameraUtil.getImagePath();
         Intent toCaptureImage = cameraUtil.getIntentToCaptureImage();
-        if (cameraUtil.cameraAppExists(toCaptureImage)) launchCameraApp(toCaptureImage);
+        if (cameraUtil.cameraAppExists(toCaptureImage)) {
+            launchCameraApp(toCaptureImage);
+        }
     }
 
     private void launchCameraApp(Intent toCaptureImage) {

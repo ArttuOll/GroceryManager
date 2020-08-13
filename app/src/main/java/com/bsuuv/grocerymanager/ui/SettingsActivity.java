@@ -2,19 +2,15 @@ package com.bsuuv.grocerymanager.ui;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.MultiSelectListPreference;
 import androidx.preference.PreferenceFragmentCompat;
-
 import com.bsuuv.grocerymanager.R;
-
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Objects;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -36,7 +32,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void setActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat implements

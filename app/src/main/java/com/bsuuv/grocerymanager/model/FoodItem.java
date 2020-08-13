@@ -4,22 +4,22 @@ import com.bsuuv.grocerymanager.util.TimeFrame;
 
 public interface FoodItem {
 
-    int getId();
+  int getId();
 
-    String getImageUri();
+  String getImageUri();
 
-    String getLabel();
+  String getLabel();
 
-    String getBrand();
+  String getBrand();
 
-    String getInfo();
+  String getInfo();
 
-    int getAmount();
+  int getAmount();
 
-    String getUnit();
+  String getUnit();
 
-    TimeFrame getTimeFrame();
+  TimeFrame getTimeFrame();
 
-    int getFrequency();
+  int getFrequency();
 
 }

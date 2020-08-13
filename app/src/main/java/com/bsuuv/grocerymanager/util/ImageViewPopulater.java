@@ -2,9 +2,7 @@ package com.bsuuv.grocerymanager.util;
 
 import android.content.Context;
 import android.widget.ImageView;
-
 import com.bumptech.glide.Glide;
-
 import java.io.File;
 
 public class ImageViewPopulater {

@@ -1,7 +1,10 @@
 package com.bsuuv.grocerymanager.util;
 
-import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import static org.mockito.Mockito.when;
 
+import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,62 +14,57 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.mockito.Mockito.when;
-
 @RunWith(MockitoJUnitRunner.class)
 public class FrequencyQuotientCalculatorTests {
 
-    @Mock
-    private SharedPreferencesHelper mSharedPrefsHelper;
+  @Mock
+  private SharedPreferencesHelper mSharedPrefsHelper;
 
-    @InjectMocks
-    private FrequencyQuotientCalculator mFqCalculator;
+  @InjectMocks
+  private FrequencyQuotientCalculator mFqCalculator;
 
-    private Set<String> mGroceryDays;
+  private Set<String> mGroceryDays;
 
-    @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
+  @Before
+  public void init() {
+    MockitoAnnotations.initMocks(this);
 
-        this.mGroceryDays = new HashSet<>();
-    }
+    this.mGroceryDays = new HashSet<>();
+  }
 
-    @Test
-    public void getFrequencyQuotient_singleGroceryDay() {
-        mGroceryDays.add("tuesday");
+  @Test
+  public void getFrequencyQuotient_singleGroceryDay() {
+    mGroceryDays.add("tuesday");
 
-        when(mSharedPrefsHelper.getGroceryDays()).thenReturn(mGroceryDays);
+    when(mSharedPrefsHelper.getGroceryDays()).thenReturn(mGroceryDays);
 
-        FoodItemEntity foodItem = new FoodItemEntity("Olut", "Karjala",
-                "Raikasta", 2, "Packets", TimeFrame.TWO_WEEKS, 1,
-                "", 0.0);
+    FoodItemEntity foodItem = new FoodItemEntity("Olut", "Karjala",
+        "Raikasta", 2, "Packets", TimeFrame.TWO_WEEKS, 1,
+        "", 0.0);
 
-        Assert.assertEquals(0.5, mFqCalculator.getFrequencyQuotient(foodItem)
-                , 0.001);
+    Assert.assertEquals(0.5, mFqCalculator.getFrequencyQuotient(foodItem)
+        , 0.001);
 
-        Assert.assertEquals(0.5, mFqCalculator.getFrequencyQuotient(1, TimeFrame.TWO_WEEKS, 1),
-                0.001);
-    }
+    Assert.assertEquals(0.5, mFqCalculator.getFrequencyQuotient(1, TimeFrame.TWO_WEEKS, 1),
+        0.001);
+  }
 
-    @Test
-    public void getFrequencyQuotient_multipleGroceryDays() {
-        mGroceryDays.add("tuesday");
-        mGroceryDays.add("wednesday");
-        mGroceryDays.add("saturday");
+  @Test
+  public void getFrequencyQuotient_multipleGroceryDays() {
+    mGroceryDays.add("tuesday");
+    mGroceryDays.add("wednesday");
+    mGroceryDays.add("saturday");
 
-        when(mSharedPrefsHelper.getGroceryDays()).thenReturn(mGroceryDays);
+    when(mSharedPrefsHelper.getGroceryDays()).thenReturn(mGroceryDays);
 
-        FoodItemEntity foodItem = new FoodItemEntity("Olut", "Karjala",
-                "Raikasta", 2, "Packets", TimeFrame.TWO_WEEKS, 1,
-                "", 0.0);
+    FoodItemEntity foodItem = new FoodItemEntity("Olut", "Karjala",
+        "Raikasta", 2, "Packets", TimeFrame.TWO_WEEKS, 1,
+        "", 0.0);
 
-        Assert.assertEquals(0.15, mFqCalculator.getFrequencyQuotient(foodItem)
-                , 0.001);
+    Assert.assertEquals(0.15, mFqCalculator.getFrequencyQuotient(foodItem)
+        , 0.001);
 
-        Assert.assertEquals(0.15, mFqCalculator.getFrequencyQuotient(1, TimeFrame.TWO_WEEKS, 3),
-                0.001);
-    }
+    Assert.assertEquals(0.15, mFqCalculator.getFrequencyQuotient(1, TimeFrame.TWO_WEEKS, 3),
+        0.001);
+  }
 }

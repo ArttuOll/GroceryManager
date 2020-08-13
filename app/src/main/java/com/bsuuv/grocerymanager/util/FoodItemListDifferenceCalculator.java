@@ -1,15 +1,13 @@
 package com.bsuuv.grocerymanager.util;
 
 import androidx.recyclerview.widget.DiffUtil;
-
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
-
 import java.util.List;
 
 public class FoodItemListDifferenceCalculator {
 
     public static DiffUtil.DiffResult calculateMigrationOperations(List<FoodItemEntity> oldFoodItems
-            , List<FoodItemEntity> newFoodItems) {
+        , List<FoodItemEntity> newFoodItems) {
         return DiffUtil.calculateDiff(new DiffUtil.Callback() {
             @Override
             public int getOldListSize() {
@@ -24,7 +22,7 @@ public class FoodItemListDifferenceCalculator {
             @Override
             public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
                 return oldFoodItems.get(oldItemPosition).getId() ==
-                        newFoodItems.get(newItemPosition).getId();
+                    newFoodItems.get(newItemPosition).getId();
             }
 
             @Override
@@ -37,16 +35,16 @@ public class FoodItemListDifferenceCalculator {
     }
 
     private static boolean idAndVisibleMembersEqual(FoodItemEntity oldFoodItem,
-                                                    FoodItemEntity newFoodItem) {
+        FoodItemEntity newFoodItem) {
         return oldFoodItem.getId() == newFoodItem.getId() &&
-                oldFoodItem.getAmount() == newFoodItem.getAmount() &&
-                oldFoodItem.getBrand().equals(newFoodItem.getBrand()) &&
-                oldFoodItem.getFrequency() == newFoodItem.getFrequency() &&
-                oldFoodItem.getImageUri().equals(newFoodItem.getImageUri()) &&
-                oldFoodItem.getInfo().equals(newFoodItem.getInfo()) &&
-                oldFoodItem.getLabel().equals(newFoodItem.getLabel()) &&
-                oldFoodItem.getTimeFrame() == newFoodItem.getTimeFrame() &&
-                oldFoodItem.getUnit().equals(newFoodItem.getUnit());
+            oldFoodItem.getAmount() == newFoodItem.getAmount() &&
+            oldFoodItem.getBrand().equals(newFoodItem.getBrand()) &&
+            oldFoodItem.getFrequency() == newFoodItem.getFrequency() &&
+            oldFoodItem.getImageUri().equals(newFoodItem.getImageUri()) &&
+            oldFoodItem.getInfo().equals(newFoodItem.getInfo()) &&
+            oldFoodItem.getLabel().equals(newFoodItem.getLabel()) &&
+            oldFoodItem.getTimeFrame() == newFoodItem.getTimeFrame() &&
+            oldFoodItem.getUnit().equals(newFoodItem.getUnit());
 
     }
 }

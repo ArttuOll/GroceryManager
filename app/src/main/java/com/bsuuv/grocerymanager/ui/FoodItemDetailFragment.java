@@ -7,11 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.ImageViewPopulater;
@@ -25,7 +23,8 @@ public class FoodItemDetailFragment extends Fragment {
     private PluralsProvider mPluralsProvider;
     private FoodItemEntity mFoodItem;
 
-    public FoodItemDetailFragment() {} // Required
+    public FoodItemDetailFragment() {
+    } // Required
 
     public static FoodItemDetailFragment newInstance(int foodItemId) {
         FoodItemDetailFragment fragment = new FoodItemDetailFragment();
@@ -61,7 +60,7 @@ public class FoodItemDetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.food_item_detail, container, false);
         setUpImageView(rootView);
         setUpTextViews(rootView);
