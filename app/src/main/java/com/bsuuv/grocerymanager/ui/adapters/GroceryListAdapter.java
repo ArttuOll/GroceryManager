@@ -104,7 +104,8 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
     void bindTo(FoodItemEntity currentFoodItem) {
       setInputFieldValues(currentFoodItem);
-      ImageViewPopulater.populateFromUri(mContext, currentFoodItem.getImageUri(), mFoodImage);
+      String uri = currentFoodItem.getImageUri() == null ? "" : currentFoodItem.getImageUri();
+      ImageViewPopulater.populateFromUri(mContext, uri, mFoodImage);
     }
 
     private void setInputFieldValues(FoodItemEntity currentFoodItem) {

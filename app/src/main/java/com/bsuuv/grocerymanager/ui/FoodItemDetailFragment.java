@@ -69,8 +69,8 @@ public class FoodItemDetailFragment extends Fragment {
 
     private void setUpImageView(View rootView) {
         ImageView foodImage = rootView.findViewById(R.id.imageView_detail);
-        String imageUri = mFoodItem.getImageUri();
-        ImageViewPopulater.populateFromUri(getContext(), imageUri, foodImage);
+        String uri = mFoodItem.getImageUri() == null ? "" : mFoodItem.getImageUri();
+        ImageViewPopulater.populateFromUri(getContext(), uri, foodImage);
     }
 
     private void setUpTextViews(View rootView) {

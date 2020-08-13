@@ -92,10 +92,22 @@ public class MainActivity extends AppCompatActivity {
   private void setUpRecyclerView() {
     mRecyclerView.setLayoutManager(mLayoutManager);
     mRecyclerView.setAdapter(mAdapter);
-    mRecyclerView.setVisibility(View.GONE);
-
+    setRecyclerViewVisibility();
     ItemTouchHelper helper = initializeItemTouchHelper();
     helper.attachToRecyclerView(mRecyclerView);
+  }
+
+  private void setRecyclerViewVisibility() {
+    if (mNumberOfGroceryDays == 0) {
+      RecyclerViewUtil.toggleRecyclerViewVisibility(mRecyclerView, mRecyclerViewPlaceHolder
+          , View.GONE, R.string.main_no_grocery_days_set);
+    } else if (!mDateHelper.isGroceryDay()) {
+      RecyclerViewUtil.toggleRecyclerViewVisibility(mRecyclerView, mRecyclerViewPlaceHolder
+          , View.GONE, R.string.main_not_grocery_day);
+    } else if (mDateHelper.isGroceryDay()) {
+      RecyclerViewUtil.toggleRecyclerViewVisibility(mRecyclerView, mRecyclerViewPlaceHolder
+          , View.VISIBLE, 0);
+    }
   }
 
   private ItemTouchHelper initializeItemTouchHelper() {
@@ -122,22 +134,8 @@ public class MainActivity extends AppCompatActivity {
     if (mDateHelper.isGroceryDay()) {
       mGroceryViewModel.getGroceryList().observe(this, groceryListItems -> {
         this.mGroceryList = groceryListItems;
-        setRecyclerViewVisibility();
         mAdapter.setGroceryItems(mGroceryList);
       });
-    }
-  }
-
-  private void setRecyclerViewVisibility() {
-    if (mNumberOfGroceryDays == 0) {
-      RecyclerViewUtil.toggleRecyclerViewVisibility(mRecyclerView, mRecyclerViewPlaceHolder
-          , View.GONE, R.string.main_no_grocery_days_set);
-    } else if (!mDateHelper.isGroceryDay()) {
-      RecyclerViewUtil.toggleRecyclerViewVisibility(mRecyclerView, mRecyclerViewPlaceHolder
-          , View.GONE, R.string.main_not_grocery_day);
-    } else if (mDateHelper.isGroceryDay()) {
-      RecyclerViewUtil.toggleRecyclerViewVisibility(mRecyclerView, mRecyclerViewPlaceHolder
-          , View.VISIBLE, 0);
     }
   }
 
