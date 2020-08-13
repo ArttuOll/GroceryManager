@@ -12,6 +12,7 @@ import com.bsuuv.grocerymanager.util.DateHelper;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import java.util.List;
+import java.util.Objects;
 
 public class GroceryItemViewModel extends AndroidViewModel {
 
@@ -56,7 +57,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
   }
 
   public FoodItemEntity get(int foodItemId) {
-    return mRepository.getFoodItem(foodItemId);
+    return Objects.requireNonNull(mRepository.getFoodItem(foodItemId));
   }
 
   @Override

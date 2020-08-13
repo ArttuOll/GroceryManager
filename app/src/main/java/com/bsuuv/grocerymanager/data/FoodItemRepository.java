@@ -14,8 +14,7 @@ public class FoodItemRepository {
   private LiveData<List<FoodItemEntity>> mFoodItems;
 
   public FoodItemRepository(Application application) {
-    FoodItemRoomDatabase database =
-        FoodItemRoomDatabase.getInstance(application);
+    FoodItemRoomDatabase database = FoodItemRoomDatabase.getInstance(application);
     mFoodItemDao = database.foodItemDao();
     mFoodItems = mFoodItemDao.getAllFoodItems();
   }
@@ -26,14 +25,11 @@ public class FoodItemRepository {
 
   public FoodItemEntity getFoodItem(int foodItemId) {
     FoodItemEntity result = null;
-
     try {
-      result =
-          FoodItemRoomDatabase.dbExecService.submit(() -> mFoodItemDao.get(foodItemId)).get();
+      result = FoodItemRoomDatabase.dbExecService.submit(() -> mFoodItemDao.get(foodItemId)).get();
     } catch (ExecutionException | InterruptedException e) {
       e.printStackTrace();
     }
-
     return result;
   }
 
