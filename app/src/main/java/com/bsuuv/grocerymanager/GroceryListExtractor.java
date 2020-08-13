@@ -7,7 +7,7 @@ import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroceryListManager {
+public class GroceryListExtractor {
 
   public static final String MODIFIED_LIST_KEY = "modifiedlist";
   public static final String CHECKED_ITEMS_KEY = "checkeditems";
@@ -18,7 +18,7 @@ public class GroceryListManager {
   private FrequencyQuotientCalculator mFqCalculator;
   private SharedPreferencesHelper mSharedPrefsHelper;
 
-  public GroceryListManager(SharedPreferencesHelper sharedPreferencesHelper,
+  public GroceryListExtractor(SharedPreferencesHelper sharedPreferencesHelper,
       DateHelper dateHelper,
       FrequencyQuotientCalculator fqCalculator) {
     this.mSharedPrefsHelper = sharedPreferencesHelper;

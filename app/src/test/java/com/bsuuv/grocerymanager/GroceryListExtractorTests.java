@@ -23,7 +23,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GroceryListManagerTests {
+public class GroceryListExtractorTests {
 
   @Mock
   private SharedPreferencesHelper mSharedPrefsHelper;
@@ -41,7 +41,7 @@ public class GroceryListManagerTests {
   private FrequencyQuotientCalculator mCalculator;
 
   @InjectMocks
-  private GroceryListManager mGroceryListManager;
+  private GroceryListExtractor mGroceryListExtractor;
 
   private List<FoodItemEntity> mFoodItems;
   private FoodItemEntity mFoodItem1;
@@ -68,9 +68,9 @@ public class GroceryListManagerTests {
         "Tylsää",
         5, "Bags", TimeFrame.WEEK, 1, "", 0.0);
 
-    when(mSharedPrefsHelper.getList(GroceryListManager.MODIFIED_LIST_KEY))
+    when(mSharedPrefsHelper.getList(GroceryListExtractor.MODIFIED_LIST_KEY))
         .thenReturn(mModifiedList);
-    when(mSharedPrefsHelper.getList(GroceryListManager.CHECKED_ITEMS_KEY))
+    when(mSharedPrefsHelper.getList(GroceryListExtractor.CHECKED_ITEMS_KEY))
         .thenReturn(mCheckedItems);
 
     when(mModifiedList.contains(mFoodItem1)).thenReturn(false);
@@ -99,10 +99,10 @@ public class GroceryListManagerTests {
     mFoodItems.add(mFoodItem1);
     mFoodItems.add(mFoodItem2);
 
-    mGroceryListManager = new GroceryListManager(mSharedPrefsHelper,
+    mGroceryListExtractor = new GroceryListExtractor(mSharedPrefsHelper,
         mDateHelper, mCalculator);
     List<FoodItemEntity> actual =
-        mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListExtractor.getGroceryItemsFromFoodItems(mFoodItems);
     List<FoodItemEntity> expected = new ArrayList<>();
 
     // Was added to list of modified food-items
@@ -120,10 +120,10 @@ public class GroceryListManagerTests {
     mFoodItem2.setCountdownValue(1.0);
     mFoodItems.add(mFoodItem2);
 
-    mGroceryListManager = new GroceryListManager(mSharedPrefsHelper,
+    mGroceryListExtractor = new GroceryListExtractor(mSharedPrefsHelper,
         mDateHelper, mCalculator);
     List<FoodItemEntity> actual =
-        mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListExtractor.getGroceryItemsFromFoodItems(mFoodItems);
     List<FoodItemEntity> expected = new ArrayList<>();
     expected.add(mFoodItem1);
     expected.add(mFoodItem2);
@@ -143,10 +143,10 @@ public class GroceryListManagerTests {
     mFoodItems.add(mFoodItem1);
     mFoodItem1.setCountdownValue(1.0);
 
-    mGroceryListManager = new GroceryListManager(mSharedPrefsHelper,
+    mGroceryListExtractor = new GroceryListExtractor(mSharedPrefsHelper,
         mDateHelper, mCalculator);
     List<FoodItemEntity> actual =
-        mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListExtractor.getGroceryItemsFromFoodItems(mFoodItems);
     List<FoodItemEntity> expected = new ArrayList<>();
 
     // Nothing was added to list of modified items
@@ -161,10 +161,10 @@ public class GroceryListManagerTests {
     mModifiedFoodItem.setCountdownValue(1.0);
     mFoodItems.add(mModifiedFoodItem);
 
-    mGroceryListManager = new GroceryListManager(mSharedPrefsHelper,
+    mGroceryListExtractor = new GroceryListExtractor(mSharedPrefsHelper,
         mDateHelper, mCalculator);
     List<FoodItemEntity> actual =
-        mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListExtractor.getGroceryItemsFromFoodItems(mFoodItems);
     List<FoodItemEntity> expected = new ArrayList<>();
     expected.add(mModifiedFoodItem);
 
@@ -180,10 +180,10 @@ public class GroceryListManagerTests {
     mFoodItems.add(mCheckedFoodItem);
     mCheckedFoodItem.setCountdownValue(1.0);
 
-    mGroceryListManager = new GroceryListManager(mSharedPrefsHelper,
+    mGroceryListExtractor = new GroceryListExtractor(mSharedPrefsHelper,
         mDateHelper, mCalculator);
     List<FoodItemEntity> actual =
-        mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListExtractor.getGroceryItemsFromFoodItems(mFoodItems);
     List<FoodItemEntity> expected = new ArrayList<>();
 
     // Nothing was added to the list of modified food-items.
@@ -200,10 +200,10 @@ public class GroceryListManagerTests {
     mFoodItems.add(mCheckedFoodItem);
     mFoodItems.add(mModifiedCheckedFoodItem);
 
-    mGroceryListManager = new GroceryListManager(mSharedPrefsHelper,
+    mGroceryListExtractor = new GroceryListExtractor(mSharedPrefsHelper,
         mDateHelper, mCalculator);
     List<FoodItemEntity> actual =
-        mGroceryListManager.getGroceryItemsFromFoodItems(mFoodItems);
+        mGroceryListExtractor.getGroceryItemsFromFoodItems(mFoodItems);
     List<FoodItemEntity> expected = new ArrayList<>();
 
     // Nothing was added to the list of modified food-items.

@@ -6,7 +6,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import com.bsuuv.grocerymanager.FoodItemRepository;
-import com.bsuuv.grocerymanager.GroceryListManager;
+import com.bsuuv.grocerymanager.GroceryListExtractor;
 import com.bsuuv.grocerymanager.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.DateHelper;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
@@ -18,7 +18,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
   private FoodItemRepository mRepository;
   private LiveData<List<FoodItemEntity>> mFoodItems;
   private List<FoodItemEntity> mModifiedList;
-  private GroceryListManager mGroceryListManager;
+  private GroceryListExtractor mGroceryListExtractor;
   private DateHelper mInspector;
   private List<FoodItemEntity> mCheckedItems;
 
@@ -27,7 +27,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
     this.mRepository = new FoodItemRepository(application);
     this.mFoodItems = mRepository.getFoodItems();
 
-    // Dependencies for GroceryListManager
+    // Dependencies for GroceryListExtractor
     Context context = application.getApplicationContext();
 
     SharedPreferencesHelper sharedPreferencesHelper =
@@ -39,15 +39,15 @@ public class GroceryItemViewModel extends AndroidViewModel {
     FrequencyQuotientCalculator calculator =
         new FrequencyQuotientCalculator(sharedPreferencesHelper);
 
-    this.mGroceryListManager =
-        new GroceryListManager(sharedPreferencesHelper, dateHelper,
+    this.mGroceryListExtractor =
+        new GroceryListExtractor(sharedPreferencesHelper, dateHelper,
             calculator
         );
 
     this.mInspector = new DateHelper(application, sharedPreferencesHelper);
 
-    this.mCheckedItems = mGroceryListManager.getCheckedItems();
-    this.mModifiedList = mGroceryListManager.getModifiedList();
+    this.mCheckedItems = mGroceryListExtractor.getCheckedItems();
+    this.mModifiedList = mGroceryListExtractor.getModifiedList();
 
     if (!mInspector.isGroceryDay()) {
       updateDatabase();
@@ -56,7 +56,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
 
   public LiveData<List<FoodItemEntity>> getGroceryList() {
     return Transformations.map(mFoodItems,
-        mGroceryListManager::getGroceryItemsFromFoodItems);
+        mGroceryListExtractor::getGroceryItemsFromFoodItems);
   }
 
   public void check(FoodItemEntity foodItem) {
@@ -71,7 +71,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
   protected void onCleared() {
     super.onCleared();
     if (mInspector.isGroceryDay()) {
-      mGroceryListManager.saveBuffers(mModifiedList, mCheckedItems);
+      mGroceryListExtractor.saveBuffers(mModifiedList, mCheckedItems);
     }
   }
 
@@ -79,7 +79,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
     for (FoodItemEntity foodItem : mModifiedList) {
       mRepository.update(foodItem);
     }
-    mGroceryListManager.clearBuffers();
+    mGroceryListExtractor.clearBuffers();
   }
 }
 
