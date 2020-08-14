@@ -12,13 +12,4 @@ public enum TimeFrame {
   public int value() {
     return mValue;
   }
-
-  public TimeFrame parse(int value) {
-    for (TimeFrame tf : TimeFrame.values()) {
-      if (tf.value() == value) {
-        return tf;
-      }
-    }
-    throw new IllegalArgumentException("Given value does not match any time frame options!");
-  }
 }
