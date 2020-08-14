@@ -27,7 +27,6 @@ public class SharedPreferencesHelper {
 
   public SharedPreferencesHelper(Context context) {
     this.mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-
     GsonBuilder builder = new GsonBuilder();
     this.gson = builder.create();
   }
@@ -52,25 +51,12 @@ public class SharedPreferencesHelper {
 
   public List<FoodItemEntity> getList(String key) {
     String json = mSharedPreferences.getString(key, "");
-    if (json.equals("")) {
-      return new ArrayList<>();
-    } else {
-      return gson.fromJson(json, listType);
-    }
+    return json.equals("") ? new ArrayList<>() : gson.fromJson(json, listType);
   }
 
   public void clearList(String key) {
     SharedPreferences.Editor editor = mSharedPreferences.edit();
     editor.remove(key);
-    editor.apply();
-  }
-
-  /**
-   * Clears all items from <code>SharedPreferences</code>.
-   */
-  public void clear() {
-    SharedPreferences.Editor editor = mSharedPreferences.edit();
-    editor.clear();
     editor.apply();
   }
 
