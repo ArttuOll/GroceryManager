@@ -15,13 +15,23 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.ui.ConfigurationsActivity;
+import com.bsuuv.grocerymanager.ui.MainActivity;
 import com.bsuuv.grocerymanager.ui.NewFoodItemActivity;
+import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter.GroceryViewHolder;
 import com.bsuuv.grocerymanager.util.FoodItemListDifferenceCalculator;
 import com.bsuuv.grocerymanager.util.ImageViewPopulater;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
 import com.bsuuv.grocerymanager.util.RequestValidator;
 import java.util.List;
 
+/**
+ * Adapter that feeds food-items in the form of {@link ConfigsViewHolder}s to the
+ * <code>RecyclerView</code> in {@link ConfigurationsActivity}.
+ *
+ * @see GroceryViewHolder
+ * @see MainActivity
+ */
 public class ConfigurationsListAdapter extends
     RecyclerView.Adapter<ConfigurationsListAdapter.ConfigsViewHolder> {
 
@@ -58,6 +68,14 @@ public class ConfigurationsListAdapter extends
     return mFoodItems.get(position);
   }
 
+  /**
+   * Sets the list of food-items that functions as a data source for this adapter. If already set,
+   * calculates an optimal set of update operations to migrate from the old list to the new one.
+   *
+   * @param newFoodItems List of food-items that should be displayed in the
+   *                     <code>RecyclerView</code> in {@link ConfigurationsActivity}
+   * @see ConfigurationsActivity
+   */
   public void setFoodItems(List<FoodItemEntity> newFoodItems) {
     if (this.mFoodItems == null) {
       initFoodItems(newFoodItems);
@@ -78,6 +96,12 @@ public class ConfigurationsListAdapter extends
     migrationOperations.dispatchUpdatesTo(this);
   }
 
+  /**
+   * A <code>ViewHolder</code> containing one food-item to be displayed in the
+   * <code>RecyclerView</code> in {@link ConfigurationsActivity}.
+   *
+   * @see ConfigurationsActivity
+   */
   class ConfigsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     ConfigurationsListAdapter mAdapter;

@@ -16,13 +16,21 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
-import com.bsuuv.grocerymanager.ui.GroceryItemDetail;
+import com.bsuuv.grocerymanager.ui.GroceryItemDetailActivity;
 import com.bsuuv.grocerymanager.ui.GroceryItemDetailFragment;
+import com.bsuuv.grocerymanager.ui.MainActivity;
 import com.bsuuv.grocerymanager.util.FoodItemListDifferenceCalculator;
 import com.bsuuv.grocerymanager.util.ImageViewPopulater;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
 import java.util.List;
 
+/**
+ * Adapter that feeds grocery items in the form of {@link GroceryViewHolder}s to the
+ * <code>RecyclerView</code> in {@link MainActivity}.
+ *
+ * @see GroceryViewHolder
+ * @see MainActivity
+ */
 public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.GroceryViewHolder> {
 
   private List<FoodItemEntity> mGroceryItems;
@@ -55,6 +63,15 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     return mGroceryItems == null ? 0 : mGroceryItems.size();
   }
 
+  /**
+   * Sets the list of grocery items that functions as a data source for this adapter. If already
+   * set, calculates an optimal set of update operations to migrate from the old list to the new
+   * one.
+   *
+   * @param newGroceryItems List of grocery items that should be displayed in the
+   *                        <code>RecyclerView</code> in {@link MainActivity}
+   * @see MainActivity
+   */
   public void setGroceryItems(List<FoodItemEntity> newGroceryItems) {
     if (this.mGroceryItems == null) {
       initGroceryItems(newGroceryItems);
@@ -79,6 +96,12 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     return mGroceryItems.get(position);
   }
 
+  /**
+   * A <code>ViewHolder</code> containing one grocery item to be displayed in the
+   * <code>RecyclerView</code> in {@link MainActivity}.
+   *
+   * @see MainActivity
+   */
   class GroceryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     GroceryListAdapter mAdapter;
@@ -115,17 +138,28 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
           currentFoodItem.getUnit()));
     }
 
+    /**
+     * Called when an item in the <code>RecyclerView</code> in {@link MainActivity} is clicked.
+     * Checks if the device screen is wide (>900 dp) and based on that launches {@link
+     * GroceryItemDetailFragment} either in {@link MainActivity} or {@link
+     * GroceryItemDetailActivity}.
+     *
+     * @param v Default parameter from the parent method. The <code>View</code> that was clicked.
+     * @see MainActivity
+     * @see GroceryItemDetailFragment
+     * @see GroceryItemDetailActivity
+     */
     @Override
     public void onClick(View v) {
       FoodItemEntity currentFoodItem = mGroceryItems.get(getAdapterPosition());
       if (mIsWideScreen) {
-        showInFragment(currentFoodItem);
+        showInMainActivity(currentFoodItem);
       } else {
         showInFoodItemDetailActivity(currentFoodItem);
       }
     }
 
-    private void showInFragment(FoodItemEntity currentFoodItem) {
+    private void showInMainActivity(FoodItemEntity currentFoodItem) {
       GroceryItemDetailFragment fragment = GroceryItemDetailFragment
           .newInstance(currentFoodItem.getId());
 
@@ -143,7 +177,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     }
 
     private Intent createIntentToFoodItemDetail(FoodItemEntity foodItem) {
-      Intent toFoodItemDetail = new Intent(mContext, GroceryItemDetail.class);
+      Intent toFoodItemDetail = new Intent(mContext, GroceryItemDetailActivity.class);
       toFoodItemDetail.putExtra(GroceryItemDetailFragment.FOOD_ITEM_ID_KEY, foodItem.getId());
       return toFoodItemDetail;
     }
