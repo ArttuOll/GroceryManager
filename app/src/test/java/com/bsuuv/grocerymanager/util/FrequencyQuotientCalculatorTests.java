@@ -18,7 +18,6 @@ public class FrequencyQuotientCalculatorTests {
 
   @Mock
   private SharedPreferencesHelper mSharedPrefsHelper;
-
   private Set<String> mGroceryDays;
 
   @Before
@@ -33,12 +32,11 @@ public class FrequencyQuotientCalculatorTests {
 
     when(mSharedPrefsHelper.getGroceryDays()).thenReturn(mGroceryDays);
 
-    FoodItemEntity foodItem = new FoodItemEntity("Olut", "Karjala",
-        "Raikasta", 2, "Packets", TimeFrame.TWO_WEEKS, 1,
-        "", 0.0);
+    FoodItemEntity foodItem = new FoodItemEntity("Olut", "Karjala", "Raikasta",
+        2, "Packets", TimeFrame.TWO_WEEKS, 1, "", 0.0);
 
-    Assert.assertEquals(0.5, FrequencyQuotientCalculator.calculate(mSharedPrefsHelper, foodItem)
-        , 0.001);
+    Assert.assertEquals(0.5, FrequencyQuotientCalculator.calculate(mSharedPrefsHelper, foodItem),
+        0.001);
     Assert.assertEquals(0.5, FrequencyQuotientCalculator.calculate(1, TimeFrame.TWO_WEEKS, 1),
         0.001);
   }
