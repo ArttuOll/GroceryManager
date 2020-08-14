@@ -15,30 +15,32 @@
         android:required="true" />
 
     <application
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:allowBackup="true"
-        android:theme="@style/AppTheme">
+      android:allowBackup="true"
+      android:fullBackupContent="@xml/backup_descriptor"
+      android:icon="@mipmap/ic_launcher"
+      android:label="@string/app_name"
+      android:roundIcon="@mipmap/ic_launcher_round"
+      android:supportsRtl="true"
+      android:theme="@style/AppTheme">
+        <activity
+          android:label="@string/title_activity_settings"
+          android:name=".ui.SettingsActivity"
+          android:parentActivityName=".ui.MainActivity" />
+
         <receiver
-            android:name=".notifications.GroceryDayReceiver"
-            android:enabled="true"
-            android:exported="false" />
+          android:enabled="true"
+          android:exported="false"
+          android:name=".notifications.GroceryDayReceiver" />
 
         <activity
-            android:name=".ui.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.MainActivity" />
+          android:name=".ui.NewFoodItemActivity"
+          android:parentActivityName=".ui.ConfigurationsActivity" />
         <activity
-            android:name=".ui.NewFoodItemActivity"
-            android:parentActivityName=".ui.ConfigurationsActivity" />
+          android:name=".ui.ConfigurationsActivity"
+          android:parentActivityName=".ui.MainActivity" />
         <activity
-            android:name=".ui.ConfigurationsActivity"
-            android:parentActivityName=".ui.MainActivity" />
-        <activity
-            android:name=".ui.FoodItemDetail"
-            android:parentActivityName=".ui.MainActivity" />
+          android:name=".ui.FoodItemDetail"
+          android:parentActivityName=".ui.MainActivity" />
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name"
