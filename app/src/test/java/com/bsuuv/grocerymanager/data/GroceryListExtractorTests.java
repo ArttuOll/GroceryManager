@@ -24,16 +24,12 @@ public class GroceryListExtractorTests {
 
   @Mock
   private GroceryListState mState;
-
   @Mock
   private SharedPreferencesHelper mSharedPrefsHelper;
-
   @Mock
   private List<FoodItemEntity> mModifiedList;
-
   @Mock
   private List<FoodItemEntity> mCheckedItems;
-
   @InjectMocks
   private GroceryListExtractor mGroceryListExtractor;
 
@@ -47,7 +43,11 @@ public class GroceryListExtractorTests {
   @Before
   public void initialize() {
     MockitoAnnotations.initMocks(this);
+    initMembers();
+    configureMocks();
+  }
 
+  private void initMembers() {
     this.mFoodItems = new ArrayList<>();
     this.mFoodItem1 = new FoodItemEntity("Kalja", "Karjala", "Raikasta",
         2, "Packets", TimeFrame.TWO_WEEKS, 1, "", 0.0);
@@ -61,7 +61,9 @@ public class GroceryListExtractorTests {
     this.mModifiedCheckedFoodItem = new FoodItemEntity("Voi", "Valio",
         "Tylsää",
         5, "Bags", TimeFrame.WEEK, 1, "", 0.0);
+  }
 
+  private void configureMocks() {
     when(mState.getCheckedItems()).thenReturn(mCheckedItems);
     when(mCheckedItems.contains(mCheckedFoodItem)).thenReturn(true);
     when(mCheckedItems.contains(mModifiedCheckedFoodItem)).thenReturn(true);
@@ -94,6 +96,7 @@ public class GroceryListExtractorTests {
     Assert.assertEquals(expected, actual);
   }
 
+
   @Test
   public void getGroceryList_countdownValueOne() {
     mFoodItem1.setCountdownValue(1.0);
@@ -104,11 +107,8 @@ public class GroceryListExtractorTests {
     mGroceryListExtractor = new GroceryListExtractor(mState, mSharedPrefsHelper);
     mGroceryListExtractor.extractGroceryListFromFoodItems(mFoodItems);
 
-    // Was added to list of modified food-items
     verify(mState).markAsModified(mFoodItem1);
     verify(mState).markAsModified(mFoodItem2);
-
-    // Both food-items added to grocery list
     verify(mState).addToGroceryList(mFoodItem1);
     verify(mState).addToGroceryList(mFoodItem2);
   }
@@ -121,10 +121,7 @@ public class GroceryListExtractorTests {
     mGroceryListExtractor = new GroceryListExtractor(mState, mSharedPrefsHelper);
     mGroceryListExtractor.extractGroceryListFromFoodItems(mFoodItems);
 
-    // Nothing was added to the list of modified food-items.
     verify(mModifiedList, never()).add(mModifiedFoodItem);
-
-    // The food-item was added to grocery list
     verify(mState).addToGroceryList(mModifiedFoodItem);
   }
 
@@ -137,10 +134,7 @@ public class GroceryListExtractorTests {
     List<FoodItemEntity> actual = mGroceryListExtractor.extractGroceryListFromFoodItems(mFoodItems);
     List<FoodItemEntity> expected = new ArrayList<>();
 
-    // Nothing was added to the list of modified food-items.
     verify(mCheckedItems, never()).add(mCheckedFoodItem);
-
-    // The food-item was not added to grocery list
     Assert.assertEquals(expected, actual);
   }
 
@@ -155,13 +149,8 @@ public class GroceryListExtractorTests {
     List<FoodItemEntity> actual = mGroceryListExtractor.extractGroceryListFromFoodItems(mFoodItems);
     List<FoodItemEntity> expected = new ArrayList<>();
 
-    // Nothing was added to the list of modified food-items.
     verify(mCheckedItems, never()).add(mCheckedFoodItem);
-
-    // Nothing was added to the list of modified food-items.
     verify(mModifiedList, never()).add(mModifiedFoodItem);
-
-    // The food-item was not added to grocery list
     Assert.assertEquals(expected, actual);
   }
 }
