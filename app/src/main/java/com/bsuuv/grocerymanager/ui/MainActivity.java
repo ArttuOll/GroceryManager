@@ -85,8 +85,7 @@ public class MainActivity extends AppCompatActivity {
   private void setUpToolbar() {
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    setTitle(getString(R.string.mainActivity_actionbar_label) + " "
-        + mDateHelper.getCurrentDate());
+    setTitle(getString(R.string.mainActivity_actionbar_label) + " " + mDateHelper.getCurrentDate());
   }
 
   private void setUpRecyclerView() {

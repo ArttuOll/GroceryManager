@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container_food_item_detail"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.FoodItemDetail">
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/container_food_item_detail"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context=".ui.GroceryItemDetail">
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView_detail"
-            style="@style/activity_imageviews"
-            android:contentDescription="@string/food_image_content_description"
-            android:transitionName="@string/transition_detail" />
+          android:id="@+id/imageView_detail"
+          style="@style/activity_imageviews"
+          android:contentDescription="@string/food_image_content_description"
+          android:transitionName="@string/transition_detail" />
 
         <View
             android:layout_width="match_parent"

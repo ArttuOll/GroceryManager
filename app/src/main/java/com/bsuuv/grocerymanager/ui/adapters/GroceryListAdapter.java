@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
-import com.bsuuv.grocerymanager.ui.FoodItemDetail;
-import com.bsuuv.grocerymanager.ui.FoodItemDetailFragment;
+import com.bsuuv.grocerymanager.ui.GroceryItemDetail;
+import com.bsuuv.grocerymanager.ui.GroceryItemDetailFragment;
 import com.bsuuv.grocerymanager.util.FoodItemListDifferenceCalculator;
 import com.bsuuv.grocerymanager.util.ImageViewPopulater;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
@@ -126,7 +126,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     }
 
     private void showInFragment(FoodItemEntity currentFoodItem) {
-      FoodItemDetailFragment fragment = FoodItemDetailFragment
+      GroceryItemDetailFragment fragment = GroceryItemDetailFragment
           .newInstance(currentFoodItem.getId());
 
       ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction()
@@ -143,8 +143,8 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     }
 
     private Intent createIntentToFoodItemDetail(FoodItemEntity foodItem) {
-      Intent toFoodItemDetail = new Intent(mContext, FoodItemDetail.class);
-      toFoodItemDetail.putExtra(FoodItemDetailFragment.FOOD_ITEM_ID_KEY, foodItem.getId());
+      Intent toFoodItemDetail = new Intent(mContext, GroceryItemDetail.class);
+      toFoodItemDetail.putExtra(GroceryItemDetailFragment.FOOD_ITEM_ID_KEY, foodItem.getId());
       return toFoodItemDetail;
     }
   }

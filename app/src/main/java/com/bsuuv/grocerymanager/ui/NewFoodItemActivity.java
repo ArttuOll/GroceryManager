@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.CameraUtil;
 import com.bsuuv.grocerymanager.util.FoodItemCreationRequirementChecker;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;

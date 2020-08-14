@@ -16,18 +16,18 @@ import com.bsuuv.grocerymanager.data.viewmodel.GroceryItemViewModel;
 import com.bsuuv.grocerymanager.util.ImageViewPopulater;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
 
-public class FoodItemDetailFragment extends Fragment {
+public class GroceryItemDetailFragment extends Fragment {
 
     public static final String FOOD_ITEM_ID_KEY = "foodItemId";
 
     private PluralsProvider mPluralsProvider;
     private FoodItemEntity mFoodItem;
 
-    public FoodItemDetailFragment() {
+    public GroceryItemDetailFragment() {
     } // Required
 
-    public static FoodItemDetailFragment newInstance(int foodItemId) {
-        FoodItemDetailFragment fragment = new FoodItemDetailFragment();
+    public static GroceryItemDetailFragment newInstance(int foodItemId) {
+        GroceryItemDetailFragment fragment = new GroceryItemDetailFragment();
         Bundle args = new Bundle();
         args.putInt(FOOD_ITEM_ID_KEY, foodItemId);
         fragment.setArguments(args);

@@ -39,7 +39,7 @@
           android:name=".ui.ConfigurationsActivity"
           android:parentActivityName=".ui.MainActivity" />
         <activity
-          android:name=".ui.FoodItemDetail"
+          android:name=".ui.GroceryItemDetail"
           android:parentActivityName=".ui.MainActivity" />
         <activity
             android:name=".ui.MainActivity"

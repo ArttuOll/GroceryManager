@@ -31,7 +31,6 @@ public class SharedPreferencesHelper {
     this.gson = builder.create();
   }
 
-
   /**
    * Returns a list of grocery days selected by the user in SettingsActivity.
    *
