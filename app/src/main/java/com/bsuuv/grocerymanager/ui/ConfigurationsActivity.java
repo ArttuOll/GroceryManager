@@ -20,6 +20,19 @@ import com.bsuuv.grocerymanager.util.RequestValidator;
 import com.bsuuv.grocerymanager.util.TimeFrame;
 import java.util.Objects;
 
+/**
+ * Activity for viewing all created food-items. Displays the items as a list or shows a placeholder
+ * text if no food-items are yet created. The items can be swiped left or right to delete them, or
+ * clicked to edit the. Contains a floating action button, which launches {@link
+ * NewFoodItemActivity} for creating a new food-item.
+ * <p>
+ * The food-items are displayed in a <code>RecyclerView</code>, the {@link
+ * ConfigurationsListAdapter} of which receives its data from a {@link FoodItemViewModel}.
+ *
+ * @see NewFoodItemActivity
+ * @see ConfigurationsListAdapter
+ * @see FoodItemViewModel
+ */
 public class ConfigurationsActivity extends AppCompatActivity {
 
   private ConfigurationsListAdapter mAdapter;

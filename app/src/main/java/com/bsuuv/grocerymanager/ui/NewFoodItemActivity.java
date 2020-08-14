@@ -24,6 +24,32 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.Objects;
 
+/**
+ * Activity for creating new food-items. Displays a form with input fields corresponding to
+ * different properties of a food-item:
+ * <ul>
+ * <li>An image, with a camera icon as a placeholder. Clicking the camera icon
+ *     or an image launches the devices camera app, if one is installed.</li>
+ * <li>A label</li>
+ * <li>Brand</li>
+ * <li>Amount</li>
+ * <li>Unit for the amount</li>
+ * <li>Frequency, that is, how many times in the chosen time frame (see next)
+ *     the user wants this?</li>
+ * <li>Time frame, that is, what is the time period during which the user wants
+ *     to see this food-item appear on the grocery list the amount of times specified
+ *     by the frequency?</li>
+ * <li>Additional information the user wants to add</li>
+ * </ul>
+ * Some of these input fields are not mandatory. Finally, the view contains a
+ * floating action button, which launches validation of the input fields and
+ * afterwards sends their data to {@link ConfigurationsActivity}. For information
+ * on required fields and their validation, see {@link FoodItemCreationRequirementChecker}
+ *
+ * @see ConfigurationsActivity
+ * @see FoodItemCreationRequirementChecker
+ * @see FoodItemEntity
+ */
 public class NewFoodItemActivity extends AppCompatActivity implements View.OnClickListener {
 
   private static final String IMAGE_PATH_KEY = "imagePath";

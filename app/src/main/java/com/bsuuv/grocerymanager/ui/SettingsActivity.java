@@ -12,8 +12,11 @@ import java.util.Objects;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Activity containing settings of the application. Hosts the setting <code>Preference</code>s in
+ * <code>SettingsFragment</code> inner class.
+ */
 public class SettingsActivity extends AppCompatActivity {
-
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

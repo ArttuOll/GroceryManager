@@ -16,89 +16,93 @@ import com.bsuuv.grocerymanager.data.viewmodel.GroceryItemViewModel;
 import com.bsuuv.grocerymanager.util.ImageViewPopulater;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
 
+/**
+ * Fragment for displaying properties of a grocery item. Used by {@link GroceryItemDetail} and
+ * {@link MainActivity} (on wide-screen devices).
+ */
 public class GroceryItemDetailFragment extends Fragment {
 
-    public static final String FOOD_ITEM_ID_KEY = "foodItemId";
+  public static final String FOOD_ITEM_ID_KEY = "foodItemId";
 
-    private PluralsProvider mPluralsProvider;
-    private FoodItemEntity mFoodItem;
+  private PluralsProvider mPluralsProvider;
+  private FoodItemEntity mFoodItem;
 
-    public GroceryItemDetailFragment() {
-    } // Required
+  public GroceryItemDetailFragment() {
+  } // Required
 
-    public static GroceryItemDetailFragment newInstance(int foodItemId) {
-        GroceryItemDetailFragment fragment = new GroceryItemDetailFragment();
-        Bundle args = new Bundle();
-        args.putInt(FOOD_ITEM_ID_KEY, foodItemId);
-        fragment.setArguments(args);
-        return fragment;
-    }
+  public static GroceryItemDetailFragment newInstance(int foodItemId) {
+    GroceryItemDetailFragment fragment = new GroceryItemDetailFragment();
+    Bundle args = new Bundle();
+    args.putInt(FOOD_ITEM_ID_KEY, foodItemId);
+    fragment.setArguments(args);
+    return fragment;
+  }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initMembers();
-    }
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    initMembers();
+  }
 
-    private void initMembers() {
-        this.mPluralsProvider = new PluralsProvider(getActivity());
-        this.mFoodItem = getFoodItem();
-    }
+  private void initMembers() {
+    this.mPluralsProvider = new PluralsProvider(getActivity());
+    this.mFoodItem = getFoodItem();
+  }
 
-    private FoodItemEntity getFoodItem() {
-        GroceryItemViewModel viewModel = getViewModel();
-        Bundle fragmentArgs = requireArguments();
-        int foodItemId = fragmentArgs.getInt(FOOD_ITEM_ID_KEY);
-        return viewModel.get(foodItemId);
-    }
+  private FoodItemEntity getFoodItem() {
+    GroceryItemViewModel viewModel = getViewModel();
+    Bundle fragmentArgs = requireArguments();
+    int foodItemId = fragmentArgs.getInt(FOOD_ITEM_ID_KEY);
+    return viewModel.get(foodItemId);
+  }
 
-    private GroceryItemViewModel getViewModel() {
-        Application parentActivityOwner = requireActivity().getApplication();
-        return new GroceryItemViewModel(parentActivityOwner);
-    }
+  private GroceryItemViewModel getViewModel() {
+    Application parentActivityOwner = requireActivity().getApplication();
+    return new GroceryItemViewModel(parentActivityOwner);
+  }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.food_item_detail, container, false);
-        setUpImageView(rootView);
-        setUpTextViews(rootView);
-        return rootView;
-    }
+  @Nullable
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
+    View rootView = inflater.inflate(R.layout.food_item_detail, container, false);
+    setUpImageView(rootView);
+    setUpTextViews(rootView);
+    return rootView;
+  }
 
-    private void setUpImageView(View rootView) {
-        ImageView foodImage = rootView.findViewById(R.id.imageView_detail);
-        String uri = mFoodItem.getImageUri() == null ? "" : mFoodItem.getImageUri();
-        ImageViewPopulater.populateFromUri(getContext(), uri, foodImage);
-    }
+  private void setUpImageView(View rootView) {
+    ImageView foodImage = rootView.findViewById(R.id.imageView_detail);
+    String uri = mFoodItem.getImageUri() == null ? "" : mFoodItem.getImageUri();
+    ImageViewPopulater.populateFromUri(getContext(), uri, foodImage);
+  }
 
-    private void setUpTextViews(View rootView) {
-        setUpLabelTextView(rootView);
-        setUpAmountTextView(rootView);
-        setUpBrandTextView(rootView);
-        setUpInfoTextView(rootView);
-    }
+  private void setUpTextViews(View rootView) {
+    setUpLabelTextView(rootView);
+    setUpAmountTextView(rootView);
+    setUpBrandTextView(rootView);
+    setUpInfoTextView(rootView);
+  }
 
-    private void setUpLabelTextView(View rootView) {
-        TextView label = rootView.findViewById(R.id.textview_title);
-        label.setText(mFoodItem.getLabel());
-    }
+  private void setUpLabelTextView(View rootView) {
+    TextView label = rootView.findViewById(R.id.textview_title);
+    label.setText(mFoodItem.getLabel());
+  }
 
-    private void setUpAmountTextView(View rootView) {
-        TextView amountView = rootView.findViewById(R.id.textview_amount);
-        int amount = mFoodItem.getAmount();
-        String unit = mFoodItem.getUnit();
-        amountView.setText(mPluralsProvider.getAmountString(amount, unit));
-    }
+  private void setUpAmountTextView(View rootView) {
+    TextView amountView = rootView.findViewById(R.id.textview_amount);
+    int amount = mFoodItem.getAmount();
+    String unit = mFoodItem.getUnit();
+    amountView.setText(mPluralsProvider.getAmountString(amount, unit));
+  }
 
-    private void setUpBrandTextView(View rootView) {
-        TextView brand = rootView.findViewById(R.id.textview_brand);
-        brand.setText(mFoodItem.getBrand());
-    }
+  private void setUpBrandTextView(View rootView) {
+    TextView brand = rootView.findViewById(R.id.textview_brand);
+    brand.setText(mFoodItem.getBrand());
+  }
 
-    private void setUpInfoTextView(View rootView) {
-        TextView info = rootView.findViewById(R.id.textview_info);
-        info.setText(mFoodItem.getInfo());
-    }
+  private void setUpInfoTextView(View rootView) {
+    TextView info = rootView.findViewById(R.id.textview_info);
+    info.setText(mFoodItem.getInfo());
+  }
 }
