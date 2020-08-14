@@ -14,18 +14,17 @@ public class DateHelper {
 
   private Set<String> mGroceryDays;
   private Context mContext;
-  private int today;
+  private int mToday;
   private Calendar mCalendar;
 
   public DateHelper(Context context, SharedPreferencesHelper sharedPrefsHelper) {
     this.mContext = context;
     this.mGroceryDays = sharedPrefsHelper.getGroceryDays();
-
-    this.mCalendar = createAndConfigureCalendar();
-    this.today = mCalendar.get(Calendar.DAY_OF_WEEK);
+    this.mCalendar = createCalendar();
+    this.mToday = mCalendar.get(Calendar.DAY_OF_WEEK);
   }
 
-  private Calendar createAndConfigureCalendar() {
+  private Calendar createCalendar() {
     Calendar calendar = Calendar.getInstance();
     calendar.setFirstDayOfWeek(Calendar.SUNDAY);
     // When Date-object is instantiated without parameters, its time is set to the current day.
@@ -36,7 +35,7 @@ public class DateHelper {
   public boolean isGroceryDay() {
     for (String groceryDayString : mGroceryDays) {
       int groceryDay = stringWeekDayToInt(groceryDayString);
-      if (groceryDay == today) {
+      if (groceryDay == mToday) {
         return true;
       }
     }
@@ -47,7 +46,7 @@ public class DateHelper {
     int daysUntilClosestGroceryDay = NO_GROCERY_DAYS_SET;
     for (String groceryDayString : mGroceryDays) {
       int groceryDay = getGroceryDayInt(groceryDayString);
-      int daysFromTodayToGroceryDay = Math.abs(today - groceryDay);
+      int daysFromTodayToGroceryDay = Math.abs(mToday - groceryDay);
       if (daysFromTodayToGroceryDay < daysUntilClosestGroceryDay) {
         daysUntilClosestGroceryDay = daysFromTodayToGroceryDay;
       }
@@ -59,7 +58,7 @@ public class DateHelper {
     int groceryDayInt = stringWeekDayToInt(groceryDay);
     // If the weekday of the grocery day is already behind, put it to next week by adding 7
     // to it.
-    if (groceryDayInt < today) {
+    if (groceryDayInt < mToday) {
       groceryDayInt += 7;
     }
     return groceryDayInt;
@@ -94,6 +93,6 @@ public class DateHelper {
   }
 
   void setToday(int today) {
-    this.today = today;
+    this.mToday = today;
   }
 }
