@@ -60,7 +60,7 @@ public class FoodItemDetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.food_item_detail, container, false);
         setUpImageView(rootView);
         setUpTextViews(rootView);

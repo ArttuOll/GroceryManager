@@ -7,7 +7,7 @@ import java.io.File;
 
 public class ImageViewPopulater {
 
-    public static void populateFromUri(Context context, String uri, ImageView imageView) {
-        Glide.with(context).load(new File(uri)).into(imageView);
-    }
+  public static void populateFromUri(Context context, String uri, ImageView imageView) {
+    Glide.with(context).load(new File(uri)).into(imageView);
+  }
 }
