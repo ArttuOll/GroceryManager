@@ -62,14 +62,7 @@ public class GroceryListExtractorTests {
         "Tylsää",
         5, "Bags", TimeFrame.WEEK, 1, "", 0.0);
 
-    when(mState.getModifiedItems()).thenReturn(mModifiedList);
     when(mState.getCheckedItems()).thenReturn(mCheckedItems);
-
-    when(mModifiedList.contains(mFoodItem1)).thenReturn(false);
-    when(mModifiedList.contains(mFoodItem2)).thenReturn(false);
-    when(mModifiedList.contains(mModifiedFoodItem)).thenReturn(true);
-    when(mModifiedList.contains(mModifiedCheckedFoodItem)).thenReturn(true);
-
     when(mCheckedItems.contains(mCheckedFoodItem)).thenReturn(true);
     when(mCheckedItems.contains(mModifiedCheckedFoodItem)).thenReturn(true);
   }
@@ -109,17 +102,15 @@ public class GroceryListExtractorTests {
     mFoodItems.add(mFoodItem2);
 
     mGroceryListExtractor = new GroceryListExtractor(mState, mCalculator);
-    List<FoodItemEntity> actual = mGroceryListExtractor.extractGroceryListFromFoodItems(mFoodItems);
-    List<FoodItemEntity> expected = new ArrayList<>();
-    expected.add(mFoodItem1);
-    expected.add(mFoodItem2);
+    mGroceryListExtractor.extractGroceryListFromFoodItems(mFoodItems);
 
     // Was added to list of modified food-items
     verify(mState).markAsModified(mFoodItem1);
     verify(mState).markAsModified(mFoodItem2);
 
     // Both food-items added to grocery list
-    Assert.assertEquals(expected, actual);
+    verify(mState).addToGroceryList(mFoodItem1);
+    verify(mState).addToGroceryList(mFoodItem2);
   }
 
   @Test
@@ -128,15 +119,13 @@ public class GroceryListExtractorTests {
     mFoodItems.add(mModifiedFoodItem);
 
     mGroceryListExtractor = new GroceryListExtractor(mState, mCalculator);
-    List<FoodItemEntity> actual = mGroceryListExtractor.extractGroceryListFromFoodItems(mFoodItems);
-    List<FoodItemEntity> expected = new ArrayList<>();
-    expected.add(mModifiedFoodItem);
+    mGroceryListExtractor.extractGroceryListFromFoodItems(mFoodItems);
 
     // Nothing was added to the list of modified food-items.
     verify(mModifiedList, never()).add(mModifiedFoodItem);
 
     // The food-item was added to grocery list
-    Assert.assertEquals(expected, actual);
+    verify(mState).addToGroceryList(mModifiedFoodItem);
   }
 
   @Test

@@ -2,50 +2,42 @@ package com.bsuuv.grocerymanager.data;
 
 import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GroceryListExtractor {
 
   private FrequencyQuotientCalculator mFqCalculator;
-  private GroceryListState mState;
+  private GroceryListState mGroceries;
 
-  public GroceryListExtractor(GroceryListState state, FrequencyQuotientCalculator fqCalculator) {
-    this.mState = state;
+  public GroceryListExtractor(GroceryListState groceries,
+      FrequencyQuotientCalculator fqCalculator) {
+    this.mGroceries = groceries;
     this.mFqCalculator = fqCalculator;
   }
 
   public List<FoodItemEntity> extractGroceryListFromFoodItems(List<FoodItemEntity> foodItems) {
-    List<FoodItemEntity> groceries = new ArrayList<>();
     for (FoodItemEntity foodItem : foodItems) {
+      double frequencyQuotient = mFqCalculator.getFrequencyQuotient(foodItem);
       if (shouldAppearInGroceryList(foodItem)) {
-        groceries.add(foodItem);
-        resetCountdownValue(foodItem);
+        mGroceries.addToGroceryList(foodItem);
+        resetCountdownValue(foodItem, frequencyQuotient);
       } else {
-        incrementCountdownValue(foodItem);
+        incrementCountdownValue(foodItem, frequencyQuotient);
       }
-      if (notModified(foodItem)) {
-        mState.markAsModified(foodItem);
-      }
+      mGroceries.markAsModified(foodItem);
     }
-    return groceries;
+    return mGroceries.getGroceryList();
   }
 
   private boolean shouldAppearInGroceryList(FoodItemEntity foodItem) {
-    return foodItem.getCountdownValue() >= 1 && !mState.getCheckedItems().contains(foodItem);
+    return foodItem.getCountdownValue() >= 1 && !mGroceries.getCheckedItems().contains(foodItem);
   }
 
-  private void resetCountdownValue(FoodItemEntity foodItem) {
-    double frequencyQuotient = mFqCalculator.getFrequencyQuotient(foodItem);
+  private void resetCountdownValue(FoodItemEntity foodItem, double frequencyQuotient) {
     foodItem.setCountdownValue(frequencyQuotient);
   }
 
-  private void incrementCountdownValue(FoodItemEntity foodItem) {
-    double frequencyQuotient = mFqCalculator.getFrequencyQuotient(foodItem);
+  private void incrementCountdownValue(FoodItemEntity foodItem, double frequencyQuotient) {
     foodItem.setCountdownValue(foodItem.getCountdownValue() + frequencyQuotient);
-  }
-
-  private boolean notModified(FoodItemEntity foodItem) {
-    return !mState.getModifiedItems().contains(foodItem);
   }
 }

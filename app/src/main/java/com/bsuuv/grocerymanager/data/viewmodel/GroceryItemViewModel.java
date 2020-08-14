@@ -20,7 +20,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
   private LiveData<List<FoodItemEntity>> mFoodItems;
   private GroceryListExtractor mGroceryListExtractor;
   private DateHelper mDateHelper;
-  private GroceryListState mState;
+  private GroceryListState mGroceries;
 
   public GroceryItemViewModel(Application application) {
     super(application);
@@ -31,17 +31,17 @@ public class GroceryItemViewModel extends AndroidViewModel {
   }
 
   private void updateDatabase() {
-    for (FoodItemEntity foodItem : mState.getModifiedItems()) {
+    for (FoodItemEntity foodItem : mGroceries.getModifiedItems()) {
       mRepository.update(foodItem);
     }
-    mState.clearState();
+    mGroceries.clearState();
   }
 
   private void initMembers(Application application) {
     SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(application);
     this.mRepository = new FoodItemRepository(application);
     this.mFoodItems = mRepository.getFoodItems();
-    this.mState = new GroceryListState(sharedPreferencesHelper);
+    this.mGroceries = new GroceryListState(sharedPreferencesHelper);
     this.mGroceryListExtractor = initExtractor(sharedPreferencesHelper);
     this.mDateHelper = new DateHelper(application, sharedPreferencesHelper);
   }
@@ -49,7 +49,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
   private GroceryListExtractor initExtractor(SharedPreferencesHelper sharedPreferencesHelper) {
     FrequencyQuotientCalculator calculator = new FrequencyQuotientCalculator(
         sharedPreferencesHelper);
-    return new GroceryListExtractor(mState, calculator);
+    return new GroceryListExtractor(mGroceries, calculator);
   }
 
   public LiveData<List<FoodItemEntity>> getGroceryList() {
@@ -64,12 +64,12 @@ public class GroceryItemViewModel extends AndroidViewModel {
   protected void onCleared() {
     super.onCleared();
     if (mDateHelper.isGroceryDay()) {
-      mState.saveState();
+      mGroceries.saveState();
     }
   }
 
   public void check(FoodItemEntity foodItem) {
-    mState.check(foodItem);
+    mGroceries.check(foodItem);
   }
 }
 
