@@ -9,7 +9,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -20,15 +19,11 @@ public class FrequencyQuotientCalculatorTests {
   @Mock
   private SharedPreferencesHelper mSharedPrefsHelper;
 
-  @InjectMocks
-  private FrequencyQuotientCalculator mFqCalculator;
-
   private Set<String> mGroceryDays;
 
   @Before
   public void init() {
     MockitoAnnotations.initMocks(this);
-
     this.mGroceryDays = new HashSet<>();
   }
 
@@ -42,10 +37,9 @@ public class FrequencyQuotientCalculatorTests {
         "Raikasta", 2, "Packets", TimeFrame.TWO_WEEKS, 1,
         "", 0.0);
 
-    Assert.assertEquals(0.5, mFqCalculator.getFrequencyQuotient(foodItem)
+    Assert.assertEquals(0.5, FrequencyQuotientCalculator.calculate(mSharedPrefsHelper, foodItem)
         , 0.001);
-
-    Assert.assertEquals(0.5, mFqCalculator.getFrequencyQuotient(1, TimeFrame.TWO_WEEKS, 1),
+    Assert.assertEquals(0.5, FrequencyQuotientCalculator.calculate(1, TimeFrame.TWO_WEEKS, 1),
         0.001);
   }
 
@@ -61,10 +55,9 @@ public class FrequencyQuotientCalculatorTests {
         "Raikasta", 2, "Packets", TimeFrame.TWO_WEEKS, 1,
         "", 0.0);
 
-    Assert.assertEquals(0.15, mFqCalculator.getFrequencyQuotient(foodItem)
-        , 0.001);
-
-    Assert.assertEquals(0.15, mFqCalculator.getFrequencyQuotient(1, TimeFrame.TWO_WEEKS, 3),
+    Assert.assertEquals(0.15, FrequencyQuotientCalculator.calculate(mSharedPrefsHelper, foodItem),
+        0.001);
+    Assert.assertEquals(0.15, FrequencyQuotientCalculator.calculate(1, TimeFrame.TWO_WEEKS, 3),
         0.001);
   }
 }

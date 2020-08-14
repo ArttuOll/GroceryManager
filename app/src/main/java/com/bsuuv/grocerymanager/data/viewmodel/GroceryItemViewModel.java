@@ -9,7 +9,6 @@ import com.bsuuv.grocerymanager.data.GroceryListExtractor;
 import com.bsuuv.grocerymanager.data.GroceryListState;
 import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.DateHelper;
-import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import java.util.List;
 import java.util.Objects;
@@ -42,14 +41,8 @@ public class GroceryItemViewModel extends AndroidViewModel {
     this.mRepository = new FoodItemRepository(application);
     this.mFoodItems = mRepository.getFoodItems();
     this.mGroceries = new GroceryListState(sharedPreferencesHelper);
-    this.mGroceryListExtractor = initExtractor(sharedPreferencesHelper);
+    this.mGroceryListExtractor = new GroceryListExtractor(mGroceries, sharedPreferencesHelper);
     this.mDateHelper = new DateHelper(application, sharedPreferencesHelper);
-  }
-
-  private GroceryListExtractor initExtractor(SharedPreferencesHelper sharedPreferencesHelper) {
-    FrequencyQuotientCalculator calculator = new FrequencyQuotientCalculator(
-        sharedPreferencesHelper);
-    return new GroceryListExtractor(mGroceries, calculator);
   }
 
   public LiveData<List<FoodItemEntity>> getGroceryList() {

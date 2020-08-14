@@ -213,9 +213,7 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
   }
 
   private double calculateFreqQuotient(int frequency, TimeFrame timeFrame, int groceryDaysAWeek) {
-    FrequencyQuotientCalculator calculator =
-        new FrequencyQuotientCalculator(mSharedPrefsHelper);
-    return calculator.getFrequencyQuotient(frequency, timeFrame, groceryDaysAWeek);
+    return FrequencyQuotientCalculator.calculate(frequency, timeFrame, groceryDaysAWeek);
   }
 
   private boolean foodItemCreationRequirementsMet(String label, int amount, TimeFrame timeFrame,

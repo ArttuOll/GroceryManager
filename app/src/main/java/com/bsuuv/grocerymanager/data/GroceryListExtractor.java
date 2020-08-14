@@ -2,22 +2,24 @@ package com.bsuuv.grocerymanager.data;
 
 import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
+import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import java.util.List;
 
 public class GroceryListExtractor {
 
-  private FrequencyQuotientCalculator mFqCalculator;
   private GroceryListState mGroceries;
+  private SharedPreferencesHelper mSharedPrefsHelper;
 
   public GroceryListExtractor(GroceryListState groceries,
-      FrequencyQuotientCalculator fqCalculator) {
+      SharedPreferencesHelper sharedPreferencesHelper) {
+    this.mSharedPrefsHelper = sharedPreferencesHelper;
     this.mGroceries = groceries;
-    this.mFqCalculator = fqCalculator;
   }
 
   public List<FoodItemEntity> extractGroceryListFromFoodItems(List<FoodItemEntity> foodItems) {
     for (FoodItemEntity foodItem : foodItems) {
-      double frequencyQuotient = mFqCalculator.getFrequencyQuotient(foodItem);
+      double frequencyQuotient = FrequencyQuotientCalculator
+          .calculate(mSharedPrefsHelper, foodItem);
       if (shouldAppearInGroceryList(foodItem)) {
         mGroceries.addToGroceryList(foodItem);
         resetCountdownValue(foodItem, frequencyQuotient);

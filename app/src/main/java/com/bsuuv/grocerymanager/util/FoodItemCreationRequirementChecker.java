@@ -7,6 +7,7 @@ public class FoodItemCreationRequirementChecker {
   private static final int FREQUENCY_NOT_SET = 0;
   private static final int AMOUNT_FIELD_EMPTY = 0;
   private static final double MAX_FREQUENCY_QUOTIENT = 1.0;
+
   private SharedPreferencesHelper mSharedPrefsHelper;
 
   public FoodItemCreationRequirementChecker(SharedPreferencesHelper sharedPreferencesHelper) {
