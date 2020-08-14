@@ -53,6 +53,7 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
   }
 
   private void initMembers() {
+    this.mImageUri = "";
     this.mLabelField = findViewById(R.id.editText_label);
     this.mBrandField = findViewById(R.id.editText_brand);
     this.mAmountField = findViewById(R.id.editText_amount);
@@ -131,7 +132,7 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
 
   private void setImageFromIntent(Intent intent) {
     String uri = intent.getStringExtra("uri");
-    this.mImageUri = uri == null ? "" : uri;
+    mImageUri = uri == null ? "" : uri;
     ImageViewPopulater.populateFromUri(this, mImageUri, mFoodImage);
   }
 
@@ -243,8 +244,7 @@ public class NewFoodItemActivity extends AppCompatActivity implements View.OnCli
   }
 
   private Intent createIntentToConfigs(String label, String brand, int amount, String unit,
-      String info, TimeFrame timeFrame, int frequency,
-      double frequencyQuotient) {
+      String info, TimeFrame timeFrame, int frequency, double frequencyQuotient) {
     Intent toConfigs = new Intent(this, ConfigurationsActivity.class);
     toConfigs.putExtra("label", label);
     toConfigs.putExtra("brand", brand);
