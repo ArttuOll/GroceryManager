@@ -11,15 +11,15 @@ public class PluralsProvider {
     this.mContext = context;
   }
 
-  public String getScheduleString(int frequency, int timeFrame) {
+  public String getScheduleString(int frequency, TimeFrame timeFrame) {
     switch (timeFrame) {
-      case 1:
+      case WEEK:
         return mContext.getResources().getQuantityString(
             R.plurals.times_a_week, frequency, frequency);
-      case 2:
+      case TWO_WEEKS:
         return mContext.getResources().getQuantityString(
             R.plurals.times_in_two_weeks, frequency, frequency);
-      case 4:
+      case MONTH:
         return mContext.getResources().getQuantityString(
             R.plurals.times_in_a_month, frequency, frequency);
       default:
@@ -29,7 +29,6 @@ public class PluralsProvider {
 
   public String getAmountString(int amount, String unit) {
     String[] units = mContext.getResources().getStringArray(R.array.units_plural);
-
     if (units[0].equals(unit)) {
       return mContext.getResources().getQuantityString(R.plurals.Pieces, amount,
           amount);
@@ -47,7 +46,6 @@ public class PluralsProvider {
       return mContext.getResources().getQuantityString(R.plurals.Bottles,
           amount, amount);
     }
-
     return "";
   }
 }

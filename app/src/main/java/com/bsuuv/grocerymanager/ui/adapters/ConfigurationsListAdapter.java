@@ -114,7 +114,7 @@ public class ConfigurationsListAdapter extends
       mFoodItemAmount.setText(mPluralsProvider.getAmountString(currentFoodItem.getAmount(),
           currentFoodItem.getUnit()));
       mSchedule.setText(mPluralsProvider.getScheduleString(currentFoodItem.getFrequency(),
-          currentFoodItem.getTimeFrame().value()));
+          currentFoodItem.getTimeFrame()));
     }
 
     @Override
