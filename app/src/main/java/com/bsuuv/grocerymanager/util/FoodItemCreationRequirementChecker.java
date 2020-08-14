@@ -58,19 +58,19 @@ public class FoodItemCreationRequirementChecker {
     throw new RequirementNotMetException(R.string.snackbar_time_frame_not_chosen);
   }
 
+  private boolean frequencyFieldSet(int frequency) throws RequirementNotMetException {
+    if (frequency > FREQUENCY_NOT_SET) {
+      return true;
+    }
+    throw new RequirementNotMetException(R.string.snackbar_frequency_not_set);
+  }
+
   private boolean frequencyQuotientValid(double frequencyQuotient)
       throws RequirementNotMetException {
     if (frequencyQuotient <= MAX_FREQUENCY_QUOTIENT) {
       return true;
     }
     throw new RequirementNotMetException(R.string.snackbar_not_enough_grocery_days);
-  }
-
-  private boolean frequencyFieldSet(int frequency) throws RequirementNotMetException {
-    if (frequency > FREQUENCY_NOT_SET) {
-      return true;
-    }
-    throw new RequirementNotMetException(R.string.snackbar_frequency_not_set);
   }
 
   public static class RequirementNotMetException extends Exception {
