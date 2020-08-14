@@ -13,7 +13,7 @@ import com.bsuuv.grocerymanager.R;
  * @see GroceryItemDetailFragment
  * @see MainActivity
  */
-public class GroceryItemDetail extends AppCompatActivity {
+public class GroceryItemDetailActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

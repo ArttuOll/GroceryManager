@@ -17,8 +17,8 @@ import com.bsuuv.grocerymanager.util.ImageViewPopulater;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
 
 /**
- * Fragment for displaying properties of a grocery item. Used by {@link GroceryItemDetail} and
- * {@link MainActivity} (on wide-screen devices).
+ * Fragment for displaying properties of a grocery item. Used by {@link GroceryItemDetailActivity}
+ * and {@link MainActivity} (on wide-screen devices).
  */
 public class GroceryItemDetailFragment extends Fragment {
 
