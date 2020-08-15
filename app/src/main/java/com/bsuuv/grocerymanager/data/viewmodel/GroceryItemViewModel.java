@@ -61,7 +61,12 @@ public class GroceryItemViewModel extends AndroidViewModel {
     }
   }
 
-  public void check(FoodItemEntity foodItem) {
+  /**
+   * Deletes the given food-item from the grocery list, but not from the database.
+   *
+   * @param foodItem Food-item to delete from the grocery list.
+   */
+  public void deleteFromGroceryList(FoodItemEntity foodItem) {
     mGroceries.check(foodItem);
   }
 }
