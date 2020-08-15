@@ -64,7 +64,7 @@ public class GroceryListExtractorTests {
   }
 
   private void configureMocks() {
-    when(mState.getCheckedItems()).thenReturn(mCheckedItems);
+    when(mState.getRemovedItems()).thenReturn(mCheckedItems);
     when(mCheckedItems.contains(mCheckedFoodItem)).thenReturn(true);
     when(mCheckedItems.contains(mModifiedCheckedFoodItem)).thenReturn(true);
   }

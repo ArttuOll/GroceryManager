@@ -32,7 +32,7 @@ public class GroceryListExtractor {
   }
 
   private boolean shouldAppearInGroceryList(FoodItemEntity foodItem) {
-    return foodItem.getCountdownValue() >= 1 && !mGroceries.getCheckedItems().contains(foodItem);
+    return foodItem.getCountdownValue() >= 1 && !mGroceries.getRemovedItems().contains(foodItem);
   }
 
   private void resetCountdownValue(FoodItemEntity foodItem, double frequencyQuotient) {

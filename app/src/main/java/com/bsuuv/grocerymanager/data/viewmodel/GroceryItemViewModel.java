@@ -67,7 +67,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
    * @param foodItem Food-item to delete from the grocery list.
    */
   public void deleteFromGroceryList(FoodItemEntity foodItem) {
-    mGroceries.check(foodItem);
+    mGroceries.remove(foodItem);
   }
 }
 
