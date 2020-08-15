@@ -8,6 +8,12 @@ import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * A single source of data for the whole app. Handles communication with {@link
+ * FoodItemRoomDatabase} making sure that all operations are executed on a separate thread.
+ *
+ * @see FoodItemRoomDatabase
+ */
 public class FoodItemRepository {
 
   private FoodItemDao mDao;
@@ -19,6 +25,12 @@ public class FoodItemRepository {
     mFoodItems = mDao.getAllFoodItems();
   }
 
+  /**
+   * Returns an always-up-to-date list of all food-items created by the user.
+   *
+   * @return List of all created food-items, wrapped in an observable <code>LiveData</code> object.
+   * @see LiveData
+   */
   public LiveData<List<FoodItemEntity>> getFoodItems() {
     return mFoodItems;
   }

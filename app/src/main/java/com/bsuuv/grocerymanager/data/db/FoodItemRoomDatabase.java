@@ -9,6 +9,12 @@ import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * A <code>Room</code> database definition for saving food-items.
+ *
+ * @see <a href=https://developer.android.com/topic/libraries/architecture/room>Room Persistence
+ * Library</a>
+ */
 @Database(entities = {FoodItemEntity.class}, version = 3)
 public abstract class FoodItemRoomDatabase extends RoomDatabase {
 
@@ -28,5 +34,11 @@ public abstract class FoodItemRoomDatabase extends RoomDatabase {
     return INSTANCE;
   }
 
+  /**
+   * Defines the type of DAO this <code>Room</code> database should provide.
+   *
+   * @return <code>FoodItemDao</code> that grants access to values stored in
+   * this database
+   */
   public abstract FoodItemDao foodItemDao();
 }

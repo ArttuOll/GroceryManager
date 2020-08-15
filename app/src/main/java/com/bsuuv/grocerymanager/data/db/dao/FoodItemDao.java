@@ -6,9 +6,18 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+import com.bsuuv.grocerymanager.data.db.FoodItemRoomDatabase;
 import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import java.util.List;
 
+/**
+ * Data-access-object definition for accessing food-items in the {@link FoodItemRoomDatabase}. The
+ * actual implementation is generated automatically by the <code>Room Persistence Library</code>.
+ *
+ * @see FoodItemRoomDatabase
+ * @see <a href=https://developer.android.com/topic/libraries/architecture/room>Room Persistence
+ * Library</a>
+ */
 @Dao
 public interface FoodItemDao {
 
@@ -26,7 +35,4 @@ public interface FoodItemDao {
 
   @Update
   void update(FoodItemEntity foodItem);
-
-  @Query("DELETE FROM FoodItemEntity")
-  void deleteAll();
 }

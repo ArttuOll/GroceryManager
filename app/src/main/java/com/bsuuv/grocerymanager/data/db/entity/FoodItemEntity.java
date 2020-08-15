@@ -12,7 +12,7 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A class representing a food-item in the grocery list.
+ * A concrete data-class representing a food-item on the grocery list
  */
 @Entity
 public class FoodItemEntity implements FoodItem {

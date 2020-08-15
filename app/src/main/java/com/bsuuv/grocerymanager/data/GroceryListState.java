@@ -4,6 +4,14 @@ import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import java.util.List;
 
+/**
+ * Represent the state of the grocery list on any given moment. The state consists of food-items
+ * that were not displayed on the grocery list yet, but whose countdown values (for information on
+ * countdown values, see {@link GroceryListExtractor} were incremented, and food-items that the user
+ * has removed from the grocery list.
+ *
+ * @see GroceryListExtractor
+ */
 public class GroceryListState {
 
   private static final String INCREMENTED_ITEMS_KEY = "incrementedItems";

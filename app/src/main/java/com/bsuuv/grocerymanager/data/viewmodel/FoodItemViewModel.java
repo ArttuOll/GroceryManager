@@ -8,6 +8,13 @@ import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.ConfigurationsActivity;
 import java.util.List;
 
+/**
+ * A <code>ViewModel</code> that contains all the data and business logic calls required by {@link
+ * ConfigurationsActivity}.
+ *
+ * @see androidx.lifecycle.ViewModel
+ * @see ConfigurationsActivity
+ */
 public class FoodItemViewModel extends AndroidViewModel {
 
   private FoodItemRepository mRepository;

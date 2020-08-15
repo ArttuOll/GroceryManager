@@ -1,8 +1,13 @@
 package com.bsuuv.grocerymanager.data.db.entity;
 
 import androidx.room.TypeConverter;
+import com.bsuuv.grocerymanager.data.db.FoodItemRoomDatabase;
 import com.bsuuv.grocerymanager.util.TimeFrame;
 
+/**
+ * Helps {@link FoodItemRoomDatabase} to convert the enum {@link TimeFrame} to integers that can be
+ * persisted in the database.
+ */
 public class TimeFrameConverter {
 
   @TypeConverter

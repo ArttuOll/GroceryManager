@@ -14,8 +14,16 @@ import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A <code>ViewModel</code> that contains all the data and business logic calls required by {@link
+ * MainActivity}.
+ *
+ * @see androidx.lifecycle.ViewModel
+ * @see MainActivity
+ */
 public class GroceryItemViewModel extends AndroidViewModel {
 
+  //TODO: move scheduling notification here
   private FoodItemRepository mRepository;
   private LiveData<List<FoodItemEntity>> mFoodItems;
   private GroceryListExtractor mGroceryListExtractor;
@@ -46,6 +54,14 @@ public class GroceryItemViewModel extends AndroidViewModel {
     this.mDateHelper = new DateHelper(application, sharedPreferencesHelper);
   }
 
+  /**
+   * Returns an always-up-to-date list of all food-items that are qualified to be on the grocery
+   * list.
+   *
+   * @return List of all food-items eligible to be on the grocery list, wrapped in an observable
+   * <code>LiveData</code> object.
+   * @see LiveData
+   */
   public LiveData<List<FoodItemEntity>> getGroceryList() {
     return Transformations.map(mFoodItems, mGroceryListExtractor::extractGroceryListFromFoodItems);
   }
