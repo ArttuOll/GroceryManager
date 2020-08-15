@@ -3,6 +3,7 @@ package com.bsuuv.grocerymanager.data;
 import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GroceryListExtractor {
@@ -17,18 +18,19 @@ public class GroceryListExtractor {
   }
 
   public List<FoodItemEntity> extractGroceryListFromFoodItems(List<FoodItemEntity> foodItems) {
+    List<FoodItemEntity> groceries = new ArrayList<>();
     for (FoodItemEntity foodItem : foodItems) {
       double frequencyQuotient = FrequencyQuotientCalculator
           .calculate(mSharedPrefsHelper, foodItem);
       if (shouldAppearInGroceryList(foodItem)) {
-        mGroceries.addToGroceryList(foodItem);
+        groceries.add(foodItem);
         resetCountdownValue(foodItem, frequencyQuotient);
       } else {
         incrementCountdownValue(foodItem, frequencyQuotient);
       }
-      mGroceries.markAsModified(foodItem);
+      mGroceries.addToIncrementedItems(foodItem);
     }
-    return mGroceries.getGroceryList();
+    return groceries;
   }
 
   private boolean shouldAppearInGroceryList(FoodItemEntity foodItem) {

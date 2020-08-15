@@ -44,8 +44,4 @@ public class FoodItemRepository {
   public void update(FoodItemEntity foodItem) {
     FoodItemRoomDatabase.dbExecService.execute(() -> mDao.update(foodItem));
   }
-
-  public void deleteAll() {
-    FoodItemRoomDatabase.dbExecService.execute(() -> mDao.deleteAll());
-  }
 }
