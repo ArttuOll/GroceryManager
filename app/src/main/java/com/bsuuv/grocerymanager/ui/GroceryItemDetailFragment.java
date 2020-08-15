@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.model.FoodItem;
 import com.bsuuv.grocerymanager.data.viewmodel.GroceryItemViewModel;
 import com.bsuuv.grocerymanager.util.ImageViewPopulater;
 import com.bsuuv.grocerymanager.util.PluralsProvider;
@@ -25,7 +25,7 @@ public class GroceryItemDetailFragment extends Fragment {
   public static final String FOOD_ITEM_ID_KEY = "foodItemId";
 
   private PluralsProvider mPluralsProvider;
-  private FoodItemEntity mFoodItem;
+  private FoodItem mFoodItem;
 
   public GroceryItemDetailFragment() {
   } // Required
@@ -49,7 +49,7 @@ public class GroceryItemDetailFragment extends Fragment {
     this.mFoodItem = getFoodItem();
   }
 
-  private FoodItemEntity getFoodItem() {
+  private FoodItem getFoodItem() {
     GroceryItemViewModel viewModel = getViewModel();
     Bundle fragmentArgs = requireArguments();
     int foodItemId = fragmentArgs.getInt(FOOD_ITEM_ID_KEY);
