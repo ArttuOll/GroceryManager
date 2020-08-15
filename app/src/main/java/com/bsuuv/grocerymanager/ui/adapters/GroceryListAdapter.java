@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.model.FoodItem;
 import com.bsuuv.grocerymanager.ui.GroceryItemDetailActivity;
 import com.bsuuv.grocerymanager.ui.GroceryItemDetailFragment;
 import com.bsuuv.grocerymanager.ui.MainActivity;
@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.GroceryViewHolder> {
 
-  private List<FoodItemEntity> mGroceryItems;
+  private List<? extends FoodItem> mGroceryItems;
   private LayoutInflater mInflater;
   private Context mContext;
   private boolean mIsWideScreen;
@@ -54,7 +54,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
   @Override
   public void onBindViewHolder(@NonNull GroceryListAdapter.GroceryViewHolder holder, int position) {
-    FoodItemEntity currentFoodItem = mGroceryItems.get(position);
+    FoodItem currentFoodItem = mGroceryItems.get(position);
     holder.bindTo(currentFoodItem);
   }
 
@@ -72,7 +72,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
    *                        <code>RecyclerView</code> in {@link MainActivity}
    * @see MainActivity
    */
-  public void setGroceryItems(List<FoodItemEntity> newGroceryItems) {
+  public void setGroceryItems(List<? extends FoodItem> newGroceryItems) {
     if (this.mGroceryItems == null) {
       initGroceryItems(newGroceryItems);
     } else {
@@ -80,19 +80,19 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     }
   }
 
-  private void initGroceryItems(List<FoodItemEntity> newGroceryItems) {
+  private void initGroceryItems(List<? extends FoodItem> newGroceryItems) {
     this.mGroceryItems = newGroceryItems;
     notifyItemRangeInserted(0, newGroceryItems.size());
   }
 
-  private void updateGroceryItems(List<FoodItemEntity> newGroceryItems) {
+  private void updateGroceryItems(List<? extends FoodItem> newGroceryItems) {
     DiffUtil.DiffResult migrationOperations = FoodItemListDifferenceCalculator
         .calculateMigrationOperations(mGroceryItems, newGroceryItems);
     mGroceryItems = newGroceryItems;
     migrationOperations.dispatchUpdatesTo(this);
   }
 
-  public FoodItemEntity getFoodItemAtPosition(int position) {
+  public FoodItem getFoodItemAtPosition(int position) {
     return mGroceryItems.get(position);
   }
 
@@ -125,13 +125,13 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
       this.mPluralsProvider = new PluralsProvider(mContext);
     }
 
-    void bindTo(FoodItemEntity currentFoodItem) {
+    void bindTo(FoodItem currentFoodItem) {
       setInputFieldValues(currentFoodItem);
       String uri = currentFoodItem.getImageUri() == null ? "" : currentFoodItem.getImageUri();
       ImageViewPopulater.populateFromUri(mContext, uri, mFoodImage);
     }
 
-    private void setInputFieldValues(FoodItemEntity currentFoodItem) {
+    private void setInputFieldValues(FoodItem currentFoodItem) {
       mFoodItemLabel.setText(currentFoodItem.getLabel());
       mFoodItemBrand.setText(currentFoodItem.getBrand());
       mFoodItemAmount.setText(mPluralsProvider.getAmountString(currentFoodItem.getAmount(),
@@ -151,7 +151,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
      */
     @Override
     public void onClick(View v) {
-      FoodItemEntity currentFoodItem = mGroceryItems.get(getAdapterPosition());
+      FoodItem currentFoodItem = mGroceryItems.get(getAdapterPosition());
       if (mIsWideScreen) {
         showInMainActivity(currentFoodItem);
       } else {
@@ -159,7 +159,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
       }
     }
 
-    private void showInMainActivity(FoodItemEntity currentFoodItem) {
+    private void showInMainActivity(FoodItem currentFoodItem) {
       GroceryItemDetailFragment fragment = GroceryItemDetailFragment
           .newInstance(currentFoodItem.getId());
 
@@ -169,14 +169,14 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
           .commit();
     }
 
-    private void showInFoodItemDetailActivity(FoodItemEntity currentFoodItem) {
+    private void showInFoodItemDetailActivity(FoodItem currentFoodItem) {
       Intent toFoodItemDetail = createIntentToFoodItemDetail(currentFoodItem);
       Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext,
           mFoodImage, mFoodImage.getTransitionName()).toBundle();
       mContext.startActivity(toFoodItemDetail, bundle);
     }
 
-    private Intent createIntentToFoodItemDetail(FoodItemEntity foodItem) {
+    private Intent createIntentToFoodItemDetail(FoodItem foodItem) {
       Intent toFoodItemDetail = new Intent(mContext, GroceryItemDetailActivity.class);
       toFoodItemDetail.putExtra(GroceryItemDetailFragment.FOOD_ITEM_ID_KEY, foodItem.getId());
       return toFoodItemDetail;

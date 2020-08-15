@@ -25,4 +25,6 @@ public interface FoodItem {
 
   int getFrequency();
 
+  double getCountdownValue();
+
 }

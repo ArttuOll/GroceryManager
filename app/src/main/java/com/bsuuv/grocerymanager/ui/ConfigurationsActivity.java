@@ -81,7 +81,7 @@ public class ConfigurationsActivity extends AppCompatActivity {
       @Override
       public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         int deletedPosition = viewHolder.getAdapterPosition();
-        mFoodItemViewModel.delete(mAdapter.getFoodItemAtPosition(deletedPosition));
+        mFoodItemViewModel.delete((FoodItemEntity) mAdapter.getFoodItemAtPosition(deletedPosition));
       }
     });
   }

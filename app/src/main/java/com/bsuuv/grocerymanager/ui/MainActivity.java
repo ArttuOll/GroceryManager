@@ -144,7 +144,8 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         int swipedPosition = viewHolder.getAdapterPosition();
-        mGroceryViewModel.deleteFromGroceryList(mAdapter.getFoodItemAtPosition(swipedPosition));
+        mGroceryViewModel.deleteFromGroceryList(
+            (FoodItemEntity) mAdapter.getFoodItemAtPosition(swipedPosition));
       }
     });
   }

@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.model.FoodItem;
 import com.bsuuv.grocerymanager.ui.ConfigurationsActivity;
 import com.bsuuv.grocerymanager.ui.MainActivity;
 import com.bsuuv.grocerymanager.ui.NewFoodItemActivity;
@@ -35,7 +35,7 @@ import java.util.List;
 public class ConfigurationsListAdapter extends
     RecyclerView.Adapter<ConfigurationsListAdapter.ConfigsViewHolder> {
 
-  private List<FoodItemEntity> mFoodItems;
+  private List<? extends FoodItem> mFoodItems;
   private LayoutInflater mInflater;
   private Context mContext;
 
@@ -55,7 +55,7 @@ public class ConfigurationsListAdapter extends
   @Override
   public void onBindViewHolder(@NonNull ConfigurationsListAdapter.ConfigsViewHolder holder,
       int position) {
-    FoodItemEntity currentFoodItem = mFoodItems.get(position);
+    FoodItem currentFoodItem = mFoodItems.get(position);
     holder.bindTo(currentFoodItem);
   }
 
@@ -64,7 +64,7 @@ public class ConfigurationsListAdapter extends
     return mFoodItems == null ? 0 : mFoodItems.size();
   }
 
-  public FoodItemEntity getFoodItemAtPosition(int position) {
+  public FoodItem getFoodItemAtPosition(int position) {
     return mFoodItems.get(position);
   }
 
@@ -76,7 +76,7 @@ public class ConfigurationsListAdapter extends
    *                     <code>RecyclerView</code> in {@link ConfigurationsActivity}
    * @see ConfigurationsActivity
    */
-  public void setFoodItems(List<FoodItemEntity> newFoodItems) {
+  public void setFoodItems(List<? extends FoodItem> newFoodItems) {
     if (this.mFoodItems == null) {
       initFoodItems(newFoodItems);
     } else {
@@ -84,12 +84,12 @@ public class ConfigurationsListAdapter extends
     }
   }
 
-  private void initFoodItems(List<FoodItemEntity> newFoodItems) {
+  private void initFoodItems(List<? extends FoodItem> newFoodItems) {
     this.mFoodItems = newFoodItems;
     notifyItemRangeInserted(0, newFoodItems.size());
   }
 
-  private void updateFoodItems(List<FoodItemEntity> newFoodItems) {
+  private void updateFoodItems(List<? extends FoodItem> newFoodItems) {
     DiffUtil.DiffResult migrationOperations = FoodItemListDifferenceCalculator
         .calculateMigrationOperations(mFoodItems, newFoodItems);
     mFoodItems = newFoodItems;
@@ -126,13 +126,13 @@ public class ConfigurationsListAdapter extends
       this.mPluralsProvider = new PluralsProvider(mContext);
     }
 
-    void bindTo(FoodItemEntity currentFoodItem) {
+    void bindTo(FoodItem currentFoodItem) {
       setInputFieldValues(currentFoodItem);
       String uri = currentFoodItem.getImageUri() != null ? currentFoodItem.getImageUri() : "";
       ImageViewPopulater.populateFromUri(mContext, uri, mFoodImage);
     }
 
-    private void setInputFieldValues(FoodItemEntity currentFoodItem) {
+    private void setInputFieldValues(FoodItem currentFoodItem) {
       mFoodItemLabel.setText(currentFoodItem.getLabel());
       mFoodItemBrand.setText(currentFoodItem.getBrand());
       mFoodItemAmount.setText(mPluralsProvider.getAmountString(currentFoodItem.getAmount(),
@@ -156,7 +156,7 @@ public class ConfigurationsListAdapter extends
     }
 
     private Intent createIntentToNewFoodItem() {
-      FoodItemEntity currentFoodItem = mFoodItems.get(getAdapterPosition());
+      FoodItem currentFoodItem = mFoodItems.get(getAdapterPosition());
       Intent toNewFoodItem = new Intent(mContext, NewFoodItemActivity.class);
       toNewFoodItem.putExtra("label", currentFoodItem.getLabel());
       toNewFoodItem.putExtra("brand", currentFoodItem.getBrand());
@@ -173,7 +173,7 @@ public class ConfigurationsListAdapter extends
       return toNewFoodItem;
     }
 
-    private String getUri(FoodItemEntity foodItem) {
+    private String getUri(FoodItem foodItem) {
       return (foodItem.getImageUri() != null) ? foodItem.getImageUri() : "";
     }
   }

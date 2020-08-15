@@ -1,13 +1,14 @@
 package com.bsuuv.grocerymanager.util;
 
 import androidx.recyclerview.widget.DiffUtil;
-import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.model.FoodItem;
 import java.util.List;
 
 public class FoodItemListDifferenceCalculator {
 
-  public static DiffUtil.DiffResult calculateMigrationOperations(List<FoodItemEntity> oldFoodItems
-      , List<FoodItemEntity> newFoodItems) {
+  public static DiffUtil.DiffResult calculateMigrationOperations(
+      List<? extends FoodItem> oldFoodItems
+      , List<? extends FoodItem> newFoodItems) {
     return DiffUtil.calculateDiff(new DiffUtil.Callback() {
       @Override
       public int getOldListSize() {
@@ -27,15 +28,15 @@ public class FoodItemListDifferenceCalculator {
 
       @Override
       public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        FoodItemEntity oldFoodItem = oldFoodItems.get(oldItemPosition);
-        FoodItemEntity newFoodItem = newFoodItems.get(newItemPosition);
+        FoodItem oldFoodItem = oldFoodItems.get(oldItemPosition);
+        FoodItem newFoodItem = newFoodItems.get(newItemPosition);
         return idAndVisibleMembersEqual(oldFoodItem, newFoodItem);
       }
     });
   }
 
-  private static boolean idAndVisibleMembersEqual(FoodItemEntity oldFoodItem,
-      FoodItemEntity newFoodItem) {
+  private static boolean idAndVisibleMembersEqual(FoodItem oldFoodItem,
+      FoodItem newFoodItem) {
     return oldFoodItem.getId() == newFoodItem.getId() &&
         oldFoodItem.getAmount() == newFoodItem.getAmount() &&
         oldFoodItem.getBrand().equals(newFoodItem.getBrand()) &&
