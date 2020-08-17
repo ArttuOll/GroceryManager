@@ -9,11 +9,14 @@ import androidx.core.app.NotificationCompat;
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.ui.MainActivity;
 
+/**
+ * A receiver for the alarm set by {@link GroceryDayNotifier}. Defines what happens when the alarm
+ * is triggered.
+ */
 public class GroceryDayReceiver extends BroadcastReceiver {
 
-  public static final String PRIMARY_CHANNEL_ID =
-      "primary_notification_channel";
-  public static final int NOTIFICATION_ID = 0;
+  private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
+  private static final int NOTIFICATION_ID = 0;
 
   private NotificationManager mNotifManager;
 
@@ -24,17 +27,15 @@ public class GroceryDayReceiver extends BroadcastReceiver {
     sendNotification(context);
   }
 
-  public void sendNotification(Context context) {
-    NotificationCompat.Builder notifBuilder =
-        getNotificationBuilder(context);
+  private void sendNotification(Context context) {
+    NotificationCompat.Builder notifBuilder = getNotificationBuilder(context);
     mNotifManager.notify(NOTIFICATION_ID, notifBuilder.build());
   }
 
   private NotificationCompat.Builder getNotificationBuilder(Context context) {
     Intent notificationIntent = new Intent(context, MainActivity.class);
-    PendingIntent notifPendingIntent = PendingIntent.getActivity(context,
-        NOTIFICATION_ID, notificationIntent,
-        PendingIntent.FLAG_UPDATE_CURRENT);
+    PendingIntent notifPendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID,
+        notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     return new NotificationCompat.Builder(context,
         PRIMARY_CHANNEL_ID)

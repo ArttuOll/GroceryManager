@@ -8,15 +8,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
+import com.bsuuv.grocerymanager.util.DateHelper;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import java.util.Objects;
 
+/**
+ * Logic class responsible for scheduling a notification for the grocery day(s).
+ */
 public class GroceryDayNotifier {
 
-  public static final int NOTIFICATION_ID = 0;
+  private static final int NOTIFICATION_ID = 0;
 
-  private final SharedPreferencesHelper mSharedPrefsHelper;
-  private final AlarmManager mAlarmManager;
+  private SharedPreferencesHelper mSharedPrefsHelper;
+  private AlarmManager mAlarmManager;
   private Context mContext;
   private long mDaysToNotif;
 
@@ -24,11 +28,8 @@ public class GroceryDayNotifier {
     this.mContext = context;
     this.mSharedPrefsHelper = sharedPreferencesHelper;
     this.mAlarmManager = createAlarmManager();
-    NotificationChannelCreator mChannelCreator = new NotificationChannelCreator();
-
-    // Trying to create a notification channel that already exists causes no action, so
-    // calling this many times does no harm.
-    mChannelCreator.createNotificationChannel(mContext);
+    NotificationChannelCreator mChannelCreator = new NotificationChannelCreator(mContext);
+    mChannelCreator.createNotificationChannel();
   }
 
   private AlarmManager createAlarmManager() {
@@ -36,8 +37,20 @@ public class GroceryDayNotifier {
     return Objects.requireNonNull((AlarmManager) alarmService);
   }
 
-  public void scheduleGroceryDayNotification(int timeUntilGroceryDay) {
-    this.mDaysToNotif = calculateDaysToNotif(timeUntilGroceryDay);
+  /**
+   * Schedules a notification to be shown on the primary notification channel (see {@link
+   * NotificationChannelCreator}), if the grocery days have changed since the last time this method
+   * was called. <code>AlarmManager</code> and {@link GroceryDayReceiver} are used to trigger and
+   * the notification on time.
+   *
+   * @param daysUntilGroceryDay Integer representing days until grocery day. As long as this value
+   *                            is retrieved from {@link DateHelper}, it can never be less than 0.
+   * @see NotificationChannelCreator
+   * @see DateHelper
+   * @see GroceryDayReceiver
+   */
+  public void scheduleGroceryDayNotification(int daysUntilGroceryDay) {
+    this.mDaysToNotif = calculateDaysToNotif(daysUntilGroceryDay);
 
     SharedPreferences.OnSharedPreferenceChangeListener groceryDaysChangedListener =
         createOnSharedPrefsChangeListener();
@@ -46,8 +59,8 @@ public class GroceryDayNotifier {
     sharedPreferences.registerOnSharedPreferenceChangeListener(groceryDaysChangedListener);
   }
 
-  private long calculateDaysToNotif(int timeUntilGroceryDay) {
-    return AlarmManager.INTERVAL_DAY * timeUntilGroceryDay;
+  private long calculateDaysToNotif(int daysUntilGroceryDay) {
+    return AlarmManager.INTERVAL_DAY * daysUntilGroceryDay;
   }
 
   private SharedPreferences.OnSharedPreferenceChangeListener createOnSharedPrefsChangeListener() {

@@ -10,14 +10,29 @@ import android.os.Build;
 import com.bsuuv.grocerymanager.R;
 import java.util.Objects;
 
+/**
+ * A logic class responsible for creating the notification channel for the grocery day
+ * notification.
+ */
 class NotificationChannelCreator {
 
-  public static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
+  private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
 
   private Context mContext;
 
-  public void createNotificationChannel(Context context) {
+  NotificationChannelCreator(Context context) {
     this.mContext = context;
+  }
+
+  /**
+   * Creates the primary notification channel of this app. This method can be
+   * safely called multiple times, since trying to create a notification channel
+   * that already exists causes no action (see <a href="https://developer.android.com/training/notify-user/channels#importance">Android documentation on notifications</a>).
+   * <p>
+   * Since notification channels are required only on SDKs higher than 26, on
+   * lower SDKs this method does nothing.
+   */
+  public void createNotificationChannel() {
     NotificationManager mNotifManager = createNotificationManager();
 
     if (sdkOreoOrHigher()) {
