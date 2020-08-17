@@ -25,7 +25,7 @@
 
     </string-array>
 
-    <!-- DateHelper -->
+    <!-- DateTimeHelper -->
     <string-array name="daysofweek_datehelper">
         <item>sunnuntai</item>
         <item>maanantai</item>

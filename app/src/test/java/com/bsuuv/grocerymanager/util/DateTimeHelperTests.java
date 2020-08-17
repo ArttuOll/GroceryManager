@@ -19,26 +19,26 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DateHelperTests {
+public class DateTimeHelperTests {
 
   @Mock
   private Context mContext;
   @Mock
   private Resources mResources;
   @Mock
-  // Though not used, Mockito needs this for constructing DateHelper
+  // Though not used, Mockito needs this for constructing DateTimeHelper
   private SharedPreferencesHelper mSharedPrefsHelper;
   @Spy
   private Set<String> mGroceryDays;
   @InjectMocks
-  private DateHelper mDateHelper;
+  private DateTimeHelper mDateTimeHelper;
 
   @Before
   public void init() {
     this.mGroceryDays = new HashSet<>();
     MockitoAnnotations.initMocks(this);
     // Current day is Monday
-    mDateHelper.setToday(2);
+    mDateTimeHelper.setToday(2);
     configureMocks();
   }
 
@@ -68,20 +68,20 @@ public class DateHelperTests {
   @Test
   public void isGroceryDay_groceryDay() {
     mGroceryDays.add("monday");
-    Assert.assertTrue(mDateHelper.isGroceryDay());
+    Assert.assertTrue(mDateTimeHelper.isGroceryDay());
   }
 
   @Test
   public void timeUntilNextGroceryDay_groceryWeekDayInFuture() {
     mGroceryDays.add("tuesday");
-    Assert.assertEquals(1, mDateHelper.timeUntilNextGroceryDay());
+    Assert.assertEquals(1, mDateTimeHelper.getTimeUntilNextGroceryDay());
   }
 
   @Test
   public void timeUntilNextGroceryDay_groceryWeekDayInPast() {
     // Current day is Wednesday
-    mDateHelper.setToday(4);
+    mDateTimeHelper.setToday(4);
     mGroceryDays.add("monday");
-    Assert.assertEquals(5, mDateHelper.timeUntilNextGroceryDay());
+    Assert.assertEquals(5, mDateTimeHelper.getTimeUntilNextGroceryDay());
   }
 }

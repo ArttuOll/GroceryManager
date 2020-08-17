@@ -17,7 +17,7 @@ public class DateHelper {
   private int mToday;
   private Calendar mCalendar;
 
-  public DateHelper(Context context, SharedPreferencesHelper sharedPrefsHelper) {
+  public DateTimeHelper(Context context, SharedPreferencesHelper sharedPrefsHelper) {
     this.mContext = context;
     this.mGroceryDays = sharedPrefsHelper.getGroceryDays();
     this.mCalendar = createCalendar();
@@ -42,7 +42,7 @@ public class DateHelper {
     return false;
   }
 
-  public int timeUntilNextGroceryDay() {
+  public int getTimeUntilNextGroceryDay() {
     int daysUntilClosestGroceryDay = NO_GROCERY_DAYS_SET;
     for (String groceryDayString : mGroceryDays) {
       int groceryDay = getGroceryDayInt(groceryDayString);

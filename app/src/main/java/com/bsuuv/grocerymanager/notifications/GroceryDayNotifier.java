@@ -8,7 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
-import com.bsuuv.grocerymanager.util.DateHelper;
+import com.bsuuv.grocerymanager.util.DateTimeHelper;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import java.util.Objects;
 
@@ -44,9 +44,10 @@ public class GroceryDayNotifier {
    * the notification on time.
    *
    * @param daysUntilGroceryDay Integer representing days until grocery day. As long as this value
-   *                            is retrieved from {@link DateHelper}, it can never be less than 0.
+   *                            is retrieved from {@link DateTimeHelper}, it can never be less than
+   *                            0.
    * @see NotificationChannelCreator
-   * @see DateHelper
+   * @see DateTimeHelper
    * @see GroceryDayReceiver
    */
   public void scheduleGroceryDayNotification(int daysUntilGroceryDay) {

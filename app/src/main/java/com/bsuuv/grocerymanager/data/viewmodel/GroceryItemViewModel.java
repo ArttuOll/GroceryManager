@@ -9,7 +9,7 @@ import com.bsuuv.grocerymanager.data.GroceryListExtractor;
 import com.bsuuv.grocerymanager.data.GroceryListState;
 import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.ui.MainActivity;
-import com.bsuuv.grocerymanager.util.DateHelper;
+import com.bsuuv.grocerymanager.util.DateTimeHelper;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import java.util.List;
 import java.util.Objects;
@@ -27,13 +27,13 @@ public class GroceryItemViewModel extends AndroidViewModel {
   private FoodItemRepository mRepository;
   private LiveData<List<FoodItemEntity>> mFoodItems;
   private GroceryListExtractor mGroceryListExtractor;
-  private DateHelper mDateHelper;
+  private DateTimeHelper mDateTimeHelper;
   private GroceryListState mGroceries;
 
   public GroceryItemViewModel(Application application) {
     super(application);
     initMembers(application);
-    if (!mDateHelper.isGroceryDay()) {
+    if (!mDateTimeHelper.isGroceryDay()) {
       updateDatabase();
     }
   }
@@ -51,7 +51,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
     this.mFoodItems = mRepository.getFoodItems();
     this.mGroceries = new GroceryListState(sharedPreferencesHelper);
     this.mGroceryListExtractor = new GroceryListExtractor(mGroceries, sharedPreferencesHelper);
-    this.mDateHelper = new DateHelper(application, sharedPreferencesHelper);
+    this.mDateTimeHelper = new DateTimeHelper(application, sharedPreferencesHelper);
   }
 
   /**
@@ -73,7 +73,7 @@ public class GroceryItemViewModel extends AndroidViewModel {
   @Override
   protected void onCleared() {
     super.onCleared();
-    if (mDateHelper.isGroceryDay()) {
+    if (mDateTimeHelper.isGroceryDay()) {
       mGroceries.saveState();
     }
   }

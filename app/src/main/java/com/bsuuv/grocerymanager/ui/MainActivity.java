@@ -19,7 +19,7 @@ import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.data.viewmodel.GroceryItemViewModel;
 import com.bsuuv.grocerymanager.notifications.GroceryDayNotifier;
 import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter;
-import com.bsuuv.grocerymanager.util.DateHelper;
+import com.bsuuv.grocerymanager.util.DateTimeHelper;
 import com.bsuuv.grocerymanager.util.RecyclerViewUtil;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import java.util.List;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
   private LinearLayoutManager mLayoutManager;
   private TextView mRecyclerViewPlaceHolder;
   private GroceryItemViewModel mGroceryViewModel;
-  private DateHelper mDateHelper;
+  private DateTimeHelper mDateTimeHelper;
   private List<FoodItemEntity> mGroceryList;
   private int mNumberOfGroceryDays;
   private SharedPreferencesHelper mSharedPrefsHelper;
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
   private void initMembers() {
     this.mSharedPrefsHelper = new SharedPreferencesHelper(this);
-    this.mDateHelper = new DateHelper(this, mSharedPrefsHelper);
+    this.mDateTimeHelper = new DateTimeHelper(this, mSharedPrefsHelper);
     this.mRecyclerView = findViewById(R.id.main_recyclerview);
     this.mLayoutManager = new LinearLayoutManager(this);
     this.mAdapter = initAdapter();
@@ -105,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
   private void setUpToolbar() {
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    setTitle(getString(R.string.mainActivity_actionbar_label) + " " + mDateHelper.getCurrentDate());
+    setTitle(
+        getString(R.string.mainActivity_actionbar_label) + " " + mDateTimeHelper.getCurrentDate());
   }
 
   private void setUpRecyclerView() {
@@ -120,10 +121,10 @@ public class MainActivity extends AppCompatActivity {
     if (mNumberOfGroceryDays == 0) {
       RecyclerViewUtil.toggleRecyclerViewVisibility(mRecyclerView, mRecyclerViewPlaceHolder
           , View.GONE, R.string.main_no_grocery_days_set);
-    } else if (!mDateHelper.isGroceryDay()) {
+    } else if (!mDateTimeHelper.isGroceryDay()) {
       RecyclerViewUtil.toggleRecyclerViewVisibility(mRecyclerView, mRecyclerViewPlaceHolder
           , View.GONE, R.string.main_not_grocery_day);
-    } else if (mDateHelper.isGroceryDay()) {
+    } else if (mDateTimeHelper.isGroceryDay()) {
       RecyclerViewUtil.toggleRecyclerViewVisibility(mRecyclerView, mRecyclerViewPlaceHolder
           , View.VISIBLE, 0);
     }
@@ -151,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void setUpViewModel() {
-    if (mDateHelper.isGroceryDay()) {
+    if (mDateTimeHelper.isGroceryDay()) {
       mGroceryViewModel.getGroceryList().observe(this, groceryListItems -> {
         this.mGroceryList = groceryListItems;
         mAdapter.setGroceryItems(mGroceryList);
@@ -161,8 +162,8 @@ public class MainActivity extends AppCompatActivity {
 
   private void scheduleNotification() {
     GroceryDayNotifier mNotifier = new GroceryDayNotifier(this, mSharedPrefsHelper);
-    int timeUntilGroceryDay = mDateHelper.timeUntilNextGroceryDay();
-    if (timeUntilGroceryDay < DateHelper.NO_GROCERY_DAYS_SET) {
+    int timeUntilGroceryDay = mDateTimeHelper.getTimeUntilNextGroceryDay();
+    if (timeUntilGroceryDay < DateTimeHelper.NO_GROCERY_DAYS_SET) {
       mNotifier.scheduleGroceryDayNotification(timeUntilGroceryDay);
     }
   }
