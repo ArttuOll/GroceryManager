@@ -36,7 +36,7 @@ public class GroceryListExtractor {
    * @param foodItems List of food-items from which the grocery list should be formed. In practice,
    *                  in this app this always corresponds to all food-items.
    * @return Food items, that are eligible to appear on the grocery list (countdown value >1.0 and
-   * not previously removed from grocery list).
+   * not previously removed from grocery list). For information on the countdown value see {@link FrequencyQuotientCalculator}.
    */
   public List<FoodItemEntity> extractGroceryListFromFoodItems(List<FoodItemEntity> foodItems) {
     List<FoodItemEntity> groceries = new ArrayList<>();

@@ -8,7 +8,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
-public class DateHelper {
+/**
+ * Utility class to help with date- and time- related operations.
+ */
+public class DateTimeHelper {
 
   public static int NO_GROCERY_DAYS_SET = 8;
 
@@ -32,6 +35,10 @@ public class DateHelper {
     return calendar;
   }
 
+  /**
+   * @return <code>Boolean</code> telling whether the current day is set as
+   * grocery day by the user or not
+   */
   public boolean isGroceryDay() {
     for (String groceryDayString : mGroceryDays) {
       int groceryDay = stringWeekDayToInt(groceryDayString);

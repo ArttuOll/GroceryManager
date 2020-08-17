@@ -13,6 +13,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * Utility class responsible for operations related to capturing and saving an image.
+ */
 public class CameraUtil {
 
   private File mImageFile;
@@ -40,6 +43,9 @@ public class CameraUtil {
     return "JPEG_" + timestamp + "_";
   }
 
+  /**
+   * @return Intent configured for capturing an image using the device's camera app
+   */
   public Intent getIntentToCaptureImage() {
     Intent toCaptureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     Uri imageUri = FileProvider.getUriForFile(mContext, "com.bsuuv.android.fileprovider",
@@ -48,11 +54,18 @@ public class CameraUtil {
     return toCaptureImage;
   }
 
+  /**
+   * @return String URI of the last taken image
+   */
   public String getImagePath() {
     return Uri.parse(mImageFile.toURI().getPath()).getPath();
   }
 
-  public boolean cameraAppExists(Intent takePictureIntent) {
-    return takePictureIntent.resolveActivity(mContext.getPackageManager()) != null;
+  /**
+   * @param toCaptureImage Intent configured to launch the device's camera app
+   * @return boolean telling if a camera app has been installed on the device
+   */
+  public boolean cameraAppExists(Intent toCaptureImage) {
+    return toCaptureImage.resolveActivity(mContext.getPackageManager()) != null;
   }
 }
