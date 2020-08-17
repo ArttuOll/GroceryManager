@@ -1,7 +1,12 @@
 package com.bsuuv.grocerymanager.util;
 
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.ui.NewFoodItemActivity;
 
+/**
+ * Utility class containing logic to check that given food-item properties fit their requirements.
+ * This class is used in {@link NewFoodItemActivity} to validate the values in its input fields.
+ */
 public class FoodItemCreationRequirementChecker {
 
   private static final int FREQUENCY_NOT_SET = 0;
@@ -14,6 +19,26 @@ public class FoodItemCreationRequirementChecker {
     this.mSharedPrefsHelper = sharedPreferencesHelper;
   }
 
+  /**
+   * The requirements are as follows:
+   * <ul>
+   *   <li>Label must not be empty</li>
+   *   <li>Amount must be greater than zero</li>
+   *   <li>TimeFrame must not equal <code>TimeFrame.NULL</code></li>
+   *   <li>Frequency must be greater than zero</li>
+   *   <li>Frequency quotient must not be more than 1.0</li>
+   * </ul>
+   *
+   * @param label             Label of the food-item
+   * @param amount            Amount of the food-item
+   * @param timeFrame         Time frame property of the food-item (see {@link TimeFrame}).
+   * @param frequency         Frequency property of the food-item
+   * @param frequencyQuotient Frequency quotient of the food-item (see {@link
+   *                          FrequencyQuotientCalculator}).
+   * @return Boolean telling if all of the requirements were met.
+   * @throws RequirementNotMetException An exception with message telling which of the requirements
+   *                                    was not met.
+   */
   public boolean requirementsMet(String label, int amount, TimeFrame timeFrame,
       int frequency, double frequencyQuotient) throws RequirementNotMetException {
     return groceryDaysSet() &&
