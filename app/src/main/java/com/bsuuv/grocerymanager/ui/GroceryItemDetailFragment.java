@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment;
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.data.model.FoodItem;
 import com.bsuuv.grocerymanager.data.viewmodel.GroceryItemViewModel;
-import com.bsuuv.grocerymanager.util.ImageViewPopulater;
-import com.bsuuv.grocerymanager.util.PluralsProvider;
+import com.bsuuv.grocerymanager.ui.util.ImageViewPopulater;
+import com.bsuuv.grocerymanager.ui.util.PluralsProvider;
 
 /**
  * Fragment for displaying properties of a grocery item. Used by {@link GroceryItemDetailActivity}

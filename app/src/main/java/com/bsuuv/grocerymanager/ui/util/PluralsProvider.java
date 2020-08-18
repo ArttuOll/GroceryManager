@@ -1,7 +1,8 @@
-package com.bsuuv.grocerymanager.util;
+package com.bsuuv.grocerymanager.ui.util;
 
 import android.content.Context;
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.util.TimeFrame;
 
 /**
  * Utility class for creating certain strings of the app that require plural forms.

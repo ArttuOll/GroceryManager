@@ -19,9 +19,9 @@ import com.bsuuv.grocerymanager.data.model.FoodItem;
 import com.bsuuv.grocerymanager.ui.GroceryItemDetailActivity;
 import com.bsuuv.grocerymanager.ui.GroceryItemDetailFragment;
 import com.bsuuv.grocerymanager.ui.MainActivity;
-import com.bsuuv.grocerymanager.util.FoodItemListDifferenceCalculator;
-import com.bsuuv.grocerymanager.util.ImageViewPopulater;
-import com.bsuuv.grocerymanager.util.PluralsProvider;
+import com.bsuuv.grocerymanager.ui.util.FoodItemListDifferenceCalculator;
+import com.bsuuv.grocerymanager.ui.util.ImageViewPopulater;
+import com.bsuuv.grocerymanager.ui.util.PluralsProvider;
 import java.util.List;
 
 /**

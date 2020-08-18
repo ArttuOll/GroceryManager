@@ -34,7 +34,6 @@ class NotificationChannelCreator {
    */
   public void createNotificationChannel() {
     NotificationManager mNotifManager = createNotificationManager();
-
     if (sdkOreoOrHigher()) {
       NotificationChannel primaryChannel = Objects.requireNonNull(buildPrimaryChannel());
       mNotifManager.createNotificationChannel(primaryChannel);

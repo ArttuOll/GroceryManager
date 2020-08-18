@@ -1,7 +1,10 @@
-package com.bsuuv.grocerymanager.util;
+package com.bsuuv.grocerymanager.ui.util;
 
 import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.ui.NewFoodItemActivity;
+import com.bsuuv.grocerymanager.util.FrequencyQuotientCalculator;
+import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
+import com.bsuuv.grocerymanager.util.TimeFrame;
 
 /**
  * Utility class containing logic to check that given food-item properties fit their requirements.

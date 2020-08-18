@@ -15,8 +15,8 @@ import com.bsuuv.grocerymanager.R;
 import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
 import com.bsuuv.grocerymanager.data.viewmodel.FoodItemViewModel;
 import com.bsuuv.grocerymanager.ui.adapters.ConfigurationsListAdapter;
-import com.bsuuv.grocerymanager.util.RecyclerViewUtil;
-import com.bsuuv.grocerymanager.util.RequestValidator;
+import com.bsuuv.grocerymanager.ui.util.RecyclerViewUtil;
+import com.bsuuv.grocerymanager.ui.util.RequestValidator;
 import com.bsuuv.grocerymanager.util.TimeFrame;
 import java.util.Objects;
 

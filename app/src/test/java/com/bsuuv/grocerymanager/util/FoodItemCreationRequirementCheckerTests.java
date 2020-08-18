@@ -3,7 +3,8 @@ package com.bsuuv.grocerymanager.util;
 import static org.mockito.Mockito.when;
 
 import com.bsuuv.grocerymanager.R;
-import com.bsuuv.grocerymanager.util.FoodItemCreationRequirementChecker.RequirementNotMetException;
+import com.bsuuv.grocerymanager.ui.util.FoodItemCreationRequirementChecker;
+import com.bsuuv.grocerymanager.ui.util.FoodItemCreationRequirementChecker.RequirementNotMetException;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Assert;

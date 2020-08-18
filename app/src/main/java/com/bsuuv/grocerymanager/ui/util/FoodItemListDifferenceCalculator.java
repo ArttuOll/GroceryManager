@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.util;
+package com.bsuuv.grocerymanager.ui.util;
 
 import androidx.recyclerview.widget.DiffUtil;
 import com.bsuuv.grocerymanager.data.model.FoodItem;

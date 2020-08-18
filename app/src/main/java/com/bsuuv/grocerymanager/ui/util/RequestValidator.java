@@ -1,4 +1,4 @@
-package com.bsuuv.grocerymanager.util;
+package com.bsuuv.grocerymanager.ui.util;
 
 import static android.app.Activity.RESULT_OK;
 
