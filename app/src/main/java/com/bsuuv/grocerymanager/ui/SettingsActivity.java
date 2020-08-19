@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.MultiSelectListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import com.bsuuv.grocerymanager.R;
+import com.bsuuv.grocerymanager.ui.util.WeekdaySorter;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
@@ -73,8 +75,9 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private String buildEntriesString(Set<String> entries) {
+      List<String> sortedWeekdays = WeekdaySorter.getSorted(entries);
       StringBuilder builder = new StringBuilder();
-      for (String entry : entries) {
+      for (String entry : sortedWeekdays) {
         builder.append(StringUtils.capitalize(entry)).append(" ");
       }
       return builder.toString();
