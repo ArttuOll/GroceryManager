@@ -1,0 +1,11 @@
+com.bsuuv.grocerymanager.data
+com.bsuuv.grocerymanager.data.db
+com.bsuuv.grocerymanager.data.db.dao
+com.bsuuv.grocerymanager.data.db.entity
+com.bsuuv.grocerymanager.data.model
+com.bsuuv.grocerymanager.data.viewmodel
+com.bsuuv.grocerymanager.notifications
+com.bsuuv.grocerymanager.ui
+com.bsuuv.grocerymanager.ui.adapters
+com.bsuuv.grocerymanager.ui.util
+com.bsuuv.grocerymanager.util
