@@ -23,7 +23,6 @@ import java.util.Objects;
  */
 public class GroceryItemViewModel extends AndroidViewModel {
 
-  //TODO: move scheduling notification here
   private FoodItemRepository mRepository;
   private LiveData<List<FoodItemEntity>> mFoodItems;
   private GroceryListExtractor mGroceryListExtractor;

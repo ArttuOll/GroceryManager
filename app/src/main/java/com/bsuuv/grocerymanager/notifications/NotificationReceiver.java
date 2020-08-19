@@ -13,7 +13,7 @@ import com.bsuuv.grocerymanager.ui.MainActivity;
  * A receiver for the alarm set by {@link GroceryDayNotifier}. Defines what happens when the alarm
  * is triggered.
  */
-public class GroceryDayReceiver extends BroadcastReceiver {
+public class NotificationReceiver extends BroadcastReceiver {
 
   private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
   private static final int NOTIFICATION_ID = 0;

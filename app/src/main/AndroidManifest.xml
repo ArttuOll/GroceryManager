@@ -30,7 +30,7 @@
         <receiver
           android:enabled="true"
           android:exported="false"
-          android:name=".notifications.GroceryDayReceiver" />
+          android:name=".notifications.NotificationReceiver" />
 
         <activity
           android:name=".ui.NewFoodItemActivity"

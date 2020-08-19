@@ -40,15 +40,15 @@ public class GroceryDayNotifier {
   /**
    * Schedules a notification to be shown on the primary notification channel (see {@link
    * NotificationChannelCreator}), if the grocery days have changed since the last time this method
-   * was called. <code>AlarmManager</code> and {@link GroceryDayReceiver} are used to trigger and
-   * the notification on time.
+   * was called. <code>AlarmManager</code> and {@link NotificationReceiver} are used to trigger the
+   * notification on time.
    *
    * @param daysUntilGroceryDay Integer representing days until grocery day. As long as this value
    *                            is retrieved from {@link DateTimeHelper}, it can never be less than
    *                            0.
    * @see NotificationChannelCreator
    * @see DateTimeHelper
-   * @see GroceryDayReceiver
+   * @see NotificationReceiver
    */
   public void scheduleGroceryDayNotification(int daysUntilGroceryDay) {
     this.mDaysToNotif = calculateDaysToNotif(daysUntilGroceryDay);
@@ -80,7 +80,7 @@ public class GroceryDayNotifier {
   }
 
   private PendingIntent createPendingIntent() {
-    Intent notificationIntent = new Intent(mContext, GroceryDayReceiver.class);
+    Intent notificationIntent = new Intent(mContext, NotificationReceiver.class);
     return PendingIntent.getBroadcast(mContext, NOTIFICATION_ID, notificationIntent,
         PendingIntent.FLAG_UPDATE_CURRENT);
   }
