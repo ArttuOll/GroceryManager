@@ -96,7 +96,8 @@ public class DateTimeHelper {
       return 7;
     }
 
-    throw new IllegalArgumentException("Given string didn't match any weekday!");
+    throw new IllegalArgumentException(
+        String.format("Given string %s didn't match any weekdays!", weekday));
   }
 
   void setToday(int today) {
