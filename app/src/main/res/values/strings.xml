@@ -3,14 +3,15 @@
 
     <!-- Multiple Activities -->
     <string name="food_image_content_description">Food-item image</string>
+    <string name="transition_detail">transition detail</string>
 
-    <!-- SettingsActivity Activity -->
+    <!-- SettingsActivity  -->
     <string name="title_activity_settings">Settings</string>
     <string name="grocery_settings_label_text">Food-items</string>
     <string name="grocery_day_title">Grocery days</string>
     <string name="groceries_header">Groceries</string>
 
-    <!-- NewFoodItemActivity Activity -->
+    <!-- NewFoodItemActivity  -->
     <string name="hint_item_label">Item Label</string>
     <string name="hint_brand">Brand</string>
     <string name="hint_amount">Amount</string>
@@ -20,10 +21,12 @@
     <string name="button_twoweeks">Two Weeks</string>
     <string name="button_month">A Month</string>
     <string name="hint_more_information">More information:</string>
+    <string name="hint_freq_input">frequency input</string>
 
-    <!-- ConfigurationsActivity Activity -->
+    <!-- ConfigurationsActivity  -->
     <string name="comma" translatable="false">%1$s,</string>
     <string name="hint_unit">Unit</string>
+    <string name="activity_configs_title">Food-items</string>
 
     <!-- Main Activity -->
     <string name="main_not_grocery_day">It is not a grocery day!</string>
@@ -48,10 +51,11 @@
     <string name="snackbar_amount_empty">Amount field can\'t be empty!</string>
     <string name="snackbar_label_empty">The label field cannot be empty!</string>
 
+    <!-- GroceryItemDetailActivity -->
     <string name="imageview_grocerylist_content_description">Grocery Item</string>
     <string name="fooditem_detail_more_info">Info:</string>
-    <string name="hint_freq_input">frequency input</string>
-    <string name="transition_detail">transition detail</string>
+
+    <!-- Notifications -->
     <string name="notifchan_primary_name">Grocery Day Notification</string>
     <string name="notifchan_primary_description">A notification that reminds you to do your groceries</string>
     <string name="notification_content_title">It\'s grocery day!</string>

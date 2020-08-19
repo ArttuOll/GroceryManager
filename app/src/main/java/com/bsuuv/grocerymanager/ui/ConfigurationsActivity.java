@@ -57,7 +57,7 @@ public class ConfigurationsActivity extends AppCompatActivity {
   }
 
   private void configureUi() {
-    setTitle("Food-items");
+    setTitle(getString(R.string.activity_configs_title));
     setUpRecyclerView();
   }
 
