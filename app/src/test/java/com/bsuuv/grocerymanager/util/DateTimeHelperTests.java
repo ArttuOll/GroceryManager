@@ -37,8 +37,6 @@ public class DateTimeHelperTests {
   public void init() {
     this.mGroceryDays = new HashSet<>();
     MockitoAnnotations.initMocks(this);
-    // Current day is Monday
-    mDateTimeHelper.setToday(2);
     configureMocks();
   }
 
@@ -49,13 +47,13 @@ public class DateTimeHelperTests {
 
   private String[] getDaysOfWeek() {
     String[] daysOfWeek = new String[7];
-    daysOfWeek[0] = "sunday";
-    daysOfWeek[1] = "monday";
-    daysOfWeek[2] = "tuesday";
-    daysOfWeek[3] = "wednesday";
-    daysOfWeek[4] = "thursday";
-    daysOfWeek[5] = "friday";
-    daysOfWeek[6] = "saturday";
+    daysOfWeek[0] = "Sunday";
+    daysOfWeek[1] = "Monday";
+    daysOfWeek[2] = "Tuesday";
+    daysOfWeek[3] = "Wednesday";
+    daysOfWeek[4] = "Thursday";
+    daysOfWeek[5] = "Friday";
+    daysOfWeek[6] = "Saturday";
 
     return daysOfWeek;
   }
@@ -66,22 +64,37 @@ public class DateTimeHelperTests {
   }
 
   @Test
-  public void isGroceryDay_groceryDay() {
-    mGroceryDays.add("monday");
+  public void isGroceryDay_groceryDayNormalDay() {
+    mDateTimeHelper.setToday(2);
+    mGroceryDays.add("Monday");
+    Assert.assertTrue(mDateTimeHelper.isGroceryDay());
+  }
+
+  @Test
+  public void isGroceryDay_groceryDayEdgeCase1() {
+    mDateTimeHelper.setToday(1);
+    mGroceryDays.add("Sunday");
+    Assert.assertTrue(mDateTimeHelper.isGroceryDay());
+  }
+
+  @Test
+  public void isGroceryDay_groceryDayEdgeCase2() {
+    mDateTimeHelper.setToday(7);
+    mGroceryDays.add("Saturday");
     Assert.assertTrue(mDateTimeHelper.isGroceryDay());
   }
 
   @Test
   public void timeUntilNextGroceryDay_groceryWeekDayInFuture() {
-    mGroceryDays.add("tuesday");
+    mDateTimeHelper.setToday(2);
+    mGroceryDays.add("Tuesday");
     Assert.assertEquals(1, mDateTimeHelper.getTimeUntilNextGroceryDay());
   }
 
   @Test
   public void timeUntilNextGroceryDay_groceryWeekDayInPast() {
-    // Current day is Wednesday
     mDateTimeHelper.setToday(4);
-    mGroceryDays.add("monday");
+    mGroceryDays.add("Monday");
     Assert.assertEquals(5, mDateTimeHelper.getTimeUntilNextGroceryDay());
   }
 }
