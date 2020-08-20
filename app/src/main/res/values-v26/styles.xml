@@ -2,13 +2,13 @@
 <resources>
 
     <style name="TextLabels">
-        <item name="android:font">@font/roboto_medium</item>
+        <item name="android:font">@font/roboto</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/textColorMain</item>
     </style>
 
     <style name="TextImageViewLabels">
-        <item name="android:font">@font/roboto_medium</item>
+        <item name="android:font">@font/roboto</item>
         <item name="android:textSize">32sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>

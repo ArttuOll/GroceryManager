@@ -20,31 +20,31 @@
 
     <!-- Text Styles -->
     <style name="TextLabels">
-        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">@font/roboto</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/textColorMain</item>
     </style>
 
     <style name="TextSubLabels">
-        <item name="font">@font/roboto</item>
+        <item name="font">@font/roboto_medium</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/textColorMain</item>
+        <item name="android:textColor">@color/textColorMainLight</item>
     </style>
 
     <style name="TextBody">
-        <item name="font">@font/roboto</item>
+        <item name="font">@font/roboto_light</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/textColorBody</item>
     </style>
 
     <style name="TextImageViewLabels">
-        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">@font/roboto</item>
         <item name="android:textSize">32sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="TextImageViewSubLabels">
-        <item name="font">@font/roboto</item>
+        <item name="font">@font/roboto_medium</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/textColorMain</item>
     </style>
