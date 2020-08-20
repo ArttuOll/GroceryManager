@@ -1,6 +1,6 @@
 package com.bsuuv.grocerymanager.data;
 
-import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.model.FoodItem;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class GroceryListState {
   private static final String REMOVED_ITEMS_KEY = "removedItems";
 
   private SharedPreferencesHelper mSharedPrefsHelper;
-  private List<FoodItemEntity> mIncrementedItems, mRemovedItems;
+  private List<FoodItem> mIncrementedItems, mRemovedItems;
 
   public GroceryListState(SharedPreferencesHelper sharedPreferencesHelper) {
     this.mSharedPrefsHelper = sharedPreferencesHelper;
@@ -26,25 +26,25 @@ public class GroceryListState {
     this.mRemovedItems = mSharedPrefsHelper.getList(REMOVED_ITEMS_KEY);
   }
 
-  public List<FoodItemEntity> getIncrementedItems() {
+  public List<FoodItem> getIncrementedItems() {
     return mIncrementedItems;
   }
 
-  public List<FoodItemEntity> getRemovedItems() {
+  public List<FoodItem> getRemovedItems() {
     return mRemovedItems;
   }
 
-  public void remove(FoodItemEntity foodItem) {
+  public void remove(FoodItem foodItem) {
     mRemovedItems.add(foodItem);
   }
 
-  public void addToIncrementedItems(FoodItemEntity foodItem) {
+  public void addToIncrementedItems(FoodItem foodItem) {
     if (notIncremented(foodItem)) {
       mIncrementedItems.add(foodItem);
     }
   }
 
-  private boolean notIncremented(FoodItemEntity foodItem) {
+  private boolean notIncremented(FoodItem foodItem) {
     return !getIncrementedItems().contains(foodItem);
   }
 

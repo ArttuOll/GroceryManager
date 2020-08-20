@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.model.FoodItem;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
 import com.bsuuv.grocerymanager.util.TimeFrame;
 import java.util.ArrayList;
@@ -27,9 +28,9 @@ public class GroceryListExtractorTests {
   @Mock
   private SharedPreferencesHelper mSharedPrefsHelper;
   @Mock
-  private List<FoodItemEntity> mModifiedList;
+  private List<FoodItem> mModifiedList;
   @Mock
-  private List<FoodItemEntity> mCheckedItems;
+  private List<FoodItem> mCheckedItems;
   @InjectMocks
   private GroceryListExtractor mGroceryListExtractor;
 

@@ -8,6 +8,7 @@ import com.bsuuv.grocerymanager.data.FoodItemRepository;
 import com.bsuuv.grocerymanager.data.GroceryListExtractor;
 import com.bsuuv.grocerymanager.data.GroceryListState;
 import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.model.FoodItem;
 import com.bsuuv.grocerymanager.ui.MainActivity;
 import com.bsuuv.grocerymanager.util.DateTimeHelper;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
@@ -38,8 +39,8 @@ public class GroceryItemViewModel extends AndroidViewModel {
   }
 
   private void updateDatabase() {
-    for (FoodItemEntity foodItem : mGroceries.getIncrementedItems()) {
-      mRepository.update(foodItem);
+    for (FoodItem foodItem : mGroceries.getIncrementedItems()) {
+      mRepository.update((FoodItemEntity) foodItem);
     }
     mGroceries.clearState();
   }

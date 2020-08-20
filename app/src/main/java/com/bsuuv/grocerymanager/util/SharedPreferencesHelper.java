@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.model.FoodItem;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -41,14 +42,14 @@ public class SharedPreferencesHelper {
     return mSharedPreferences.getStringSet(GROCERY_DAYS_KEY, new HashSet<>());
   }
 
-  public void saveList(List<FoodItemEntity> foodItems, String key) {
+  public void saveList(List<FoodItem> foodItems, String key) {
     String json = gson.toJson(foodItems, listType);
     SharedPreferences.Editor editor = mSharedPreferences.edit();
     editor.putString(key, json);
     editor.apply();
   }
 
-  public List<FoodItemEntity> getList(String key) {
+  public List<FoodItem> getList(String key) {
     String json = mSharedPreferences.getString(key, "");
     return json.equals("") ? new ArrayList<>() : gson.fromJson(json, listType);
   }

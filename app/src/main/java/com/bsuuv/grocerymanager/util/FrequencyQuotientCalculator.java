@@ -1,6 +1,6 @@
 package com.bsuuv.grocerymanager.util;
 
-import com.bsuuv.grocerymanager.data.db.entity.FoodItemEntity;
+import com.bsuuv.grocerymanager.data.model.FoodItem;
 
 /**
  * Utility class for calculating food-item frequency quotients.
@@ -32,7 +32,7 @@ public class FrequencyQuotientCalculator {
    * @return Frequency quotient of the supplied food-item, rounded to the nearest 0.05.
    */
   public static double calculate(SharedPreferencesHelper sharedPreferencesHelper,
-      FoodItemEntity foodItem) {
+      FoodItem foodItem) {
     int groceryDaysAWeek = sharedPreferencesHelper.getGroceryDays().size();
     double frequency = (double) foodItem.getFrequency();
     int timeFrame = foodItem.getTimeFrame().value();
