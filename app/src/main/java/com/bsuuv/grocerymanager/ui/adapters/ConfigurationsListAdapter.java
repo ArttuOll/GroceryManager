@@ -134,11 +134,19 @@ public class ConfigurationsListAdapter extends
 
     private void setInputFieldValues(FoodItem currentFoodItem) {
       mFoodItemLabel.setText(currentFoodItem.getLabel());
-      mFoodItemBrand.setText(currentFoodItem.getBrand());
+      setFoodItemBrandText(currentFoodItem.getBrand());
       mFoodItemAmount.setText(mPluralsProvider.getAmountString(currentFoodItem.getAmount(),
           currentFoodItem.getUnit()));
       mSchedule.setText(mPluralsProvider.getScheduleString(currentFoodItem.getFrequency(),
           currentFoodItem.getTimeFrame()));
+    }
+
+    private void setFoodItemBrandText(String brand) {
+      if (brand.equals("")) {
+        mFoodItemBrand.setVisibility(View.GONE);
+      } else {
+        mFoodItemBrand.setText(brand);
+      }
     }
 
     @Override
