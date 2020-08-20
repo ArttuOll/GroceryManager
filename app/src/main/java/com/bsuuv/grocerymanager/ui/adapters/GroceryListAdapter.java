@@ -80,6 +80,11 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
     }
   }
 
+  public void removeItemAtPosition(int position) {
+    mGroceryItems.remove(position);
+    notifyItemRemoved(position);
+  }
+
   private void initGroceryItems(List<? extends FoodItem> newGroceryItems) {
     this.mGroceryItems = newGroceryItems;
     notifyItemRangeInserted(0, newGroceryItems.size());

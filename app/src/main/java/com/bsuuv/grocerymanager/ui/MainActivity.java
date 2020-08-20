@@ -22,7 +22,6 @@ import com.bsuuv.grocerymanager.ui.adapters.GroceryListAdapter;
 import com.bsuuv.grocerymanager.ui.util.RecyclerViewUtil;
 import com.bsuuv.grocerymanager.util.DateTimeHelper;
 import com.bsuuv.grocerymanager.util.SharedPreferencesHelper;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -55,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
   private TextView mRecyclerViewPlaceHolder;
   private GroceryItemViewModel mGroceryViewModel;
   private DateTimeHelper mDateTimeHelper;
-  private List<FoodItemEntity> mGroceryList;
   private int mNumberOfGroceryDays;
   private SharedPreferencesHelper mSharedPrefsHelper;
 
@@ -147,16 +145,15 @@ public class MainActivity extends AppCompatActivity {
         int swipedPosition = viewHolder.getAdapterPosition();
         mGroceryViewModel.deleteFromGroceryList(
             (FoodItemEntity) mAdapter.getFoodItemAtPosition(swipedPosition));
+        mAdapter.removeItemAtPosition(swipedPosition);
       }
     });
   }
 
   private void setUpViewModel() {
     if (mDateTimeHelper.isGroceryDay()) {
-      mGroceryViewModel.getGroceryList().observe(this, groceryListItems -> {
-        this.mGroceryList = groceryListItems;
-        mAdapter.setGroceryItems(mGroceryList);
-      });
+      mGroceryViewModel.getGroceryList()
+          .observe(this, groceryListItems -> mAdapter.setGroceryItems(groceryListItems));
     }
   }
 
