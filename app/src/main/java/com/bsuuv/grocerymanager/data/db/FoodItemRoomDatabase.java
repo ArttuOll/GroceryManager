@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
  * @see <a href=https://developer.android.com/topic/libraries/architecture/room>Room Persistence
  * Library</a>
  */
-@Database(entities = {FoodItemEntity.class}, version = 3)
+@Database(entities = {FoodItemEntity.class}, version = 4)
 public abstract class FoodItemRoomDatabase extends RoomDatabase {
 
   private static final int NUMBER_OF_THREADS = 2;

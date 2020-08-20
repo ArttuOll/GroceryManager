@@ -40,6 +40,7 @@ public class FoodItemEntity implements FoodItem {
   @ColumnInfo(name = "unit")
   private String mUnit;
 
+  @NonNull
   @TypeConverters(TimeFrameConverter.class)
   @ColumnInfo(name = "time_frame")
   private TimeFrame mTimeFrame;
@@ -52,7 +53,7 @@ public class FoodItemEntity implements FoodItem {
 
   @Ignore
   public FoodItemEntity(int id, @NotNull String label, String brand, String info, int amount,
-      String unit, TimeFrame timeFrame, int frequency, String mImageUri,
+      String unit, @NotNull TimeFrame timeFrame, int frequency, String mImageUri,
       double countdownValue) {
     this.mId = id;
     this.mLabel = label;
@@ -67,7 +68,7 @@ public class FoodItemEntity implements FoodItem {
   }
 
   public FoodItemEntity(@NotNull String label, String brand, String info, int amount, String unit,
-      TimeFrame timeFrame, int frequency, String mImageUri,
+      @NotNull TimeFrame timeFrame, int frequency, String mImageUri,
       double countdownValue) {
     this.mLabel = label;
     this.mBrand = brand;

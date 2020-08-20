@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "7350a06c3b16138a570e1b40046d8d5e",
+    "identityHash": "91b0024c0379eb013239c6df56b2cebd",
     "entities": [
       {
         "tableName": "FoodItemEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `image_uri` TEXT, `label` TEXT NOT NULL, `brand` TEXT, `info` TEXT, `amount` INTEGER NOT NULL, `unit` TEXT, `time_frame` INTEGER, `frequency` INTEGER NOT NULL, `countdown_value` REAL NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `image_uri` TEXT, `label` TEXT NOT NULL, `brand` TEXT, `info` TEXT, `amount` INTEGER NOT NULL, `unit` TEXT, `time_frame` INTEGER NOT NULL, `frequency` INTEGER NOT NULL, `countdown_value` REAL NOT NULL)",
         "fields": [
           {
             "fieldPath": "mId",
@@ -54,7 +54,7 @@
             "fieldPath": "mTimeFrame",
             "columnName": "time_frame",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "mFrequency",
@@ -82,7 +82,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7350a06c3b16138a570e1b40046d8d5e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '91b0024c0379eb013239c6df56b2cebd')"
     ]
   }
 }
