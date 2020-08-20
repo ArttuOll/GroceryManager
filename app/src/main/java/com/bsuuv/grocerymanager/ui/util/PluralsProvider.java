@@ -69,6 +69,6 @@ public class PluralsProvider {
       return mContext.getResources().getQuantityString(R.plurals.Bottles,
           amount, amount);
     }
-    return "";
+    return String.valueOf(amount);
   }
 }
